@@ -1,0 +1,74 @@
+name: Build and deploy
+
+on:
+  schedule:
+    # Twice daily in Central time: 7:00 and 15:00 CDT (12:00 and 20:00 UTC; an hour earlier on the clock in CST).
+    - cron: '0 12 * * *'
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  # User story 39: fails loudly, in its own job, if the city's Akamai bot manager blocks the runner.
+  # It never blocks the build; a block shows up here as a red job instead of a silently empty site.
+  akamai-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Fetch the City Newsroom once from this runner
+        run: npm run check:akamai
+
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run typecheck
+      - run: npm test
+      - name: Build from live Sources
+        env:
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+          BASE_PATH: ${{ vars.BASE_PATH || '' }}
+          SITE_DOMAIN: ${{ vars.SITE_DOMAIN || '' }}
+        run: npm run build
+      - name: Commit the data file
+        run: |
+          git config user.name "laredogov-bot"
+          git config user.email "adrianlgom@gmail.com"
+          git add data/laredo.json
+          if git diff --cached --quiet; then
+            echo "Data file unchanged."
+          else
+            git commit -m "data: scheduled ingest $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
