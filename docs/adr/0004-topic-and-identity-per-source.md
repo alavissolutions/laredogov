@@ -1,0 +1,14 @@
+---
+status: accepted
+---
+# Topic and identity are decided per Source; no classification, no cross-Source merging
+
+Every Source declares which Topic its Items get. A Source may declare a mapping from the Publisher's own categories or departments to Topics (the City Newsroom maps Fire and Police to Public Safety, Health to Health, everything else to News and Notices). Nothing inspects titles or text to guess a Topic. Each document type for a Publisher has exactly one designated Source (Legistar for every Meeting; the city calendar only for non-Meeting Events), so the same document is never ingested twice and there is no duplicate-merging logic.
+
+## Why
+
+Deterministic rules can be explained on the page ("filed under Public Safety because the city posted it under Fire Department") and never misfile a boil-water notice as Public Safety because it mentions "emergency." Cross-Source merging is fuzzy matching that fails quietly; picking one Source per document type up front removes the problem instead of solving it.
+
+## Consequences
+
+Adding a new Source means writing its Topic rule. A document that only exists in a non-designated Source is not ingested until the designation changes.
