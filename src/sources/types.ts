@@ -1,0 +1,36 @@
+import type { Body, DataFile, DirectoryEntry, Item, Meeting, PublisherId, Topic } from '../domain.js';
+import type { Fetcher, FetchMode } from '../fetcher/types.js';
+
+/** What an adapter returns for a new or re-seen Item; the build fills in first-seen and last-seen-live. */
+export type NewItem = Omit<Item, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+
+/** What an adapter returns for a Meeting; the build fills in first-seen and last-seen-live. */
+export type NewMeeting = Omit<Meeting, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+
+export interface SourceRunContext {
+  fetcher: Fetcher;
+  /** The data file as it stood before this run, so an adapter can skip unchanged detail pages. */
+  previous: DataFile;
+  now: Date;
+  log: (message: string) => void;
+}
+
+export interface SourceResult {
+  items: NewItem[];
+  meetings?: NewMeeting[];
+  bodies?: Omit<Body, 'source' | 'publisher'>[];
+}
+
+/**
+ * The Source adapter contract. Adding a Source means adding one of these:
+ * it declares its Publisher, its Topic rule, its cadence, its Directory entry, and how to fetch.
+ */
+export interface SourceAdapter {
+  id: string;
+  publisher: PublisherId;
+  fetchMode: FetchMode;
+  /** Which Topic(s) this Source files under, stated for the Directory and the README. */
+  topicRule: { topics: readonly Topic[]; stringsKey: string };
+  directory: Omit<DirectoryEntry, 'publisher' | 'kind' | 'id'>;
+  run(ctx: SourceRunContext): Promise<SourceResult>;
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Laredo Utilities Department</title>
+	<atom:link href="https://laredoutilities.com/feed/" rel="self" type="application/rss+xml" />
+	<link>https://laredoutilities.com/</link>
+	<description>City of Laredo</description>
+	<lastBuildDate>Wed, 16 Sep 2026 05:43:09 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=7.1</generator>
+
+<image>
+	<url>https://laredoutilities.com/wp-content/uploads/2022/09/favicon_35x35.png</url>
+	<title>Laredo Utilities Department</title>
+	<link>https://laredoutilities.com/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>UTILITIES UPDATE &#124; 36-INCH WATER LINE TIE-IN</title>
+		<link>https://laredoutilities.com/36-inch-water-main-connection/</link>
+		
+		<dc:creator><![CDATA[Gene Belmares]]></dc:creator>
+		<pubDate>Wed, 16 Sep 2026 05:25:36 +0000</pubDate>
+				<category><![CDATA[Announcements]]></category>
+		<category><![CDATA[Laredo Utility Blog]]></category>
+		<guid isPermaLink="false">https://laredoutilities.com/?p=2977</guid>
+
+					<description><![CDATA[<p>The City of Laredo Utilities Department will begin work today on an important 36-inch water line tie-in as part of ongoing efforts to strengthen Laredo’s water system. 🚧 Work may begin as early as 4:00 p.m. near: 📍 Kearney St. &#38; Tilden Ave. 📍 Tilden Ave. &#38; E. Price St. The work is anticipated to [&#8230;]</p>
+<p>The post <a href="https://laredoutilities.com/36-inch-water-main-connection/">UTILITIES UPDATE | 36-INCH WATER LINE TIE-IN</a> appeared first on <a href="https://laredoutilities.com">Laredo Utilities Department</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+	</channel>
+</rss>
