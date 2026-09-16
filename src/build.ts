@@ -24,7 +24,7 @@ export interface BuildResult {
   report: IngestReport;
 }
 
-export const DEFAULT_SITE_URL = 'https://adrianlgom.github.io/laredogov';
+export const DEFAULT_SITE_URL = 'https://alavissolutions.github.io/laredogov';
 
 /**
  * The whole build: ingest every Feed into the data file, then render the site from it.

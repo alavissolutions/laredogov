@@ -17,7 +17,7 @@ export interface Fetcher {
   close(): Promise<void>;
 }
 
-export const PROJECT_URL = 'https://github.com/adrianlgom/laredogov';
+export const PROJECT_URL = 'https://github.com/alavissolutions/laredogov';
 export const CONTACT_EMAIL = 'adrianlgom@gmail.com';
 
 /** Identifies the project and a contact address so Publishers can reach the owner. */
