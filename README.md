@@ -69,4 +69,4 @@ test/               seam tests and recorded fixtures
 
 ## Status
 
-Live at https://alavissolutions.github.io/laredogov/ from https://github.com/alavissolutions/laredogov, rebuilt twice a day. Before launch the owner still has to buy a domain (issue 14), send the Webb County access request (issue 15), and review the Spanish strings (issue 16). Webb County and other hosts that block datacenter IPs are Directory-only until then.
+Live at https://insidelaredo.com/ from https://github.com/alavissolutions/laredogov, rebuilt twice a day. The domain is set through the `SITE_DOMAIN` and `SITE_URL` repository variables and GitHub Pages' custom-domain setting; DNS is on Cloudflare. Before launch the owner still has to send the Webb County access request (issue 15) and review the Spanish strings (issue 16). Webb County and other hosts that block datacenter IPs are Directory-only until then.
