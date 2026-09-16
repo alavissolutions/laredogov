@@ -69,4 +69,4 @@ test/               seam tests and recorded fixtures
 
 ## Status
 
-Before launch the owner still has to buy a domain (issue 14), send the Webb County access request (issue 15), and review the Spanish strings (issue 16). Webb County and other hosts that block datacenter IPs are Directory-only until then.
+Live at https://alavissolutions.github.io/laredogov/ from https://github.com/alavissolutions/laredogov, rebuilt twice a day. Before launch the owner still has to buy a domain (issue 14), send the Webb County access request (issue 15), and review the Spanish strings (issue 16). Webb County and other hosts that block datacenter IPs are Directory-only until then.
