@@ -36,6 +36,10 @@ _Avoid_: Event (reserved for public happenings), session
 A public happening that residents can attend and that is not a Meeting: a festival, clinic, library program, or town hall. If a Body convenes it under the Open Meetings Act it is a Meeting, otherwise it is an Event.
 _Avoid_: Meeting, activity
 
+**Stream line**:
+An Item that announces a document (agenda, packet, minutes, or video) attaching to a Meeting, dated by the Publisher and linking to the Meeting. Stream lines are how the New panel shows Meeting activity without a reader revisiting the Meeting page.
+_Avoid_: Notification, update, activity
+
 **Topic**:
 A resident-facing category an Item is filed under. Every Item has exactly one Topic. Every Topic has its own RSS feed.
 _Avoid_: Category, tag, section

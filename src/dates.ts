@@ -1,4 +1,5 @@
 /** Date helpers. Publishers are in Central time (America/Chicago); the data file stores ISO strings. */
+import type { Lang } from './domain.js';
 
 export const TIME_ZONE = 'America/Chicago';
 
@@ -89,7 +90,7 @@ export function daysBetween(fromIso: string, toIso: string): number {
 }
 
 /** Wednesday, September 30, 2026 style, per language, Central time. */
-export function formatDate(lang: 'en' | 'es', iso: string, style: 'long' | 'short' = 'long'): string {
+export function formatDate(lang: Lang, iso: string, style: 'long' | 'short' = 'long'): string {
   const locale = lang === 'es' ? 'es-MX' : 'en-US';
   const opts: Intl.DateTimeFormatOptions =
     style === 'long'
@@ -98,7 +99,7 @@ export function formatDate(lang: 'en' | 'es', iso: string, style: 'long' | 'shor
   return new Intl.DateTimeFormat(locale, opts).format(instantOf(iso));
 }
 
-export function formatTime(lang: 'en' | 'es', iso: string): string {
+export function formatTime(lang: Lang, iso: string): string {
   const locale = lang === 'es' ? 'es-MX' : 'en-US';
   return new Intl.DateTimeFormat(locale, { timeZone: TIME_ZONE, hour: 'numeric', minute: '2-digit' }).format(new Date(iso));
 }

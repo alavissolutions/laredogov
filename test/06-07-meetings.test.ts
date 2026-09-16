@@ -67,6 +67,11 @@ describe('06: Legistar Meetings, the Coming up panel, and Meeting pages', () => 
     expect(bodies).toEqual(new Set(['Planning & Zoning Commission']));
     expect(pz('.meetings-list li').length).toBeGreaterThan(2);
     expect(pz('.body-filter a[aria-current]').text()).toBe('Planning & Zoning Commission');
+    expect(pz('h2').map((_, e) => pz(e).text()).get()).toContain('Past');
+    const pzEs = await site.page('/es/meetings/body/227/');
+    expect(pzEs('h2').map((_, e) => pzEs(e).text()).get()).toContain('Anteriores');
+    const pzMeeting = await site.page('/en/meetings/1623/');
+    expect(pzMeeting('.docs a').last().attr('href')).toBe('https://laredotx.new.swagit.com/');
   });
 });
 
@@ -90,7 +95,7 @@ describe('07: Meeting documents, video, and stream lines', () => {
     let page = await site.page('/en/meetings/1548/');
     let docs = page('.docs a').map((_, e) => page(e).text()).get();
     expect(docs).toEqual(['Agenda', 'Agenda packet', 'Video archive for this Body']);
-    expect(page('.docs a').last().attr('href')).toBe('https://laredotx.new.swagit.com/views/168/city-council');
+    expect(page('.docs a').last().attr('href')).toBe('https://laredotx.new.swagit.com/city-council');
 
     const before = first.data.items.filter((i) => i.stream?.meetingId === '1548').map((i) => i.stream!.kind);
     expect(before.sort()).toEqual(['agenda', 'packet']);

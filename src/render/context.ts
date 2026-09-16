@@ -1,5 +1,5 @@
 import { addDays, centralDate } from '../dates.js';
-import type { DataFile, Lang } from '../domain.js';
+import type { DataFile, Lang, Topic } from '../domain.js';
 
 export interface RenderConfig {
   /** Absolute site URL without trailing slash, used for RSS links and the language alternates. */
@@ -50,8 +50,8 @@ export function absolute(ctx: Pick<RenderContext, 'siteUrl'>, sitePath: string):
 
 export const PATHS = {
   home: '/',
-  topic: (topic: string) => `/topics/${topic}/`,
-  topicFeed: (topic: string) => `/topics/${topic}/feed.xml`,
+  topic: (topic: Topic) => `/topics/${topic}/`,
+  topicFeed: (topic: Topic) => `/topics/${topic}/feed.xml`,
   feed: '/feed.xml',
   meetings: '/meetings/',
   body: (bodyId: string) => `/meetings/body/${bodyId}/`,

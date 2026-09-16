@@ -116,4 +116,6 @@ Recorded while writing the Source adapters (`src/sources/`) and capturing fixtur
 
 **Bids page.** Hand-edited tables under "Current Bid Opportunities" per department with Due Date, Opening, Description, Pre-Bid, Addendum columns and no posting date. On 2026-09-16 every row was empty or "N/A"; the Wayback Machine has only redirects for the page, so no fixture with real rows exists yet.
 
+**Swagit archives.** `laredotx.new.swagit.com/` redirects to `/city-council`, which holds City Council, Special City Council, and Council Workshop videos; the "Boards and Commissions" menu has one entry, `/mpo`. There is no per-Body archive for other Bodies, so a Meeting without a video link falls back to the Council or MPO archive by Body name, else the site root. The `/views/168/city-council` URL from the earlier survey still resolves but is not the canonical path.
+
 **Utilities RSS.** WordPress emits `&#124;` for the pipe in titles; the parser decodes HTML entities.

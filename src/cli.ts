@@ -9,6 +9,7 @@ const flags = new Set(rest);
 
 async function main(): Promise<void> {
   if (command === 'build') {
+    // `--fixtures` is the development build (README): it borrows the test suite's recorded responses on purpose.
     const useFixtures = flags.has('--fixtures');
     const fetcher = useFixtures ? (await import('../test/fixtures/fetcher.js')).allFixturesFetcher() : productionFetcher();
     const now = useFixtures ? (await import('../test/fixtures/fetcher.js')).FIXTURE_NOW : new Date();

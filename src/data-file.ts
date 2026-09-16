@@ -18,12 +18,13 @@ export async function loadData(file: string): Promise<DataFile> {
 
 export async function saveData(file: string, data: DataFile): Promise<void> {
   validateData(data);
+  const byId = (a: { id: string }, b: { id: string }) => a.id.localeCompare(b.id);
   const sorted: DataFile = {
     version: 1,
-    items: [...data.items].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
-    meetings: [...data.meetings].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
-    bodies: [...data.bodies].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
-    sources: Object.fromEntries(Object.entries(data.sources).sort(([a], [b]) => (a < b ? -1 : 1))),
+    items: [...data.items].sort(byId),
+    meetings: [...data.meetings].sort(byId),
+    bodies: [...data.bodies].sort(byId),
+    sources: Object.fromEntries(Object.entries(data.sources).sort(([a], [b]) => a.localeCompare(b))),
   };
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, `${JSON.stringify(sorted, null, 2)}\n`);

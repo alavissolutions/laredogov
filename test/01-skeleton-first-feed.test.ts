@@ -73,6 +73,7 @@ describe('01: skeleton, seam, and the first Feed (Laredo Utilities)', () => {
     expect($('main').text()).not.toContain('undefined');
     expect(html).toMatch(/unofficial site/i);
     expect($('script[src]')).toHaveLength(0);
+    expect($('a.title').first().text()).toBe('UTILITIES UPDATE | 36-INCH WATER LINE TIE-IN');
     expect(html).not.toMatch(/googletagmanager|google-analytics|gtag\(|plausible|matomo|document\.cookie|<iframe/i);
     expect($('a.skip').attr('href')).toBe('#main');
     const css = await site.file('/style.css');

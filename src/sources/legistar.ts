@@ -1,19 +1,20 @@
 import { load } from 'cheerio';
 import { centralDate, daysBetween } from '../dates.js';
-import type { DocumentKind, Meeting } from '../domain.js';
+import type { Meeting, MeetingDocument } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
 import type { NewMeeting, SourceAdapter, SourceRunContext } from './types.js';
 
 export const LEGISTAR_API = 'https://webapi.legistar.com/v1/cityoflaredo';
 export const SWAGIT_ROOT = 'https://laredotx.new.swagit.com/';
 
-/** Swagit archive pages per Body, used when Legistar has no video for a Meeting. */
-const SWAGIT_ARCHIVE_BY_BODY: Record<string, string> = {
-  '138': 'https://laredotx.new.swagit.com/views/168/city-council',
-};
-
-export function swagitArchiveFor(bodyId: string): string {
-  return SWAGIT_ARCHIVE_BY_BODY[bodyId] ?? SWAGIT_ROOT;
+/**
+ * Swagit keeps two archives for Laredo (checked 2026-09-16): City Council and its variants
+ * (special, workshop, supplemental) and the MPO. Every other Body gets the site root.
+ */
+export function swagitArchiveFor(bodyName: string): string {
+  if (/city council/i.test(bodyName)) return `${SWAGIT_ROOT}city-council`;
+  if (/metropolitan planning organization/i.test(bodyName)) return `${SWAGIT_ROOT}mpo`;
+  return SWAGIT_ROOT;
 }
 
 interface LegistarBody {
@@ -66,8 +67,9 @@ function utc(stamp: string | null | undefined): string | undefined {
   return /Z$|[+-]\d{2}:\d{2}$/.test(stamp) ? stamp : `${stamp}Z`;
 }
 
+/** Laredo marks a cancellation in the event comment ("Cancelled", Council 2024-01-16); the status name is checked too. */
 function isCancelled(e: LegistarEvent): boolean {
-  return /cancel/i.test(`${e.EventComment ?? ''} ${e.EventAgendaStatusName ?? ''} ${e.EventLocation ?? ''}`);
+  return /cancel/i.test(`${e.EventComment ?? ''} ${e.EventAgendaStatusName ?? ''}`);
 }
 
 /**
@@ -79,7 +81,6 @@ function isCancelled(e: LegistarEvent): boolean {
 export const legistar: SourceAdapter = {
   id: 'legistar',
   publisher: 'city-of-laredo',
-  fetchMode: 'http',
   topicRule: { topics: ['meetings'], stringsKey: 'topicRule.legistar' },
   directory: { url: 'https://cityoflaredo.legistar.com/Calendar.aspx', stringsKey: 'dir.legistar', lastVerified: '2026-09-16' },
   async run(ctx) {
@@ -132,12 +133,12 @@ export const legistar: SourceAdapter = {
         ...(lastModified ? { lastModified } : {}),
       });
     }
-    log(`legistar: ${events.length} events in window, ${bodies.length} bodies, ${insiteFetches} InSite pages fetched`);
+    log(`legistar: ${meetings.length} Meetings in window, ${bodies.length} Bodies, ${insiteFetches} InSite pages fetched`);
     return { items: [], meetings, bodies };
   },
 };
 
-function withPublished(url: string, publishedAt: string | undefined): { url: string; publishedAt?: string } {
+function withPublished(url: string, publishedAt: string | undefined): MeetingDocument {
   return publishedAt ? { url, publishedAt } : { url };
 }
 
@@ -145,7 +146,7 @@ async function packetFromInSite(
   { fetcher, log }: SourceRunContext,
   insiteUrl: string,
   lastModified: string | undefined,
-): Promise<{ url: string; publishedAt?: string } | undefined> {
+): Promise<MeetingDocument | undefined> {
   const res = await fetcher.fetch(insiteUrl, 'http');
   if (res.status !== 200) {
     log(`legistar: InSite page ${insiteUrl} returned ${res.status}; packet unknown`);
@@ -156,5 +157,3 @@ async function packetFromInSite(
   if (!href) return undefined;
   return withPublished(new URL(href, insiteUrl).toString(), lastModified);
 }
-
-export const DOCUMENT_KINDS_FOR_STREAM: readonly DocumentKind[] = ['agenda', 'packet', 'minutes', 'video'];

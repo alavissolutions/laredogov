@@ -4,7 +4,6 @@ import { LANGS, TOPICS, type DataFile } from '../domain.js';
 import { assertStringsComplete } from '../i18n/strings.js';
 import { makeContext, PATHS, type RenderConfig } from './context.js';
 import { CSS } from './css.js';
-import { itemTitle } from './items.js';
 import { aboutPage, directoryPage, homePage, meetingPage, meetingsPage, searchPage, topicPage } from './pages.js';
 import { rssFeed } from './rss.js';
 import { searchIndex } from './search-index.js';
@@ -46,9 +45,7 @@ export async function render(data: DataFile, opts: RenderOptions): Promise<void>
     await write(`/${lang}${PATHS.about}`, aboutPage(ctx));
   }
 
-  const enCtx = makeContext(data, opts, 'en');
-  const index = searchIndex(data, (id) => itemTitle(enCtx, data.items.find((i) => i.id === id)!));
-  await write('/search-index.json', JSON.stringify(index));
+  await write('/search-index.json', JSON.stringify(searchIndex(data)));
   await write('/', rootRedirect(opts.basePath));
   await write('/404.html', rootRedirect(opts.basePath));
 }

@@ -4,7 +4,7 @@ import { cityCalendar } from '../src/sources/city-calendar.js';
 import { cityNewsroom } from '../src/sources/city-newsroom.js';
 import { legistar } from '../src/sources/legistar.js';
 import { bidsFixtures, calendarFixtures, FIXTURE_NOW, legistarFixtures, newsroomArchiveFixtures, newsroomFixtures } from './fixtures/fetcher.js';
-import { comingUpTitles, daysAfter, Site } from './helpers.js';
+import { comingUpTitles, daysAfter, newPanelTitles, Site } from './helpers.js';
 
 describe('10: City Newsroom Feed with department-to-Topic mapping', () => {
   it('files the tax hearing notice under News and Notices even though the city tagged it to every department', async () => {
@@ -58,7 +58,7 @@ describe('11: City Calendar Events Feed', () => {
     expect(events.map((i) => i.title)).not.toContain('Planning & Zoning Commission');
     expect(events.map((i) => i.title)).not.toContain('Metropolitan Planning Organization Policy Committee');
     expect(data.meetings.filter((m) => m.bodyName === 'Planning & Zoning Commission' && m.date === '2026-09-03')).toHaveLength(1);
-    expect(log.join('\n')).toMatch(/city-calendar: \d+ events, \d+ Body meetings skipped/);
+    expect(log.join('\n')).toMatch(/city-calendar: \d+ Events, \d+ Body Meetings skipped/);
 
     const run = events.find((i) => i.title === 'Miles for Hope - Community Run')!;
     expect(run).toMatchObject({ url: 'https://www.cityoflaredo.com/Home/Components/Calendar/Event/3360/17', date: '2026-10-01T00:00:00.000Z' });
@@ -67,6 +67,8 @@ describe('11: City Calendar Events Feed', () => {
     expect(cleanup.event!.start).toBe('2026-09-20');
 
     const home = await site.page('/en/');
+    // Events are posted Items too: New lists them by when the site first saw them, Coming up by when they happen.
+    expect(newPanelTitles(home)).toContain('Miles for Hope - Community Run');
     const titles = comingUpTitles(home);
     expect(titles.indexOf('Planning & Zoning Commission')).toBeLessThan(titles.indexOf('World Cleanup Day'));
     expect(titles.indexOf('World Cleanup Day')).toBeLessThan(titles.indexOf('City Council'));
@@ -76,7 +78,10 @@ describe('11: City Calendar Events Feed', () => {
     expect(runLine.find('time').text()).toBe('Wednesday, September 30, 2026, 7:00 PM');
     expect(runLine.find('.badge.event').text()).toBe('Events');
 
-    expect(await site.file('/en/topics/events/feed.xml')).toContain('<title>Miles for Hope - Community Run</title>');
+    const feed = await site.file('/en/topics/events/feed.xml');
+    expect(feed).toContain('<title>Miles for Hope - Community Run</title>');
+    expect(feed).toContain(`<pubDate>${FIXTURE_NOW.toUTCString()}</pubDate>`);
+    expect(feed).toContain('Wednesday, September 30, 2026');
   });
 
   it('a second unchanged build fetches no detail pages again and adds nothing', async () => {

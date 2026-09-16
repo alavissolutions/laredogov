@@ -1,10 +1,10 @@
 import { load } from 'cheerio';
 import { centralDate } from '../dates.js';
 import { ensureOk } from '../fetcher/types.js';
+import { CITY_SITE, collapse } from './city.js';
 import type { NewItem, SourceAdapter } from './types.js';
 
-const CITY = 'https://www.cityoflaredo.com';
-export const BIDS_URL = `${CITY}/services/bids-rfp-s`;
+export const BIDS_URL = `${CITY_SITE}/services/bids-rfp-s`;
 
 export interface BidRow {
   description: string;
@@ -22,7 +22,7 @@ export function parseBidsPage(html: string): BidRow[] {
   const rows: BidRow[] = [];
   $('table').each((_, table) => {
     const headerCells = $(table).find('tr').first().find('th, td');
-    const headers = headerCells.map((__, c) => $(c).text().replace(/\s+/g, ' ').trim().toLowerCase()).get();
+    const headers = headerCells.map((__, c) => collapse($(c).text()).toLowerCase()).get();
     const descIdx = headers.findIndex((h) => h.includes('description'));
     const dueIdx = headers.findIndex((h) => h.includes('due'));
     if (descIdx < 0) return;
@@ -32,10 +32,10 @@ export function parseBidsPage(html: string): BidRow[] {
       .each((__, tr) => {
         const cells = $(tr).find('td');
         const descCell = cells.eq(descIdx);
-        const description = descCell.text().replace(/\s+/g, ' ').trim();
+        const description = collapse(descCell.text());
         if (!description || /^n\/?a$/i.test(description)) return;
         const href = descCell.find('a[href]').first().attr('href') ?? $(tr).find('a[href]').first().attr('href');
-        const due = dueIdx >= 0 ? cells.eq(dueIdx).text().replace(/\s+/g, ' ').trim() : '';
+        const due = dueIdx >= 0 ? collapse(cells.eq(dueIdx).text()) : '';
         rows.push({
           description,
           ...(due && !/^n\/?a$/i.test(due) ? { dueDate: due } : {}),
@@ -58,7 +58,6 @@ function slug(text: string): string {
 export const cityBids: SourceAdapter = {
   id: 'city-bids',
   publisher: 'city-of-laredo',
-  fetchMode: 'browser',
   topicRule: { topics: ['jobs-and-bids'], stringsKey: 'topicRule.city-bids' },
   directory: { url: BIDS_URL, stringsKey: 'dir.city-bids', lastVerified: '2026-09-16' },
   async run({ fetcher, previous, now, log }) {

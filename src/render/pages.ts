@@ -12,7 +12,7 @@ import { comingUp, comingUpLine, isCouncil, itemLine, itemList, meetingLine, rec
 export function homePage(ctx: RenderContext): string {
   const { lang } = ctx;
   const upcoming = comingUp(ctx);
-  const recent = recentItems(ctx, undefined, { withEvents: false });
+  const recent = recentItems(ctx);
   const body = `<h1>${esc(t(lang, 'home.title'))}</h1>
 <p class="intro">${esc(t(lang, 'site.tagline'))}</p>
 <section aria-labelledby="coming-up">
@@ -88,7 +88,7 @@ export function meetingsPage(ctx: RenderContext, bodyId?: string): string {
 <p class="intro">${esc(bodyRec ? t(lang, 'meetings.body.intro', { body: bodyRec.name }) : t(lang, 'meetings.intro'))}</p>
 ${bodyFilter(ctx, bodyId)}
 ${section(t(lang, 'meetings.upcoming'), upcoming)}
-${section(bodyRec ? t(lang, 'meetings.past').replace(/ 90.*$/, '') : t(lang, 'meetings.past'), past)}`;
+${section(bodyRec ? t(lang, 'meetings.past.all') : t(lang, 'meetings.past'), past)}`;
   return layout(ctx, { title, path: bodyId ? PATHS.body(bodyId) : PATHS.meetings, body });
 }
 
@@ -98,7 +98,7 @@ export function meetingPage(ctx: RenderContext, meeting: Meeting): string {
     (k) => `<li><a href="${esc(meeting.documents[k]!.url)}" rel="noopener">${esc(t(lang, `document.${k}`))}</a></li>`,
   );
   if (!meeting.documents.video) {
-    docs.push(`<li><a href="${esc(swagitArchiveFor(meeting.bodyId))}" rel="noopener">${esc(t(lang, 'meetings.videoArchive'))}</a></li>`);
+    docs.push(`<li><a href="${esc(swagitArchiveFor(meeting.bodyName))}" rel="noopener">${esc(t(lang, 'meetings.videoArchive'))}</a></li>`);
   }
   const title = `${meeting.bodyName}, ${formatDate(lang, meeting.date, 'short')}`;
   const body = `<h1>${esc(meeting.bodyName)}${meeting.cancelled ? ` <span class="badge cancelled">${esc(t(lang, 'meetings.cancelled'))}</span>` : ''}</h1>
@@ -134,14 +134,14 @@ function healthBlock(ctx: RenderContext, entry: DirectoryEntry): string {
   } else if (health.firstChecked && daysBetween(health.firstChecked, now) >= UNREACHABLE_WARNING_DAYS) {
     warning = t(lang, 'directory.warning.neverReached');
   }
-  return `<p class="health">${lines.map(esc).join(' · ')}</p>${warning ? `<p class="warning" role="alert"><strong>${esc(t(lang, 'health.warning'))}:</strong> ${esc(warning.replace(/^(Warning|Aviso): /, ''))}</p>` : ''}`;
+  return `<p class="health">${lines.map(esc).join(' · ')}</p>${warning ? `<p class="warning" role="alert"><strong>${esc(t(lang, 'health.warning'))}:</strong> ${esc(warning)}</p>` : ''}`;
 }
 
 function directoryEntry(ctx: RenderContext, entry: DirectoryEntry): string {
   const { lang } = ctx;
   const name = tKey(lang, `${entry.stringsKey}.name`);
   const rows: string[] = [`<dt>${esc(t(lang, 'directory.updates'))}</dt><dd>${esc(tKey(lang, `${entry.stringsKey}.cadence`))}</dd>`];
-  if (entry.hasSearchWith) rows.push(`<dt>${esc(t(lang, 'directory.searchWith'))}</dt><dd>${esc(tKey(lang, `${entry.stringsKey}.searchWith`))}</dd>`);
+  if (entry.kind === 'lookup') rows.push(`<dt>${esc(t(lang, 'directory.searchWith'))}</dt><dd>${esc(tKey(lang, `${entry.stringsKey}.searchWith`))}</dd>`);
   const source = sourceById(entry.id);
   if (source) {
     rows.push(`<dt>${esc(t(lang, 'directory.topicRule'))}</dt><dd>${esc(t(lang, source.topicRule.stringsKey as 'topicRule.legistar'))}</dd>`);
@@ -188,9 +188,10 @@ export function searchPage(ctx: RenderContext): string {
     publishers: Object.fromEntries(PUBLISHER_ORDER.map((p) => [p, t(lang, `publisher.${p}`)])),
     locale: lang === 'es' ? 'es-MX' : 'en-US',
     index: rootHref(ctx, '/search-index.json'),
-    topicHref: href(ctx, PATHS.topic('TOPIC')),
+    topicHref: href(ctx, PATHS.topic('TOPIC' as Topic)),
     meetingHref: href(ctx, PATHS.meeting('ID')),
     officialDocument: t(lang, 'item.officialDocument'),
+    stream: Object.fromEntries(DOCUMENT_KINDS.map((kind) => [kind, t(lang, `stream.${kind}`, { body: '{body}', date: '{date}' })])),
   };
   const body = `<h1>${esc(t(lang, 'search.title'))}</h1>
 <p class="intro">${esc(t(lang, 'search.intro'))}</p>
@@ -212,13 +213,14 @@ var L=${labelsJson};var input=document.getElementById('q');var out=document.getE
 function fold(s){return s.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function fmt(d){try{var dt=/^\\d{4}-\\d{2}-\\d{2}$/.test(d)?new Date(d+'T12:00:00Z'):new Date(d);return new Intl.DateTimeFormat(L.locale,{timeZone:'America/Chicago',month:'short',day:'numeric',year:'numeric'}).format(dt);}catch(e){return d;}}
+function title(it){return it.k?L.stream[it.k].replace('{body}',it.b).replace('{date}',fmt(it.md)):it.t;}
 function load(){if(!loading){loading=fetch(L.index).then(function(r){return r.json();}).then(function(j){index=j;return j;});}return loading;}
 function render(q){var words=fold(q).split(/\\s+/).filter(Boolean);if(!words.length){out.innerHTML='';return;}
-var hits=index.filter(function(it){var h=fold(it.t);return words.every(function(w){return h.indexOf(w)>=0;});});
+var hits=index.filter(function(it){var h=fold(title(it));return words.every(function(w){return h.indexOf(w)>=0;});});
 hits.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0;});
 var head='<p>'+(hits.length===1?L.one:L.results.replace('{count}',hits.length))+'</p>';
 if(!hits.length){out.innerHTML='<p>'+esc(L.none)+'</p>';return;}
-out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.m?L.meetingHref.replace('ID',it.m):it.u;var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(it.t)+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
+out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.m?L.meetingHref.replace('ID',it.m):it.u;var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(title(it))+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
 function run(){var q=input.value;if(!q.trim()){out.innerHTML='';return;}out.innerHTML='<p>'+esc(L.loading)+'</p>';load().then(function(){render(q);});}
 form.addEventListener('submit',function(e){e.preventDefault();run();try{history.replaceState(null,'','?q='+encodeURIComponent(input.value));}catch(err){}});
 input.addEventListener('input',function(){if(index){render(input.value);}});

@@ -47,6 +47,12 @@ export const DOCUMENT_KINDS: readonly DocumentKind[] = ['agenda', 'packet', 'min
 /** ISO 8601: either a date `YYYY-MM-DD` (Central time) or a full timestamp with offset. */
 export type IsoDateOrTime = string;
 
+/** A document attached to a Meeting, with the Publisher's publish stamp when it gives one. */
+export interface MeetingDocument {
+  url: string;
+  publishedAt?: string;
+}
+
 export interface Item {
   /** `${source}:${key}`; stable across builds so a re-run never duplicates. */
   id: string;
@@ -65,7 +71,7 @@ export interface Item {
   topicReason?: { department: string };
   /** Present on Events (public happenings a resident can attend). */
   event?: { start: IsoDateOrTime; end?: IsoDateOrTime; place?: string };
-  /** Present on stream lines that announce a document attaching to a Meeting. */
+  /** Present on stream lines: an Item that announces a document attaching to a Meeting (see CONTEXT.md). */
   stream?: { kind: DocumentKind; meetingId: string };
 }
 
@@ -84,7 +90,7 @@ export interface Meeting {
   cancelled: boolean;
   /** The Meeting's page at the Publisher. */
   url: string;
-  documents: Partial<Record<DocumentKind, { url: string; publishedAt?: string }>>;
+  documents: Partial<Record<DocumentKind, MeetingDocument>>;
   /** Publisher's last-modified stamp, used to skip unchanged detail pages. */
   lastModified?: string;
   firstSeen: string;
@@ -133,6 +139,4 @@ export interface DirectoryEntry {
   lastVerified: string;
   /** The Publisher posts this only on a social network the site never fetches (ADR-0003). */
   socialOnly?: 'facebook' | 'x';
-  /** True for Lookups: has a `searchWith` string. */
-  hasSearchWith?: boolean;
 }

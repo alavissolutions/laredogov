@@ -1,5 +1,5 @@
 import { daysBetween, dayOf, formatDate, formatTime, hasTime, sortValue } from '../dates.js';
-import type { Item, Meeting } from '../domain.js';
+import type { Item, Meeting, Topic } from '../domain.js';
 import { t } from '../i18n/strings.js';
 import { href, PATHS, type RenderContext } from './context.js';
 import { esc } from './html.js';
@@ -20,10 +20,25 @@ export function itemDateLabel(ctx: RenderContext, iso: string): string {
   return hasTime(iso) ? `${date}, ${formatTime(ctx.lang, iso)}` : date;
 }
 
-/** True when the Source has been reached more recently than the Item was last seen, so its link may be gone (user story 33). */
-export function isStale(ctx: RenderContext, item: Item): boolean {
+/** Days an Item may be missing from its Source's listing before the page says so. */
+export const NOT_SEEN_DAYS = 7;
+
+/**
+ * True when the Source has been read successfully for a week or more without listing this Item.
+ * The site never fetches Item links themselves, so this is the honest signal it can give (user story 33):
+ * the Publisher's list no longer carries it, and the link may be gone.
+ */
+export function isUnlisted(ctx: RenderContext, item: Item): boolean {
   const lastSuccess = ctx.data.sources[item.source]?.lastSuccess;
-  return !!lastSuccess && daysBetween(item.lastSeenLive, lastSuccess) >= 1;
+  return !!lastSuccess && daysBetween(item.lastSeenLive, lastSuccess) >= NOT_SEEN_DAYS;
+}
+
+/**
+ * When an Item was posted, for windows and ordering. An Event's own date is when it happens, which
+ * may be weeks ahead, so it counts as posted when the site first saw it.
+ */
+export function postedDate(item: Item): string {
+  return item.event ? item.firstSeen : item.date;
 }
 
 export function itemLine(ctx: RenderContext, item: Item): string {
@@ -43,8 +58,8 @@ export function itemLine(ctx: RenderContext, item: Item): string {
   if (item.topicReason) {
     extra += `<span class="reason">${esc(t(lang, 'item.topicReason.department', { topic: t(lang, `topic.${item.topic}`), department: item.topicReason.department }))}</span>`;
   }
-  if (isStale(ctx, item)) {
-    extra += `<span class="stale">${esc(t(lang, 'item.lastSeenLive', { date: formatDate(lang, item.lastSeenLive, 'short') }))}</span>`;
+  if (isUnlisted(ctx, item)) {
+    extra += `<span class="stale">${esc(t(lang, 'item.notSeenSince', { date: formatDate(lang, item.lastSeenLive, 'short') }))}</span>`;
   }
   return `<li>${titleLink}<span class="meta">${parts.join('<span class="sep" aria-hidden="true">·</span>')}</span>${extra}</li>`;
 }
@@ -54,18 +69,12 @@ export function itemList(ctx: RenderContext, items: Item[], emptyText: string): 
   return `<ul class="items">\n${items.map((i) => itemLine(ctx, i)).join('\n')}\n</ul>`;
 }
 
-/**
- * Items in the 90-day window, newest first. Events are dated by when they happen, so they may sit up to
- * 14 days ahead; the home page's New panel leaves them to Coming up, while Topic pages and feeds carry them.
- */
-export function recentItems(ctx: RenderContext, topic?: string, opts: { withEvents?: boolean } = {}): Item[] {
-  const withEvents = opts.withEvents ?? true;
-  const end = withEvents ? ctx.windowEnd : ctx.today;
+/** Items posted in the 90-day window, newest posting first (see postedDate). */
+export function recentItems(ctx: RenderContext, topic?: Topic): Item[] {
   return ctx.data.items
-    .filter((i) => withEvents || !i.event)
-    .filter((i) => dayOf(i.date) >= ctx.windowStart && dayOf(i.date) <= end)
+    .filter((i) => dayOf(postedDate(i)) >= ctx.windowStart && dayOf(postedDate(i)) <= ctx.today)
     .filter((i) => !topic || i.topic === topic)
-    .sort((a, b) => sortValue(b.date) - sortValue(a.date) || a.id.localeCompare(b.id));
+    .sort((a, b) => sortValue(postedDate(b)) - sortValue(postedDate(a)) || a.id.localeCompare(b.id));
 }
 
 export type ComingUpEntry = { kind: 'meeting'; meeting: Meeting; when: number; day: string } | { kind: 'event'; item: Item; when: number; day: string };

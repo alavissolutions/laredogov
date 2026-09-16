@@ -8,6 +8,12 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { productionFetcher } from '../src/fetcher/production.js';
 import { ensureOk, type FetchMode } from '../src/fetcher/types.js';
+import { BIDS_URL } from '../src/sources/city-bids.js';
+import { monthUrl } from '../src/sources/city-calendar.js';
+import { CONTROL_DEPARTMENT, DEPARTMENT_TOPICS, departmentListUrl, NEWSROOM_URL } from '../src/sources/city-newsroom.js';
+import { FEED_URL } from '../src/sources/laredo-utilities.js';
+import { bodiesUrl, eventsUrl } from '../src/sources/legistar.js';
+import { FIXTURE_NOW } from '../test/fixtures/fetcher.js';
 import { fixtureRoot } from '../test/fixtures/paths.js';
 
 const fetcher = productionFetcher();
@@ -23,34 +29,37 @@ async function save(relPath: string, url: string, mode: FetchMode): Promise<stri
   return res.body;
 }
 
-function isoDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
+/**
+ * URLs come from the adapters so a refreshed fixture always matches what the adapter will ask for.
+ * Tests pass FIXTURE_NOW as `now`, so the Legistar window and calendar months are the ones for that date;
+ * bump FIXTURE_NOW in test/fixtures/fetcher.ts when refreshing, then update test expectations.
+ */
+const departmentNames: Record<string, string> = { '13': 'fire', '23': 'police', '14': 'health', [CONTROL_DEPARTMENT]: 'airport' };
 
 try {
   if (all || wanted.has('laredo-utilities')) {
-    await save('laredo-utilities/feed.xml', 'https://laredoutilities.com/feed/', 'http');
+    await save('laredo-utilities/feed.xml', FEED_URL, 'http');
   }
   if (all || wanted.has('legistar')) {
-    const since = new Date();
-    since.setMonth(since.getMonth() - 2);
-    await save('legistar/bodies.json', 'https://webapi.legistar.com/v1/cityoflaredo/bodies', 'http');
-    await save(
-      'legistar/events.json',
-      `https://webapi.legistar.com/v1/cityoflaredo/events?$filter=EventDate ge datetime'${isoDate(since)}'&$orderby=EventDate`,
-      'http',
-    );
+    await save('legistar/bodies.json', bodiesUrl, 'http');
+    await save('legistar/events.json', eventsUrl(FIXTURE_NOW), 'http');
     console.log('Legistar InSite meeting pages under legistar/insite/ are captured by hand per meeting; see README there.');
   }
   if (all || wanted.has('city-newsroom')) {
-    await save('city-newsroom/newsroom.html', 'https://www.cityoflaredo.com/government/newsroom', 'browser');
+    await save('city-newsroom/newsroom.html', NEWSROOM_URL, 'browser');
+    for (const dept of [...Object.keys(DEPARTMENT_TOPICS), CONTROL_DEPARTMENT]) {
+      await save(`city-newsroom/newsroom-dept-${dept}-${departmentNames[dept] ?? dept}.html`, departmentListUrl(dept), 'browser');
+    }
   }
   if (all || wanted.has('city-calendar')) {
-    await save('city-calendar/month.html', 'https://www.cityoflaredo.com/government/city-calendar', 'browser');
+    const [y, m] = [FIXTURE_NOW.getUTCFullYear(), FIXTURE_NOW.getUTCMonth() + 1];
+    const next: [number, number] = m === 12 ? [y + 1, 1] : [y, m + 1];
+    await save(`city-calendar/month-${y}-${String(m).padStart(2, '0')}.html`, monthUrl(y, m), 'browser');
+    await save(`city-calendar/month-${next[0]}-${String(next[1]).padStart(2, '0')}.html`, monthUrl(...next), 'browser');
     console.log('Calendar detail pages under city-calendar/event-*.html are captured by hand; see README there.');
   }
   if (all || wanted.has('city-bids')) {
-    await save('city-bids/bids.html', 'https://www.cityoflaredo.com/services/bids-rfp-s', 'browser');
+    await save('city-bids/bids.html', BIDS_URL, 'browser');
   }
 } finally {
   await fetcher.close();

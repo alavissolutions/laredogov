@@ -1,17 +1,17 @@
 import { load, type CheerioAPI } from 'cheerio';
 import { centralDate, centralMidnight, fromCentral, parseClock, parseUsDateTime } from '../dates.js';
 import { ensureOk } from '../fetcher/types.js';
+import { CITY_SITE, collapse } from './city.js';
 import type { NewItem, SourceAdapter } from './types.js';
 
-const CITY = 'https://www.cityoflaredo.com';
-export const CALENDAR_URL = `${CITY}/government/city-calendar`;
+export const CALENDAR_URL = `${CITY_SITE}/government/city-calendar`;
 
 export function monthUrl(year: number, month1: number): string {
   return `${CALENDAR_URL}/-curm-${month1}/-cury-${year}`;
 }
 
 export function eventUrl(id: string): string {
-  return `${CITY}/Home/Components/Calendar/Event/${id}/17`;
+  return `${CITY_SITE}/Home/Components/Calendar/Event/${id}/17`;
 }
 
 const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -40,7 +40,7 @@ export function parseMonthGrid(html: string): GridEntry[] {
         const a = $(item).find('a.calendar_eventlink').first();
         const href = a.attr('href');
         const idMatch = href ? /\/Calendar\/Event\/(\d+)\//.exec(href) : null;
-        const title = (a.attr('title') ?? a.text()).replace(/\s+/g, ' ').trim();
+        const title = collapse(a.attr('title') ?? a.text());
         if (!idMatch || !title) return;
         const clock = parseClock($(item).find('.calendar_eventtime').text());
         out.push({ id: idMatch[1]!, title, ymd, ...(clock ? { clock } : {}) });
@@ -59,7 +59,7 @@ interface Detail {
 export function parseEventDetail(html: string): Detail {
   const $ = load(html);
   const detail: Detail = {};
-  const subtitle = $('.detail-subtitle').first().text().replace(/\s+/g, ' ').trim();
+  const subtitle = collapse($('.detail-subtitle').first().text());
   if (subtitle) detail.subtitle = subtitle;
   $('.detail-list-label').each((_, el) => {
     const label = $(el).text().trim().toLowerCase();
@@ -68,7 +68,7 @@ export function parseEventDetail(html: string): Detail {
       // The value carries hidden schema.org <time> elements with exact instants; the visible text is the fallback.
       const startAttr = valueEl.find('time[itemprop="startDate"]').attr('datetime');
       const endAttr = valueEl.find('time[itemprop="endDate"]').attr('datetime');
-      const range = startAttr ? rangeFromInstants(startAttr, endAttr) : parseDateRange(valueEl.text().replace(/\s+/g, ' ').trim());
+      const range = startAttr ? rangeFromInstants(startAttr, endAttr) : parseDateRange(collapse(valueEl.text()));
       if (range.start) detail.start = range.start;
       if (range.end) detail.end = range.end;
     } else if (label.startsWith('location')) {
@@ -95,7 +95,7 @@ function lines($: CheerioAPI, el: ReturnType<CheerioAPI>): string[] {
   return load(`<div>${html.replace(/<br\s*\/?>/gi, '\n')}</div>`)('div')
     .text()
     .split('\n')
-    .map((s) => s.replace(/\s+/g, ' ').trim())
+    .map(collapse)
     .filter(Boolean);
 }
 
@@ -136,14 +136,18 @@ export function namesBody(title: string, bodyNames: ReadonlySet<string>): boolea
   return false;
 }
 
+/** The city labels board and commission meetings on its calendar with these subtitles; a "Town Hall Meeting" is an Event. */
+const BODY_MEETING_SUBTITLE = /\b(committee|board|commission|council)\s+meeting\b/i;
+
 /**
- * City calendar Events for the current and next month. Any entry that is a Body's Meeting is skipped,
- * because Legistar owns Meetings (ADR-0004): the title matches a known Body, or the detail page calls it a meeting.
+ * City calendar Events for the current and next month. Any calendar entry that is a Body's Meeting is
+ * skipped because Legistar owns Meetings (ADR-0004, which records this rule): the title names a known
+ * Body, a Meeting of that Body is already recorded for that day, or the city's own subtitle calls it a
+ * committee, board, commission, or council meeting.
  */
 export const cityCalendar: SourceAdapter = {
   id: 'city-calendar',
   publisher: 'city-of-laredo',
-  fetchMode: 'browser',
   topicRule: { topics: ['events'], stringsKey: 'topicRule.city-calendar' },
   directory: { url: CALENDAR_URL, stringsKey: 'dir.city-calendar', lastVerified: '2026-09-16' },
   async run({ fetcher, previous, now, log }) {
@@ -182,7 +186,7 @@ export const cityCalendar: SourceAdapter = {
       detailFetches += 1;
       const res = await fetcher.fetch(eventUrl(entry.id), 'browser');
       const detail = res.status === 200 ? parseEventDetail(res.body) : {};
-      if (detail.subtitle && /meeting/i.test(detail.subtitle)) {
+      if (detail.subtitle && BODY_MEETING_SUBTITLE.test(detail.subtitle)) {
         skipped += 1;
         continue;
       }
@@ -196,7 +200,7 @@ export const cityCalendar: SourceAdapter = {
         event: { start, ...(detail.end ? { end: detail.end } : {}), ...(detail.place ? { place: detail.place } : {}) },
       });
     }
-    log(`city-calendar: ${items.length} events, ${skipped} Body meetings skipped, ${detailFetches} detail pages fetched`);
+    log(`city-calendar: ${items.length} Events, ${skipped} Body Meetings skipped, ${detailFetches} detail pages fetched`);
     return { items };
   },
 };

@@ -1,8 +1,9 @@
 import { dayOf, formatDate } from './dates.js';
-import type { Body, DataFile, DocumentKind, Item, Meeting, SourceHealth } from './domain.js';
+import type { Body, DataFile, DocumentKind, Item, Meeting, MeetingDocument, SourceHealth } from './domain.js';
 import { DOCUMENT_KINDS } from './domain.js';
 import type { Fetcher } from './fetcher/types.js';
-import type { SourceAdapter } from './sources/types.js';
+import { t } from './i18n/strings.js';
+import type { NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
 
 export interface IngestOptions {
   fetcher: Fetcher;
@@ -54,7 +55,7 @@ export async function ingest(data: DataFile, { fetcher, sources, now, log }: Ing
   return report;
 }
 
-function mergeItems(data: DataFile, source: SourceAdapter, items: ReadonlyArray<Omit<Item, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>>, stamp: string): number {
+function mergeItems(data: DataFile, source: SourceAdapter, items: readonly NewItem[], stamp: string): number {
   const byId = new Map(data.items.map((i) => [i.id, i]));
   let added = 0;
   for (const incoming of items) {
@@ -80,10 +81,13 @@ function mergeBodies(data: DataFile, source: SourceAdapter, bodies: ReadonlyArra
   }
 }
 
-/** Merges Meetings and returns how many stream lines were added for newly attached documents. */
-function mergeMeetings(data: DataFile, source: SourceAdapter, meetings: ReadonlyArray<Omit<Meeting, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>>, stamp: string): number {
+/**
+ * Merges Meetings and returns how many stream lines were added for newly attached documents.
+ * A stream line whose document is still attached is marked seen live, like any re-seen Item.
+ */
+function mergeMeetings(data: DataFile, source: SourceAdapter, meetings: readonly NewMeeting[], stamp: string): number {
   const byId = new Map(data.meetings.map((m) => [m.id, m]));
-  const itemIds = new Set(data.items.map((i) => i.id));
+  const itemsById = new Map(data.items.map((i) => [i.id, i]));
   let added = 0;
   for (const incoming of meetings) {
     const existing = byId.get(incoming.id);
@@ -102,27 +106,35 @@ function mergeMeetings(data: DataFile, source: SourceAdapter, meetings: Readonly
     for (const kind of DOCUMENT_KINDS) {
       const doc = merged.documents[kind];
       if (!doc) continue;
-      const id = streamItemId(merged.id, kind);
-      if (itemIds.has(id)) continue;
-      data.items.push(streamItem(merged, kind, doc, stamp));
-      itemIds.add(id);
+      const id = streamItemId(merged, kind);
+      const existing = itemsById.get(id);
+      if (existing) {
+        existing.lastSeenLive = stamp;
+        existing.url = doc.url;
+        continue;
+      }
+      const line = streamItem(merged, kind, doc, stamp);
+      data.items.push(line);
+      itemsById.set(id, line);
       added += 1;
     }
   }
   return added;
 }
 
-export function streamItemId(meetingId: string, kind: DocumentKind): string {
-  return `legistar:stream:${meetingId}:${kind}`;
+export function streamItemId(meeting: Pick<Meeting, 'id' | 'source'>, kind: DocumentKind): string {
+  return `${meeting.source}:stream:${meeting.id}:${kind}`;
 }
 
-/** A line in the New panel announcing that a document attached to a Meeting, dated by the Publisher. */
-function streamItem(meeting: Meeting, kind: DocumentKind, doc: { url: string; publishedAt?: string }, stamp: string): Item {
+/**
+ * A stream line: an Item announcing that a document attached to a Meeting, dated by the Publisher.
+ * The stored title is the English rendering for readers of the data file; pages render it per language.
+ */
+function streamItem(meeting: Meeting, kind: DocumentKind, doc: MeetingDocument, stamp: string): Item {
   const date = doc.publishedAt ?? meeting.lastModified ?? stamp;
-  const labels: Record<DocumentKind, string> = { agenda: 'Agenda posted', packet: 'Agenda packet posted', minutes: 'Minutes posted', video: 'Video available' };
   return {
-    id: streamItemId(meeting.id, kind),
-    title: `${labels[kind]}: ${meeting.bodyName}, ${formatDate('en', meeting.date, 'short')}`,
+    id: streamItemId(meeting, kind),
+    title: t('en', `stream.${kind}`, { body: meeting.bodyName, date: formatDate('en', meeting.date, 'short') }),
     date: dayOf(date) < meeting.date && kind !== 'agenda' && kind !== 'packet' ? meeting.date : date,
     url: doc.url,
     topic: 'meetings',

@@ -15,3 +15,5 @@
 ## Comments
 
 2026-09-16: Done. Skips by Body name (letters only, prefix allowed) and by the detail page's "Committee Meeting" subtitle; count is in the run log. Detail pages are fetched once per new entry.
+
+2026-09-16, after review: the subtitle rule now matches only committee, board, commission, or council meetings so a "Town Hall Meeting" stays an Event; the exclusion rule is recorded in ADR-0004. Events also appear in New, ordered by when the site first saw them, so a resident hears about an Event as soon as the city posts it, not two weeks before it happens.

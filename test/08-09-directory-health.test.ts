@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allDirectoryEntries } from '../src/directory/entries.js';
 import { laredoUtilities, FEED_URL } from '../src/sources/laredo-utilities.js';
 import { legistar } from '../src/sources/legistar.js';
-import { FIXTURE_NOW, legistarFixtures, utilitiesFixtures } from './fixtures/fetcher.js';
+import { FIXTURE_NOW, FIXTURE_NOW_2024, legistar2024Fixtures, legistarFixtures, utilitiesFixtures } from './fixtures/fetcher.js';
 import { daysAfter, Site } from './helpers.js';
 
 describe('08: the Directory of Sources and Lookups', () => {
@@ -83,9 +83,43 @@ describe('09: Source health and failure resilience', () => {
     expect($('#laredo-utilities .warning').text()).toContain('has not been able to reach this Source since Sep 16, 2026');
     expect($('#legistar .warning')).toHaveLength(0);
     const es = await site.page('/es/directory/');
-    expect(es('#laredo-utilities .warning').text()).toContain('no ha podido acceder a esta Fuente desde el 16 sep 2026');
+    expect(es('#laredo-utilities .warning').text()).toContain('Aviso: Este sitio no ha podido acceder a esta Fuente desde el 16 sep 2026');
 
     const home = await site.page('/en/');
     expect(home('section[aria-labelledby="new"]').text()).toContain('36-INCH WATER LINE');
+  });
+
+  it('an Item that drops off its Source list is marked after 7 days; Items still listed never are', async () => {
+    const site = await Site.create();
+    await site.build({ fixtures: { ...utilitiesFixtures, ...legistarFixtures }, now: FIXTURE_NOW, sources });
+    // The utilities feed now answers with no items: the notice is no longer listed, though the Source is fine.
+    const emptied = { ...legistarFixtures, [FEED_URL]: '<?xml version="1.0"?><rss version="2.0"><channel><title>x</title></channel></rss>' };
+    await site.build({ fixtures: emptied, now: daysAfter(FIXTURE_NOW, 3), sources });
+    let home = await site.page('/en/');
+    expect(home('.items .stale')).toHaveLength(0);
+
+    await site.build({ fixtures: emptied, now: daysAfter(FIXTURE_NOW, 8), sources });
+    home = await site.page('/en/');
+    const utilities = home('section[aria-labelledby="new"] .items > li').filter((_, e) => home(e).find('.title').text().includes('36-INCH'));
+    expect(utilities.find('.stale').text()).toBe('Not seen on the Publisher’s list since Sep 16, 2026; the link may have moved.');
+    const streamLines = home('section[aria-labelledby="new"] .items > li').filter((_, e) => /posted|available/.test(home(e).find('.title').text()));
+    expect(streamLines.length).toBeGreaterThan(5);
+    expect(streamLines.find('.stale')).toHaveLength(0);
+  });
+
+  it('a second build where one Source has new Items leaves the other Source untouched', async () => {
+    const site = await Site.create();
+    const first = await site.build({ fixtures: { ...utilitiesFixtures, ...legistar2024Fixtures }, now: FIXTURE_NOW_2024, sources });
+    const utilitiesBefore = first.data.items.filter((i) => i.source === 'laredo-utilities');
+    expect(utilitiesBefore).toHaveLength(1);
+
+    // Two years on, Legistar has a whole new window of Meetings; the utilities feed is unchanged.
+    const second = await site.build({ fixtures: { ...utilitiesFixtures, ...legistarFixtures }, now: FIXTURE_NOW, sources });
+    expect(second.report.newItems).toBeGreaterThan(40);
+    expect(second.data.items.filter((i) => i.source === 'laredo-utilities')).toHaveLength(1);
+    expect(second.data.items.find((i) => i.source === 'laredo-utilities')).toMatchObject({ firstSeen: FIXTURE_NOW_2024.toISOString(), lastSeenLive: FIXTURE_NOW.toISOString() });
+    expect(second.data.sources['laredo-utilities']!.lastNewItem).toBe(FIXTURE_NOW_2024.toISOString());
+    expect(second.data.sources['legistar']!.lastNewItem).toBe(FIXTURE_NOW.toISOString());
+    expect(second.data.meetings.some((m) => m.id === '969')).toBe(true);
   });
 });

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { cityNewsroom } from '../src/sources/city-newsroom.js';
 import { laredoUtilities } from '../src/sources/laredo-utilities.js';
-import { FIXTURE_NOW, newsroomArchiveFixtures, utilitiesFixtures } from './fixtures/fetcher.js';
+import { legistar } from '../src/sources/legistar.js';
+import { FIXTURE_NOW, legistarFixtures, newsroomArchiveFixtures, utilitiesFixtures } from './fixtures/fetcher.js';
 import { newPanelTitles, Site } from './helpers.js';
 
 describe('13: title search across all time', () => {
@@ -18,8 +19,14 @@ describe('13: title search across all time', () => {
 
   it('the search page works in both languages and lists recent Items without JavaScript', async () => {
     const site = await Site.create();
-    await site.build({ fixtures: utilitiesFixtures, now: FIXTURE_NOW, sources: [laredoUtilities] });
+    await site.build({ fixtures: { ...utilitiesFixtures, ...legistarFixtures }, now: FIXTURE_NOW, sources: [laredoUtilities, legistar] });
+    const index = JSON.parse(await site.file('/search-index.json')) as { t: string; k?: string; b?: string; md?: string }[];
+    const minutes = index.find((e) => e.k === 'minutes' && e.b === 'City Council' && e.md === '2026-07-27')!;
+    expect(minutes.t).toBe('');
     const en = await site.page('/en/search/');
+    expect(en('script:not([src])').text()).toContain('Minutes posted: {body}, {date}');
+    const esPage = await site.page('/es/search/');
+    expect(esPage('script:not([src])').text()).toContain('Acta publicada: {body}, {date}');
     expect(en('form[role="search"] input#q')).toHaveLength(1);
     expect(en('script:not([src])').text()).toContain('/search-index.json');
     expect(en('noscript').text()).toContain('36-INCH WATER LINE');

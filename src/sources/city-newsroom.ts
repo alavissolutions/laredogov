@@ -2,10 +2,10 @@ import { load } from 'cheerio';
 import { parseUsDateTime } from '../dates.js';
 import type { Topic } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
+import { CITY_SITE, collapse } from './city.js';
 import type { NewItem, SourceAdapter } from './types.js';
 
-export const NEWSROOM_URL = 'https://www.cityoflaredo.com/government/newsroom';
-const CITY = 'https://www.cityoflaredo.com';
+export const NEWSROOM_URL = `${CITY_SITE}/government/newsroom`;
 
 /**
  * Department IDs from the Newsroom's department filter, enumerated once on 2026-09-16
@@ -78,11 +78,11 @@ export function parseNewsroomList(html: string): ListedItem[] {
   $('section.news_widget ul.list-main > li').each((_, li) => {
     const link = $(li).find('a.item-title').first();
     const href = link.attr('href');
-    const title = link.text().replace(/\s+/g, ' ').trim();
+    const title = collapse(link.text());
     const m = href ? /\/Home\/Components\/News\/News\/(\d+)\/(\d+)/i.exec(href) : null;
     const when = parseUsDateTime($(li).find('p.item-date').first().text());
     if (!m || !title || !when) return;
-    out.push({ id: m[1]!, title, url: `${CITY}/Home/Components/News/News/${m[1]}/${m[2]}`, date: when.iso });
+    out.push({ id: m[1]!, title, url: `${CITY_SITE}/Home/Components/News/News/${m[1]}/${m[2]}`, date: when.iso });
   });
   return out;
 }
@@ -91,7 +91,6 @@ export function parseNewsroomList(html: string): ListedItem[] {
 export const cityNewsroom: SourceAdapter = {
   id: 'city-newsroom',
   publisher: 'city-of-laredo',
-  fetchMode: 'browser',
   topicRule: { topics: ['news-and-notices', 'public-safety', 'health'], stringsKey: 'topicRule.city-newsroom' },
   directory: { url: NEWSROOM_URL, stringsKey: 'dir.city-newsroom', lastVerified: '2026-09-16' },
   async run({ fetcher, log }) {
@@ -103,18 +102,18 @@ export const cityNewsroom: SourceAdapter = {
       inDepartment.set(dept, new Set(parseNewsroomList(res.body).map((i) => i.id)));
     }
 
-    const items: NewItem[] = listed.map((entry) => {
-      const filed = fileByDepartment(entry.id, inDepartment);
+    const items: NewItem[] = listed.map((listedItem) => {
+      const filed = fileByDepartment(listedItem.id, inDepartment);
       return {
-        id: `city-newsroom:${entry.id}`,
-        title: entry.title,
-        date: entry.date,
-        url: entry.url,
+        id: `city-newsroom:${listedItem.id}`,
+        title: listedItem.title,
+        date: listedItem.date,
+        url: listedItem.url,
         topic: filed.topic,
         ...(filed.department ? { topicReason: { department: filed.department } } : {}),
       };
     });
-    log(`city-newsroom: ${items.length} items listed`);
+    log(`city-newsroom: ${items.length} Items listed`);
     return { items };
   },
 };

@@ -1,11 +1,11 @@
-import { rfc822 } from '../dates.js';
+import { formatDate, rfc822 } from '../dates.js';
 import type { Item, Topic } from '../domain.js';
 import { t } from '../i18n/strings.js';
 import { absolute, href, PATHS, type RenderContext } from './context.js';
 import { esc } from './html.js';
-import { itemTitle, recentItems } from './items.js';
+import { itemTitle, postedDate, recentItems } from './items.js';
 
-/** RSS 2.0. Entries link to the Publisher's page and carry the Publisher's date (user story 25). */
+/** RSS 2.0. Each Item links to the Publisher's page and carries the Publisher's date (user story 25). */
 export function rssFeed(ctx: RenderContext, topic?: Topic): string {
   const { lang } = ctx;
   const items = recentItems(ctx, topic);
@@ -30,12 +30,19 @@ ${items.map((i) => rssItem(ctx, i)).join('\n')}
 
 function rssItem(ctx: RenderContext, item: Item): string {
   const { lang } = ctx;
-  const description = [t(lang, `publisher.${item.publisher}`), t(lang, `topic.${item.topic}`), item.event?.place].filter(Boolean).join(' · ');
+  const description = [
+    t(lang, `publisher.${item.publisher}`),
+    t(lang, `topic.${item.topic}`),
+    item.event ? formatDate(lang, item.event.start, 'long') : undefined,
+    item.event?.place,
+  ]
+    .filter(Boolean)
+    .join(' · ');
   return `<item>
 <title>${esc(itemTitle(ctx, item))}</title>
 <link>${esc(item.url)}</link>
 <guid isPermaLink="false">${esc(item.id)}</guid>
-<pubDate>${rfc822(item.date)}</pubDate>
+<pubDate>${rfc822(postedDate(item))}</pubDate>
 <category>${esc(t(lang, `topic.${item.topic}`))}</category>
 <description>${esc(description)}</description>
 </item>`;
