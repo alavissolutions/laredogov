@@ -1,0 +1,3069 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "city-calendar:3302",
+      "title": "Notice of Written Fire Entrance Examination",
+      "date": "2026-10-27",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3302/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-10-27",
+        "place": "Sames Auto Arena, 6700 Arena Boulevard, Laredo, Texas 78041"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3304",
+      "title": "World Cleanup Day",
+      "date": "2026-09-20",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3304/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-20"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3310",
+      "title": "Gardening Workshop Series - Grow your own food",
+      "date": "2026-09-25T14:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3310/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-25T14:00:00.000Z",
+        "end": "2026-09-25T16:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3312",
+      "title": "6th Annual Runway Run 5K + 1 Mile Walk",
+      "date": "2026-10-03T11:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3312/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-10-03T11:00:00.000Z",
+        "end": "2026-10-03T17:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3318",
+      "title": "Collective Bargaining - Police Officers",
+      "date": "2026-09-02",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3318/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-02",
+        "place": "Laredo Police Department, 4712 Maher Ave., Laredo, Texas 78041"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3338",
+      "title": "Notice of Fire Assistant Driver Exam",
+      "date": "2026-10-21",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3338/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-10-21"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3352",
+      "title": "Ovarian Cancer Awareness Month Proclamation",
+      "date": "2026-09-16T15:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3352/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-16T15:00:00.000Z",
+        "end": "2026-09-16T16:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3354",
+      "title": "Buena Vista Classic Car Show",
+      "date": "2026-09-18T21:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3354/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-18T21:00:00.000Z",
+        "end": "2026-09-19T03:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3360",
+      "title": "Miles for Hope - Community Run",
+      "date": "2026-10-01T00:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3360/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-10-01T00:00:00.000Z",
+        "end": "2026-10-01T02:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3362",
+      "title": "Officials Workshop at Buena Vista Sports Complex",
+      "date": "2026-09-20T23:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3362/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-20T23:00:00.000Z",
+        "end": "2026-09-21T01:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3364",
+      "title": "Kickball Tournament",
+      "date": "2026-09-26",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3364/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-26"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3366",
+      "title": "National Night Out",
+      "date": "2026-10-06T22:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3366/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-10-06T22:00:00.000Z",
+        "end": "2026-10-07T02:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3368",
+      "title": "National Recovery Month Walk",
+      "date": "2026-09-29T15:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3368/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-29T15:00:00.000Z",
+        "end": "2026-09-29T16:30:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-calendar:3370",
+      "title": "Zaragoza Plaza Square - Cleanup Drive",
+      "date": "2026-09-21T13:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3370/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-21T13:00:00.000Z",
+        "end": "2026-09-21T14:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:530",
+      "title": "City of Laredo Issues Animal Health Advisory Following Regional New World Screwworm Case",
+      "date": "2026-06-27",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/530/15",
+      "topic": "health",
+      "topicReason": {
+        "department": "Health"
+      },
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:538",
+      "title": "Bridge U-Turn Violations and AVI Acct Requirements",
+      "date": "2026-07-30T21:56:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/538/15",
+      "topic": "news-and-notices",
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:542",
+      "title": "Notice of Drawing for Place on the Ballot",
+      "date": "2026-08-10T21:50:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/542/15",
+      "topic": "news-and-notices",
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:548",
+      "title": "Register for Electronic Tax Statement",
+      "date": "2026-08-18",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/548/15",
+      "topic": "news-and-notices",
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:552",
+      "title": "Notice of Public Hearing on Tax Increase",
+      "date": "2026-09-02",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/552/15",
+      "topic": "news-and-notices",
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "city-newsroom:554",
+      "title": "Public Hearing Meeting on Tax Increase",
+      "date": "2026-09-08T22:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/News/News/554/15",
+      "topic": "news-and-notices",
+      "source": "city-newsroom",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "laredo-utilities:https://laredoutilities.com/?p=2977",
+      "title": "UTILITIES UPDATE | 36-INCH WATER LINE TIE-IN",
+      "date": "2026-09-16T05:25:36.000Z",
+      "url": "https://laredoutilities.com/36-inch-water-main-connection/",
+      "topic": "news-and-notices",
+      "source": "laredo-utilities",
+      "publisher": "laredo-utilities",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "legistar:stream:1331:agenda",
+      "title": "Agenda posted: City Council, Aug 3, 2026",
+      "date": "2026-07-28T23:02:53.543Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1331_A_City_Council_26-08-03_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1331"
+      }
+    },
+    {
+      "id": "legistar:stream:1331:minutes",
+      "title": "Minutes posted: City Council, Aug 3, 2026",
+      "date": "2026-09-04T15:33:27.433Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1331_M_City_Council_26-08-03_Meeting_Minutes.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "minutes",
+        "meetingId": "1331"
+      }
+    },
+    {
+      "id": "legistar:stream:1331:packet",
+      "title": "Agenda packet posted: City Council, Aug 3, 2026",
+      "date": "2026-09-04T15:33:27.643Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351369&GUID=99E8DAB3-000E-41D4-BB9E-7AC631E18E12&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1331"
+      }
+    },
+    {
+      "id": "legistar:stream:1331:video",
+      "title": "Video available: City Council, Aug 3, 2026",
+      "date": "2026-09-04T15:33:27.643Z",
+      "url": "https://laredotx.new.swagit.com/videos/395044",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1331"
+      }
+    },
+    {
+      "id": "legistar:stream:1332:agenda",
+      "title": "Agenda posted: City Council, Aug 17, 2026",
+      "date": "2026-08-11T22:22:01.917Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1332_A_City_Council_26-08-17_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1332"
+      }
+    },
+    {
+      "id": "legistar:stream:1332:minutes",
+      "title": "Minutes posted: City Council, Aug 17, 2026",
+      "date": "2026-09-08T19:55:08.627Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1332_M_City_Council_26-08-17_Meeting_Minutes.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "minutes",
+        "meetingId": "1332"
+      }
+    },
+    {
+      "id": "legistar:stream:1332:packet",
+      "title": "Agenda packet posted: City Council, Aug 17, 2026",
+      "date": "2026-09-08T19:55:08.84Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351370&GUID=DCF0BCFA-C128-4E5D-9928-44A2538C2841&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1332"
+      }
+    },
+    {
+      "id": "legistar:stream:1332:video",
+      "title": "Video available: City Council, Aug 17, 2026",
+      "date": "2026-09-08T19:55:08.84Z",
+      "url": "https://laredotx.new.swagit.com/videos/396409",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1332"
+      }
+    },
+    {
+      "id": "legistar:stream:1333:agenda",
+      "title": "Agenda posted: City Council, Sep 8, 2026",
+      "date": "2026-09-01T22:23:09.197Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1333_A_City_Council_26-09-08_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1333"
+      }
+    },
+    {
+      "id": "legistar:stream:1333:packet",
+      "title": "Agenda packet posted: City Council, Sep 8, 2026",
+      "date": "2026-09-01T22:25:38.863Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351371&GUID=74C43D4F-B027-4739-9374-1FD1FB5F13A9&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1333"
+      }
+    },
+    {
+      "id": "legistar:stream:1333:video",
+      "title": "Video available: City Council, Sep 8, 2026",
+      "date": "2026-09-08",
+      "url": "https://laredotx.new.swagit.com/videos/400222",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1333"
+      }
+    },
+    {
+      "id": "legistar:stream:1334:agenda",
+      "title": "Agenda posted: City Council, Sep 21, 2026",
+      "date": "2026-09-15T23:08:09.893Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1334_A_City_Council_26-09-21_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1334"
+      }
+    },
+    {
+      "id": "legistar:stream:1548:agenda",
+      "title": "Agenda posted: City Council, Jul 27, 2026",
+      "date": "2026-07-21T21:37:25.933Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1548_A_City_Council_26-07-27_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1548"
+      }
+    },
+    {
+      "id": "legistar:stream:1548:minutes",
+      "title": "Minutes posted: City Council, Jul 27, 2026",
+      "date": "2026-07-31T16:40:37.433Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1548_M_City_Council_26-07-27_Meeting_Minutes.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "minutes",
+        "meetingId": "1548"
+      }
+    },
+    {
+      "id": "legistar:stream:1548:packet",
+      "title": "Agenda packet posted: City Council, Jul 27, 2026",
+      "date": "2026-08-05T19:50:51.68Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1423665&GUID=65DB7C29-F7EB-4E39-88D1-E928A205B64F&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1548"
+      }
+    },
+    {
+      "id": "legistar:stream:1548:video",
+      "title": "Video available: City Council, Jul 27, 2026",
+      "date": "2026-08-05T19:50:51.68Z",
+      "url": "https://laredotx.new.swagit.com/videos/394543",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1548"
+      }
+    },
+    {
+      "id": "legistar:stream:1549:agenda",
+      "title": "Agenda posted: Historic District / Landmark Board, Jul 9, 2026",
+      "date": "2026-07-01T21:33:30.983Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1549_A_Historic_District___Landmark_Board_26-07-09_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1549"
+      }
+    },
+    {
+      "id": "legistar:stream:1549:packet",
+      "title": "Agenda packet posted: Historic District / Landmark Board, Jul 9, 2026",
+      "date": "2026-07-01T21:33:31.183Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1423786&GUID=9AB2B7CE-C478-4E9C-BBF2-18682759006A&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1549"
+      }
+    },
+    {
+      "id": "legistar:stream:1556:agenda",
+      "title": "Agenda posted: Building Standards Board, Jul 8, 2026",
+      "date": "2026-06-30T19:36:29.4Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1556_A_Building_Standards_Board_26-07-08_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1556"
+      }
+    },
+    {
+      "id": "legistar:stream:1557:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Jul 2, 2026",
+      "date": "2026-06-27T00:35:33.82Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1557_A_Planning___Zoning_Commission_26-07-02_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1557"
+      }
+    },
+    {
+      "id": "legistar:stream:1557:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Jul 2, 2026",
+      "date": "2026-06-27T00:36:34.033Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1425562&GUID=F3A61BE2-A2B0-4E84-B263-2D92C8F201FD&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1557"
+      }
+    },
+    {
+      "id": "legistar:stream:1558:agenda",
+      "title": "Agenda posted: Convention &Visitors Bureau Advisory Committee, Jul 2, 2026",
+      "date": "2026-06-30T19:35:45.503Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1558_A_Convention__Visitors_Bureau_Advisory_Committee_26-07-02_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1558"
+      }
+    },
+    {
+      "id": "legistar:stream:1559:agenda",
+      "title": "Agenda posted: Building Standards Board, Aug 5, 2026",
+      "date": "2026-08-24T15:52:40.503Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1559_A_Building_Standards_Board_26-08-05_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1559"
+      }
+    },
+    {
+      "id": "legistar:stream:1560:agenda",
+      "title": "Agenda posted: City Utilities Advisory Committee, Jul 9, 2026",
+      "date": "2026-06-30T19:34:31.33Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1560_A_City_Utilities_Advisory_Committee_26-07-09_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1560"
+      }
+    },
+    {
+      "id": "legistar:stream:1562:agenda",
+      "title": "Agenda posted: Para Transit Advisory Committee, Jul 14, 2026",
+      "date": "2026-07-01T22:07:45.033Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1562_A_Para_Transit_Advisory_Committee_26-07-14_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1562"
+      }
+    },
+    {
+      "id": "legistar:stream:1563:agenda",
+      "title": "Agenda posted: Municipal Civil Service Commission, Jul 14, 2026",
+      "date": "2026-07-08T22:04:02.687Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1563_A_Municipal_Civil_Service_Commission_26-07-14_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1563"
+      }
+    },
+    {
+      "id": "legistar:stream:1564:agenda",
+      "title": "Agenda posted: Port Of Entry Advisory Committee, Jul 15, 2026",
+      "date": "2026-07-08T22:03:35.85Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1564_A_Port_Of_Entry_Advisory_Committee_26-07-15_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1564"
+      }
+    },
+    {
+      "id": "legistar:stream:1566:agenda",
+      "title": "Agenda posted: Fine Art & Culture Commission, Jul 16, 2026",
+      "date": "2026-07-08T22:03:11.54Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1566_A_Fine_Art___Culture_Commission_26-07-16_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1566"
+      }
+    },
+    {
+      "id": "legistar:stream:1568:agenda",
+      "title": "Agenda posted: Veterans Affairs Committee, Jul 14, 2026",
+      "date": "2026-07-08T22:04:26.44Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1568_A_Veterans_Affairs_Committee_26-07-14_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1568"
+      }
+    },
+    {
+      "id": "legistar:stream:1569:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Jul 16, 2026",
+      "date": "2026-07-10T21:57:56.287Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1569_A_Planning___Zoning_Commission_26-07-16_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1569"
+      }
+    },
+    {
+      "id": "legistar:stream:1569:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Jul 16, 2026",
+      "date": "2026-07-10T21:59:04.083Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1427864&GUID=36AF5425-B409-49ED-941A-1A03B1EBF7D9&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1569"
+      }
+    },
+    {
+      "id": "legistar:stream:1570:agenda",
+      "title": "Agenda posted: Blue Ribbon Committee For People With Disabilities, Jul 15, 2026",
+      "date": "2026-07-22T18:09:22.823Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1570_A_Blue_Ribbon_Committee_For_People_With_Disabilities_26-07-15_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1570"
+      }
+    },
+    {
+      "id": "legistar:stream:1574:agenda",
+      "title": "Agenda posted: Keep Laredo Beautiful, Jul 20, 2026",
+      "date": "2026-07-22T18:08:52.327Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1574_A_Keep_Laredo_Beautiful_26-07-20_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1574"
+      }
+    },
+    {
+      "id": "legistar:stream:1576:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Aug 6, 2026",
+      "date": "2026-07-31T16:40:52.5Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1576_A_Planning___Zoning_Commission_26-08-06_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1576"
+      }
+    },
+    {
+      "id": "legistar:stream:1576:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Aug 6, 2026",
+      "date": "2026-07-31T16:41:54.933Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1428893&GUID=F9A0CF16-F078-499D-9A26-17BBEB45C891&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1576"
+      }
+    },
+    {
+      "id": "legistar:stream:1577:agenda",
+      "title": "Agenda posted: Airport Advisory Board, Jul 22, 2026",
+      "date": "2026-07-22T18:08:20.81Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1577_A_Airport_Advisory_Board_26-07-22_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1577"
+      }
+    },
+    {
+      "id": "legistar:stream:1578:agenda",
+      "title": "Agenda posted: Municipal Civil Service Commission, Jul 28, 2026",
+      "date": "2026-07-22T18:07:21.993Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1578_A_Municipal_Civil_Service_Commission_26-07-28_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1578"
+      }
+    },
+    {
+      "id": "legistar:stream:1579:agenda",
+      "title": "Agenda posted: Suicide Prevention Committe, Jul 29, 2026",
+      "date": "2026-07-22T18:06:46.737Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1579_A_Suicide_Prevention_Committe_26-07-29_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1579"
+      }
+    },
+    {
+      "id": "legistar:stream:1581:minutes",
+      "title": "Minutes posted: City Council, Jul 28, 2026",
+      "date": "2026-07-30T20:22:21.193Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1581_M_City_Council_26-07-28_Meeting_Minutes.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "minutes",
+        "meetingId": "1581"
+      }
+    },
+    {
+      "id": "legistar:stream:1581:video",
+      "title": "Video available: City Council, Jul 28, 2026",
+      "date": "2026-07-30T20:22:21.357Z",
+      "url": "https://laredotx.new.swagit.com/videos/394644",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1581"
+      }
+    },
+    {
+      "id": "legistar:stream:1583:agenda",
+      "title": "Agenda posted: Laredo Commission For Women, Aug 11, 2026",
+      "date": "2026-08-24T15:51:12.787Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1583_A_Laredo_Commission_For_Women__26-08-11_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1583"
+      }
+    },
+    {
+      "id": "legistar:stream:1584:agenda",
+      "title": "Agenda posted: Convention &Visitors Bureau Advisory Committee, Aug 6, 2026",
+      "date": "2026-08-24T15:52:17.883Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1584_A_Convention__Visitors_Bureau_Advisory_Committee_26-08-06_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1584"
+      }
+    },
+    {
+      "id": "legistar:stream:1585:agenda",
+      "title": "Agenda posted: Keep Laredo Beautiful, Aug 12, 2026",
+      "date": "2026-08-24T15:50:09.723Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1585_A_Keep_Laredo_Beautiful_26-08-12_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1585"
+      }
+    },
+    {
+      "id": "legistar:stream:1587:agenda",
+      "title": "Agenda posted: Tax Increment Reinvestment Zone No. 1-Downtown, Aug 11, 2026",
+      "date": "2026-08-24T15:51:47.367Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1587_A_Tax_Increment_Reinvestment_Zone_No._1-Downtown_26-08-11_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1587"
+      }
+    },
+    {
+      "id": "legistar:stream:1588:agenda",
+      "title": "Agenda posted: Laredo/Webb County Drug & Alcohol Commission, Aug 12, 2026",
+      "date": "2026-08-24T15:50:36.483Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1588_A_Laredo_Webb_County_Drug___Alcohol_Commission_26-08-12_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1588"
+      }
+    },
+    {
+      "id": "legistar:stream:1589:agenda",
+      "title": "Agenda posted: Municipal Civil Service Commission, Aug 13, 2026",
+      "date": "2026-08-24T15:49:39.52Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1589_A_Municipal_Civil_Service_Commission_26-08-13_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1589"
+      }
+    },
+    {
+      "id": "legistar:stream:1590:agenda",
+      "title": "Agenda posted: City Council, Aug 14, 2026",
+      "date": "2026-08-10T21:29:23.557Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1590_A_City_Council_26-08-14_Special_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1590"
+      }
+    },
+    {
+      "id": "legistar:stream:1590:packet",
+      "title": "Agenda packet posted: City Council, Aug 14, 2026",
+      "date": "2026-08-10T21:29:51.153Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1436005&GUID=48B58344-281E-4D96-80FC-7DD7E16B00D6&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1590"
+      }
+    },
+    {
+      "id": "legistar:stream:1590:video",
+      "title": "Video available: City Council, Aug 14, 2026",
+      "date": "2026-08-14",
+      "url": "https://laredotx.new.swagit.com/videos/396260",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1590"
+      }
+    },
+    {
+      "id": "legistar:stream:1591:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Aug 20, 2026",
+      "date": "2026-08-24T15:38:28.327Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1591_A_Planning___Zoning_Commission_26-08-20_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1591"
+      }
+    },
+    {
+      "id": "legistar:stream:1591:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Aug 20, 2026",
+      "date": "2026-08-24T15:38:28.433Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1436139&GUID=32FB7A4B-1D35-49CE-B8C8-7FAC3B179D41&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1591"
+      }
+    },
+    {
+      "id": "legistar:stream:1592:agenda",
+      "title": "Agenda posted: Municipal Civil Service Commission, Aug 19, 2026",
+      "date": "2026-08-24T15:48:07.573Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1592_A_Municipal_Civil_Service_Commission_26-08-19_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1592"
+      }
+    },
+    {
+      "id": "legistar:stream:1594:agenda",
+      "title": "Agenda posted: Blue Ribbon Committee For People With Disabilities, Aug 19, 2026",
+      "date": "2026-08-24T15:48:28.893Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1594_A_Blue_Ribbon_Committee_For_People_With_Disabilities_26-08-19_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1594"
+      }
+    },
+    {
+      "id": "legistar:stream:1595:agenda",
+      "title": "Agenda posted: Port Of Entry Advisory Committee, Aug 19, 2026",
+      "date": "2026-08-24T15:47:35.327Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1595_A_Port_Of_Entry_Advisory_Committee_26-08-19_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1595"
+      }
+    },
+    {
+      "id": "legistar:stream:1596:minutes",
+      "title": "Minutes posted: City Council, Aug 20, 2026",
+      "date": "2026-09-08T21:04:24.733Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1596_M_City_Council_26-08-20_Meeting_Minutes.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "minutes",
+        "meetingId": "1596"
+      }
+    },
+    {
+      "id": "legistar:stream:1596:video",
+      "title": "Video available: City Council, Aug 20, 2026",
+      "date": "2026-09-08T21:04:24.953Z",
+      "url": "https://laredotx.new.swagit.com/videos/396864",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1596"
+      }
+    },
+    {
+      "id": "legistar:stream:1597:agenda",
+      "title": "Agenda posted: Civic Partnership and Engagement Advisory Committee, Aug 18, 2026",
+      "date": "2026-08-24T15:49:12.837Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1597_A_Civic_Partnership_and_Engagement_Advisory_Committee_26-08-18_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1597"
+      }
+    },
+    {
+      "id": "legistar:stream:1598:agenda",
+      "title": "Agenda posted: Fine Art & Culture Commission, Aug 20, 2026",
+      "date": "2026-08-24T15:39:07.64Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1598_A_Fine_Art___Culture_Commission_26-08-20_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1598"
+      }
+    },
+    {
+      "id": "legistar:stream:1599:agenda",
+      "title": "Agenda posted: City Council, Aug 21, 2026",
+      "date": "2026-08-18T04:11:26.007Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1599_A_City_Council_26-08-21_Special_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1599"
+      }
+    },
+    {
+      "id": "legistar:stream:1599:video",
+      "title": "Video available: City Council, Aug 21, 2026",
+      "date": "2026-08-21",
+      "url": "https://laredotx.new.swagit.com/videos/398782",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1599"
+      }
+    },
+    {
+      "id": "legistar:stream:1600:agenda",
+      "title": "Agenda posted: Municipal Civil Service Commission, Aug 25, 2026",
+      "date": "2026-08-24T15:38:07.823Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1600_A_Municipal_Civil_Service_Commission_26-08-25_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1600"
+      }
+    },
+    {
+      "id": "legistar:stream:1602:agenda",
+      "title": "Agenda posted: Library Advisory Committee, Aug 26, 2026",
+      "date": "2026-08-24T15:36:12.037Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1602_A_Library_Advisory_Committee_26-08-26_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1602"
+      }
+    },
+    {
+      "id": "legistar:stream:1604:agenda",
+      "title": "Agenda posted: Airport Advisory Board, Aug 26, 2026",
+      "date": "2026-08-24T15:36:41.067Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1604_A_Airport_Advisory_Board_26-08-26_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1604"
+      }
+    },
+    {
+      "id": "legistar:stream:1605:agenda",
+      "title": "Agenda posted: Suicide Prevention Committe, Aug 26, 2026",
+      "date": "2026-08-24T15:35:49.607Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1605_A_Suicide_Prevention_Committe_26-08-26_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1605"
+      }
+    },
+    {
+      "id": "legistar:stream:1611:agenda",
+      "title": "Agenda posted: City Council, Aug 31, 2026",
+      "date": "2026-08-25T21:40:53.87Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1611_A_City_Council_26-08-31_Special_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1611"
+      }
+    },
+    {
+      "id": "legistar:stream:1611:packet",
+      "title": "Agenda packet posted: City Council, Aug 31, 2026",
+      "date": "2026-08-25T21:41:29.973Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1439476&GUID=F489DDB0-BB30-43FA-B6D4-9157B5001BAE&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1611"
+      }
+    },
+    {
+      "id": "legistar:stream:1611:video",
+      "title": "Video available: City Council, Aug 31, 2026",
+      "date": "2026-08-31",
+      "url": "https://laredotx.new.swagit.com/videos/399522",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1611"
+      }
+    },
+    {
+      "id": "legistar:stream:1612:agenda",
+      "title": "Agenda posted: City Council, Sep 14, 2026",
+      "date": "2026-09-08T21:10:10.99Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1612_A_City_Council_26-09-14_Special_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1612"
+      }
+    },
+    {
+      "id": "legistar:stream:1612:packet",
+      "title": "Agenda packet posted: City Council, Sep 14, 2026",
+      "date": "2026-09-08T21:10:38.68Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1439477&GUID=0540DB1D-EE70-4694-940C-2FD2E3DC5106&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1612"
+      }
+    },
+    {
+      "id": "legistar:stream:1612:video",
+      "title": "Video available: City Council, Sep 14, 2026",
+      "date": "2026-09-14",
+      "url": "https://laredotx.new.swagit.com/videos/400775",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "video",
+        "meetingId": "1612"
+      }
+    },
+    {
+      "id": "legistar:stream:1614:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Sep 3, 2026",
+      "date": "2026-08-28T22:06:34.123Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1614_A_Planning___Zoning_Commission_26-09-03_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1614"
+      }
+    },
+    {
+      "id": "legistar:stream:1614:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Sep 3, 2026",
+      "date": "2026-08-28T22:07:11.393Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1440134&GUID=AB7EAB27-9CEF-4526-A8F2-52FA7CD1225D&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1614"
+      }
+    },
+    {
+      "id": "legistar:stream:1623:agenda",
+      "title": "Agenda posted: Planning & Zoning Commission, Sep 17, 2026",
+      "date": "2026-09-11T22:19:52.9Z",
+      "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1623_A_Planning___Zoning_Commission_26-09-17_Regular_Meeting_Agenda.pdf",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "agenda",
+        "meetingId": "1623"
+      }
+    },
+    {
+      "id": "legistar:stream:1623:packet",
+      "title": "Agenda packet posted: Planning & Zoning Commission, Sep 17, 2026",
+      "date": "2026-09-11T22:20:42.953Z",
+      "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1442902&GUID=BB43B717-3006-4F58-8458-3BAB4F1D000E&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "topic": "meetings",
+      "publisher": "city-of-laredo",
+      "source": "legistar",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z",
+      "stream": {
+        "kind": "packet",
+        "meetingId": "1623"
+      }
+    }
+  ],
+  "meetings": [
+    {
+      "id": "1331",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-03",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1331&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1331_A_City_Council_26-08-03_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-28T23:02:53.543Z"
+        },
+        "minutes": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1331_M_City_Council_26-08-03_Meeting_Minutes.pdf",
+          "publishedAt": "2026-09-04T15:33:27.433Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/395044",
+          "publishedAt": "2026-09-04T15:33:27.643Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351369&GUID=99E8DAB3-000E-41D4-BB9E-7AC631E18E12&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-09-04T15:33:27.643Z"
+        }
+      },
+      "lastModified": "2026-09-04T15:33:27.643Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1332",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-17",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1332&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1332_A_City_Council_26-08-17_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-11T22:22:01.917Z"
+        },
+        "minutes": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1332_M_City_Council_26-08-17_Meeting_Minutes.pdf",
+          "publishedAt": "2026-09-08T19:55:08.627Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/396409",
+          "publishedAt": "2026-09-08T19:55:08.84Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351370&GUID=DCF0BCFA-C128-4E5D-9928-44A2538C2841&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-09-08T19:55:08.84Z"
+        }
+      },
+      "lastModified": "2026-09-08T19:55:08.84Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1333",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-09-08",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1333&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1333_A_City_Council_26-09-08_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-09-01T22:23:09.197Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/400222",
+          "publishedAt": "2026-09-01T22:25:38.863Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1351371&GUID=74C43D4F-B027-4739-9374-1FD1FB5F13A9&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-09-01T22:25:38.863Z"
+        }
+      },
+      "lastModified": "2026-09-01T22:25:38.863Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1334",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-09-21",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1334&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1334_A_City_Council_26-09-21_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-09-15T23:08:09.893Z"
+        }
+      },
+      "lastModified": "2026-09-15T23:08:10.09Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1335",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-10-05",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1335&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2025-11-06T19:44:07.423Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1336",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-10-19",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1336&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2025-11-06T19:44:23.29Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1337",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-11-02",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1337&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2025-11-06T19:44:39.48Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1338",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-11-16",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1338&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2025-11-06T19:44:52.893Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1339",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-12-07",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1339&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2025-11-06T19:45:08.54Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1426",
+      "bodyId": "270",
+      "bodyName": "Laredo Commission For Women",
+      "date": "2026-09-08",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1426&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2026-03-03T20:33:02.17Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1548",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-07-27",
+      "time": "5:30 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1548&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1548_A_City_Council_26-07-27_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-21T21:37:25.933Z"
+        },
+        "minutes": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1548_M_City_Council_26-07-27_Meeting_Minutes.pdf",
+          "publishedAt": "2026-07-31T16:40:37.433Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/394543",
+          "publishedAt": "2026-08-05T19:50:51.68Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1423665&GUID=65DB7C29-F7EB-4E39-88D1-E928A205B64F&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-08-05T19:50:51.68Z"
+        }
+      },
+      "lastModified": "2026-08-05T19:50:51.68Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1549",
+      "bodyId": "268",
+      "bodyName": "Historic District / Landmark Board",
+      "date": "2026-07-09",
+      "time": "12:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1549&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1549_A_Historic_District___Landmark_Board_26-07-09_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-01T21:33:30.983Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1423786&GUID=9AB2B7CE-C478-4E9C-BBF2-18682759006A&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-07-01T21:33:31.183Z"
+        }
+      },
+      "lastModified": "2026-07-01T21:33:31.183Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1556",
+      "bodyId": "257",
+      "bodyName": "Building Standards Board",
+      "date": "2026-07-08",
+      "time": "6:00 PM",
+      "location": "1413 Houston St. \r\nLaredo, TX.",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1556&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1556_A_Building_Standards_Board_26-07-08_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-06-30T19:36:29.4Z"
+        }
+      },
+      "lastModified": "2026-06-30T19:36:29.597Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1557",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-07-02",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1557&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1557_A_Planning___Zoning_Commission_26-07-02_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-06-27T00:35:33.82Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1425562&GUID=F3A61BE2-A2B0-4E84-B263-2D92C8F201FD&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-06-27T00:36:34.033Z"
+        }
+      },
+      "lastModified": "2026-06-27T00:36:34.033Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1558",
+      "bodyId": "263",
+      "bodyName": "Convention &Visitors Bureau Advisory Committee",
+      "date": "2026-07-02",
+      "time": "8:30 AM",
+      "location": "Convention & Visitors Bureau\r\n101 Salinas Avenue\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1558&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1558_A_Convention__Visitors_Bureau_Advisory_Committee_26-07-02_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-06-30T19:35:45.503Z"
+        }
+      },
+      "lastModified": "2026-06-30T19:35:45.693Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1559",
+      "bodyId": "257",
+      "bodyName": "Building Standards Board",
+      "date": "2026-08-05",
+      "time": "6:00 PM",
+      "location": "1413 Houston St. Laredo, TX.",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1559&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1559_A_Building_Standards_Board_26-08-05_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:52:40.503Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:52:40.643Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1560",
+      "bodyId": "217",
+      "bodyName": "City Utilities Advisory Committee",
+      "date": "2026-07-09",
+      "time": "12:00 PM",
+      "location": "5816 Daugherty Ave.\r\nLaredo, Texas 78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1560&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1560_A_City_Utilities_Advisory_Committee_26-07-09_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-06-30T19:34:31.33Z"
+        }
+      },
+      "lastModified": "2026-06-30T19:34:31.663Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1562",
+      "bodyId": "276",
+      "bodyName": "Para Transit Advisory Committee",
+      "date": "2026-07-14",
+      "location": "Transit Center, 3rd Floor Conf. Rm. \r\n1301 Farragut St., Laredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1562&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1562_A_Para_Transit_Advisory_Committee_26-07-14_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-01T22:07:45.033Z"
+        }
+      },
+      "lastModified": "2026-07-01T22:07:45.24Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1563",
+      "bodyId": "275",
+      "bodyName": "Municipal Civil Service Commission",
+      "date": "2026-07-14",
+      "time": "6:00 PM",
+      "location": "City of Laredo",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1563&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1563_A_Municipal_Civil_Service_Commission_26-07-14_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-08T22:04:02.687Z"
+        }
+      },
+      "lastModified": "2026-07-08T22:04:02.82Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1564",
+      "bodyId": "278",
+      "bodyName": "Port Of Entry Advisory Committee",
+      "date": "2026-07-15",
+      "time": "6:00 PM",
+      "location": "City Council Chamber\r\n110 Houston St., Laredo, TX 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1564&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1564_A_Port_Of_Entry_Advisory_Committee_26-07-15_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-08T22:03:35.85Z"
+        }
+      },
+      "lastModified": "2026-07-08T22:03:35.973Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1566",
+      "bodyId": "267",
+      "bodyName": "Fine Art & Culture Commission",
+      "date": "2026-07-16",
+      "time": "5:30 PM",
+      "location": "City of Laredo\r\nFine Arts & Culture Commission\r\nJoe A. Guerra Laredo Public Library\r\n1120 E. Calton Rd. Laredo, Texas \r\n78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1566&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1566_A_Fine_Art___Culture_Commission_26-07-16_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-08T22:03:11.54Z"
+        }
+      },
+      "lastModified": "2026-07-08T22:03:11.67Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1568",
+      "bodyId": "252",
+      "bodyName": "Veterans Affairs Committee",
+      "date": "2026-07-14",
+      "time": "11:30 AM",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1568&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1568_A_Veterans_Affairs_Committee_26-07-14_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-08T22:04:26.44Z"
+        }
+      },
+      "lastModified": "2026-07-08T22:04:26.57Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1569",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-07-16",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1569&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1569_A_Planning___Zoning_Commission_26-07-16_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-10T21:57:56.287Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1427864&GUID=36AF5425-B409-49ED-941A-1A03B1EBF7D9&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-07-10T21:59:04.083Z"
+        }
+      },
+      "lastModified": "2026-07-10T21:59:04.083Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1570",
+      "bodyId": "256",
+      "bodyName": "Blue Ribbon Committee For People With Disabilities",
+      "date": "2026-07-15",
+      "time": "11:00 AM",
+      "location": "City of Laredo Public Health Department Auditorium",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1570&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1570_A_Blue_Ribbon_Committee_For_People_With_Disabilities_26-07-15_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-22T18:09:22.823Z"
+        }
+      },
+      "lastModified": "2026-07-22T18:09:22.973Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1571",
+      "bodyId": "297",
+      "bodyName": "Rio Grande Riverfront Coordination and Advisory Ad-Hoc Committee",
+      "date": "2026-07-15",
+      "time": "2:00 PM",
+      "location": "City of Laredo\r\nRio Grande Riverfront Coordination and Advisory Ad-Hoc Committee\r\nCity Hall, 1st Floor Conference Room\r\n1110 Houston, Street, Laredo Texas, 78040\r\nJuly 15, 2026 at 2:00 P.M.\r\nThis governmental body may allow video conference participation",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1571&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2026-07-09T18:45:49.18Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1574",
+      "bodyId": "292",
+      "bodyName": "Keep Laredo Beautiful",
+      "date": "2026-07-20",
+      "time": "5:30 PM",
+      "location": "619 Reynolds St, Laredo, TX 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1574&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1574_A_Keep_Laredo_Beautiful_26-07-20_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-22T18:08:52.327Z"
+        }
+      },
+      "lastModified": "2026-07-22T18:08:52.457Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1576",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-08-06",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1576&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1576_A_Planning___Zoning_Commission_26-08-06_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-31T16:40:52.5Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1428893&GUID=F9A0CF16-F078-499D-9A26-17BBEB45C891&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-07-31T16:41:54.933Z"
+        }
+      },
+      "lastModified": "2026-07-31T16:41:54.933Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1577",
+      "bodyId": "254",
+      "bodyName": "Airport Advisory Board",
+      "date": "2026-07-22",
+      "time": "12:00 PM",
+      "location": "5210 Bob Bullock Loop\r\nLaredo, Texas 78041\r\nJuly 22, 2026\r\n12:00 PM",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1577&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1577_A_Airport_Advisory_Board_26-07-22_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-22T18:08:20.81Z"
+        }
+      },
+      "lastModified": "2026-07-22T18:08:20.933Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1578",
+      "bodyId": "275",
+      "bodyName": "Municipal Civil Service Commission",
+      "date": "2026-07-28",
+      "time": "6:00 PM",
+      "location": "City of Laredo",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1578&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1578_A_Municipal_Civil_Service_Commission_26-07-28_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-22T18:07:21.993Z"
+        }
+      },
+      "lastModified": "2026-07-22T18:07:22.133Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1579",
+      "bodyId": "279",
+      "bodyName": "Suicide Prevention Committe",
+      "date": "2026-07-29",
+      "time": "5:30 PM",
+      "location": "City of Laredo Public Health Department Auditorium",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1579&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1579_A_Suicide_Prevention_Committe_26-07-29_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-07-22T18:06:46.737Z"
+        }
+      },
+      "lastModified": "2026-07-22T18:06:46.94Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1581",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-07-28",
+      "time": "12:00 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1581&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "minutes": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/7/1581_M_City_Council_26-07-28_Meeting_Minutes.pdf",
+          "publishedAt": "2026-07-30T20:22:21.193Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/394644",
+          "publishedAt": "2026-07-30T20:22:21.357Z"
+        }
+      },
+      "lastModified": "2026-07-30T20:22:21.357Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1583",
+      "bodyId": "270",
+      "bodyName": "Laredo Commission For Women",
+      "date": "2026-08-11",
+      "time": "5:30 PM",
+      "location": "City of Laredo\r\nLaredo Commission For Women\r\nJoe. A Guerra Laredo Public Library\r\nLaredo, Texas 78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1583&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1583_A_Laredo_Commission_For_Women__26-08-11_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:51:12.787Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:51:12.91Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1584",
+      "bodyId": "263",
+      "bodyName": "Convention &Visitors Bureau Advisory Committee",
+      "date": "2026-08-06",
+      "time": "8:30 AM",
+      "location": "Convention & Visitors Bureau\r\n101 Salinas Avenue\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1584&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1584_A_Convention__Visitors_Bureau_Advisory_Committee_26-08-06_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:52:17.883Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:52:18.02Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1585",
+      "bodyId": "292",
+      "bodyName": "Keep Laredo Beautiful",
+      "date": "2026-08-12",
+      "time": "5:30 PM",
+      "location": "619 Reynolds St, Laredo TX 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1585&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1585_A_Keep_Laredo_Beautiful_26-08-12_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:50:09.723Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:50:09.85Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1587",
+      "bodyId": "251",
+      "bodyName": "Tax Increment Reinvestment Zone No. 1-Downtown",
+      "date": "2026-08-11",
+      "time": "3:30 PM",
+      "location": "City Hall - Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1587&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1587_A_Tax_Increment_Reinvestment_Zone_No._1-Downtown_26-08-11_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:51:47.367Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:51:47.527Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1588",
+      "bodyId": "273",
+      "bodyName": "Laredo/Webb County Drug & Alcohol Commission",
+      "date": "2026-08-12",
+      "time": "10:00 AM",
+      "location": "City of Laredo Public Health Department Auditorium",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1588&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1588_A_Laredo_Webb_County_Drug___Alcohol_Commission_26-08-12_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:50:36.483Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:50:36.64Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1589",
+      "bodyId": "275",
+      "bodyName": "Municipal Civil Service Commission",
+      "date": "2026-08-13",
+      "time": "6:00 PM",
+      "location": "City of Laredo",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1589&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1589_A_Municipal_Civil_Service_Commission_26-08-13_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:49:39.52Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:49:39.64Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1590",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-14",
+      "time": "12:00 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1590&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1590_A_City_Council_26-08-14_Special_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-10T21:29:23.557Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/396260",
+          "publishedAt": "2026-08-10T21:29:51.153Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1436005&GUID=48B58344-281E-4D96-80FC-7DD7E16B00D6&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-08-10T21:29:51.153Z"
+        }
+      },
+      "lastModified": "2026-08-10T21:29:51.153Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1591",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-08-20",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1591&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1591_A_Planning___Zoning_Commission_26-08-20_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:38:28.327Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1436139&GUID=32FB7A4B-1D35-49CE-B8C8-7FAC3B179D41&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-08-24T15:38:28.433Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:38:28.433Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1592",
+      "bodyId": "275",
+      "bodyName": "Municipal Civil Service Commission",
+      "date": "2026-08-19",
+      "time": "6:00 PM",
+      "location": "City of Laredo",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1592&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1592_A_Municipal_Civil_Service_Commission_26-08-19_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:48:07.573Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:48:07.713Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1594",
+      "bodyId": "256",
+      "bodyName": "Blue Ribbon Committee For People With Disabilities",
+      "date": "2026-08-19",
+      "time": "11:00 AM",
+      "location": "City of Laredo Public Health Department Auditorium",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1594&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1594_A_Blue_Ribbon_Committee_For_People_With_Disabilities_26-08-19_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:48:28.893Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:48:29.033Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1595",
+      "bodyId": "278",
+      "bodyName": "Port Of Entry Advisory Committee",
+      "date": "2026-08-19",
+      "time": "6:00 PM",
+      "location": "Laredo Bridge System \r\nWorld Trade Bridge\r\nConference Room",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1595&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1595_A_Port_Of_Entry_Advisory_Committee_26-08-19_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:47:35.327Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:47:35.567Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1596",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-20",
+      "time": "12:00 PM",
+      "location": "Joe A.Guerra Laredo Public Library",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1596&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "minutes": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1596_M_City_Council_26-08-20_Meeting_Minutes.pdf",
+          "publishedAt": "2026-09-08T21:04:24.733Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/396864",
+          "publishedAt": "2026-09-08T21:04:24.953Z"
+        }
+      },
+      "lastModified": "2026-09-08T21:04:24.953Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1597",
+      "bodyId": "282",
+      "bodyName": "Civic Partnership and Engagement Advisory Committee",
+      "date": "2026-08-18",
+      "time": "5:30 PM",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1597&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1597_A_Civic_Partnership_and_Engagement_Advisory_Committee_26-08-18_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:49:12.837Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:49:13.12Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1598",
+      "bodyId": "267",
+      "bodyName": "Fine Art & Culture Commission",
+      "date": "2026-08-20",
+      "time": "5:30 PM",
+      "location": "City of Laredo \r\nArts & Culture Advisory Committee\r\nJoe. A. Guerra Laredo Public Library\r\n1120 E. Calton Rd. Laredo, Texas 78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1598&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1598_A_Fine_Art___Culture_Commission_26-08-20_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:39:07.64Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:39:07.737Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1599",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-21",
+      "time": "12:00 PM",
+      "location": "Joe A.Guerra Laredo Public Library",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1599&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1599_A_City_Council_26-08-21_Special_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-18T04:11:26.007Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/398782",
+          "publishedAt": "2026-08-18T04:11:27.007Z"
+        }
+      },
+      "lastModified": "2026-08-18T04:11:27.007Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1600",
+      "bodyId": "275",
+      "bodyName": "Municipal Civil Service Commission",
+      "date": "2026-08-25",
+      "time": "6:00 PM",
+      "location": "City of Laredo",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1600&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1600_A_Municipal_Civil_Service_Commission_26-08-25_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:38:07.823Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:38:07.95Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1602",
+      "bodyId": "274",
+      "bodyName": "Library Advisory Committee",
+      "date": "2026-08-26",
+      "time": "5:00 PM",
+      "location": "City of Laredo\r\nPublic Library Advisory Committee\r\nJoe A. Guerra Laredo Public Library\r\n1120 E. Calton Rd. Laredo, Texas\r\n78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1602&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1602_A_Library_Advisory_Committee_26-08-26_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:36:12.037Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:36:12.163Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1604",
+      "bodyId": "254",
+      "bodyName": "Airport Advisory Board",
+      "date": "2026-08-26",
+      "time": "12:00 PM",
+      "location": "5210 Bob Bullock Loop\r\nLaredo, Texas 78041\r\nAugust 26, 2026\r\n12:00 PM",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1604&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1604_A_Airport_Advisory_Board_26-08-26_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:36:41.067Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:36:41.21Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1605",
+      "bodyId": "279",
+      "bodyName": "Suicide Prevention Committe",
+      "date": "2026-08-26",
+      "time": "5:30 PM",
+      "location": "City of Laredo Public Health Department Auditorium",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1605&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1605_A_Suicide_Prevention_Committe_26-08-26_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-24T15:35:49.607Z"
+        }
+      },
+      "lastModified": "2026-08-24T15:35:49.81Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1611",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-08-31",
+      "time": "12:00 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1611&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/8/1611_A_City_Council_26-08-31_Special_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-25T21:40:53.87Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/399522",
+          "publishedAt": "2026-08-25T21:41:29.973Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1439476&GUID=F489DDB0-BB30-43FA-B6D4-9157B5001BAE&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-08-25T21:41:29.973Z"
+        }
+      },
+      "lastModified": "2026-08-25T21:41:29.973Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1612",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-09-14",
+      "time": "12:00 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1612&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1612_A_City_Council_26-09-14_Special_Meeting_Agenda.pdf",
+          "publishedAt": "2026-09-08T21:10:10.99Z"
+        },
+        "video": {
+          "url": "https://laredotx.new.swagit.com/videos/400775",
+          "publishedAt": "2026-09-08T21:10:38.68Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1439477&GUID=0540DB1D-EE70-4694-940C-2FD2E3DC5106&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-09-08T21:10:38.68Z"
+        }
+      },
+      "lastModified": "2026-09-08T21:10:38.68Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1614",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-09-03",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1614&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1614_A_Planning___Zoning_Commission_26-09-03_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-08-28T22:06:34.123Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1440134&GUID=AB7EAB27-9CEF-4526-A8F2-52FA7CD1225D&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-08-28T22:07:11.393Z"
+        }
+      },
+      "lastModified": "2026-08-28T22:07:11.393Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1622",
+      "bodyId": "267",
+      "bodyName": "Fine Art & Culture Commission",
+      "date": "2026-09-17",
+      "time": "5:30 PM",
+      "location": "City of Laredo\r\nArts & Culture Advisory Committee\r\nJoe A. Guerra Laredo Public Library\r\n1120 E. Calton Rd. Laredo, Texas 78041",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1622&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2026-09-08T21:46:52.21Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1623",
+      "bodyId": "227",
+      "bodyName": "Planning & Zoning Commission",
+      "date": "2026-09-17",
+      "time": "6:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1623&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {
+        "agenda": {
+          "url": "https://cityoflaredo.legistar1.com/cityoflaredo/meetings/2026/9/1623_A_Planning___Zoning_Commission_26-09-17_Regular_Meeting_Agenda.pdf",
+          "publishedAt": "2026-09-11T22:19:52.9Z"
+        },
+        "packet": {
+          "url": "https://cityoflaredo.legistar.com/View.ashx?M=PA&ID=1442902&GUID=BB43B717-3006-4F58-8458-3BAB4F1D000E&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+          "publishedAt": "2026-09-11T22:20:42.953Z"
+        }
+      },
+      "lastModified": "2026-09-11T22:20:42.953Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    },
+    {
+      "id": "1625",
+      "bodyId": "138",
+      "bodyName": "City Council",
+      "date": "2026-09-25",
+      "time": "12:00 PM",
+      "location": "City Council Chambers",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1625&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2026-09-10T16:56:19.16Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-16T06:20:44.546Z",
+      "lastSeenLive": "2026-09-16T06:20:44.546Z"
+    }
+  ],
+  "bodies": [
+    {
+      "id": "138",
+      "name": "City Council",
+      "primary": true,
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "199",
+      "name": "Special City Council",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "209",
+      "name": "City Council - Supplemental Agenda",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "213",
+      "name": "City Council - Workshop",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "216",
+      "name": "Max A. Mandel Golf Course Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "217",
+      "name": "City Utilities Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "219",
+      "name": "City Council - Notice of Possible quorum",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "221",
+      "name": "Laredo Youth Council",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "226",
+      "name": "Ethics Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "227",
+      "name": "Planning & Zoning Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "228",
+      "name": "Laredo Economic Development Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "229",
+      "name": "Board Of Adjustment",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "230",
+      "name": "Charter Revision Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "232",
+      "name": "Redistricting Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "233",
+      "name": "Border Area Nutritional Council",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "234",
+      "name": "Community Action Agency Advisory Board",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "236",
+      "name": "Laredo Economic Development Corporation",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "237",
+      "name": "Laredo Housing Authority Of The City Of Laredo",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "238",
+      "name": "Metropolitan Planning Organization",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "239",
+      "name": "Regional Mobility Authority Board Of Directors",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "240",
+      "name": "South Texas Development",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "241",
+      "name": "Audit & Accountability Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "250",
+      "name": "Public Safety Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "251",
+      "name": "Tax Increment Reinvestment Zone No. 1-Downtown",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "252",
+      "name": "Veterans Affairs Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "253",
+      "name": "City-County Government Issues Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "254",
+      "name": "Airport Advisory Board",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "255",
+      "name": "Animal Care Services Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "256",
+      "name": "Blue Ribbon Committee For People With Disabilities",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "257",
+      "name": "Building Standards Board",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "260",
+      "name": "Cemetery Committee.",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "261",
+      "name": "Citizens Environmental Advisory Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "262",
+      "name": "City Utilities Advisory Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "263",
+      "name": "Convention &Visitors Bureau Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "264",
+      "name": "Downtown Business Improvement District",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "265",
+      "name": "Economic Development Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "266",
+      "name": "Facility Naming & Recognition Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "267",
+      "name": "Fine Art & Culture Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "268",
+      "name": "Historic District / Landmark Board",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "269",
+      "name": "Impact Fees Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "270",
+      "name": "Laredo Commission For Women",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "271",
+      "name": "Laredo Homeless Assistance Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "272",
+      "name": "Laredo Center for Urban Agriculture & Sustainability",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "273",
+      "name": "Laredo/Webb County Drug & Alcohol Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "274",
+      "name": "Library Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "275",
+      "name": "Municipal Civil Service Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "276",
+      "name": "Para Transit Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "277",
+      "name": "Park & Recreation Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "278",
+      "name": "Port Of Entry Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "279",
+      "name": "Suicide Prevention Committe",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "280",
+      "name": "Tax Increment Reinvestment Zone No.2-The Coves At Winfield Development",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "281",
+      "name": "Telecommunications Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "282",
+      "name": "Civic Partnership and Engagement Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "283",
+      "name": "Transportation & Traffic Safety Advisory Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "284",
+      "name": "Bond Referendum Committee - Enhancement Services",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "285",
+      "name": "Bond Referendum Sub-Committee Health & Wellnes",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "286",
+      "name": "Bond Referendum Sub-Committee Public Infrastrure",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "287",
+      "name": "Bond Referendum Sub-Committee Public Safety",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "288",
+      "name": "Municipal Hospital Authority AD Hoc Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "289",
+      "name": "Old Mercy Hospital  Building AD Hoc Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "290",
+      "name": "Technical Review Board AD Hoc Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "291",
+      "name": "Firefighter & Police Officers Civil Service Commission",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "292",
+      "name": "Keep Laredo Beautiful",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "294",
+      "name": "Laredo Center For Urban Agriculture & Sustainability.",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "295",
+      "name": "City Council - Supplemental Agendas",
+      "primary": true,
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    },
+    {
+      "id": "297",
+      "name": "Rio Grande Riverfront Coordination and Advisory Ad-Hoc Committee",
+      "source": "legistar",
+      "publisher": "city-of-laredo"
+    }
+  ],
+  "sources": {
+    "city-bids": {
+      "firstChecked": "2026-09-16T06:20:44.546Z",
+      "lastChecked": "2026-09-16T06:20:44.546Z",
+      "lastSuccess": "2026-09-16T06:20:44.546Z"
+    },
+    "city-calendar": {
+      "firstChecked": "2026-09-16T06:20:44.546Z",
+      "lastChecked": "2026-09-16T06:20:44.546Z",
+      "lastNewItem": "2026-09-16T06:20:44.546Z",
+      "lastSuccess": "2026-09-16T06:20:44.546Z"
+    },
+    "city-newsroom": {
+      "firstChecked": "2026-09-16T06:20:44.546Z",
+      "lastChecked": "2026-09-16T06:20:44.546Z",
+      "lastNewItem": "2026-09-16T06:20:44.546Z",
+      "lastSuccess": "2026-09-16T06:20:44.546Z"
+    },
+    "laredo-utilities": {
+      "firstChecked": "2026-09-16T06:20:44.546Z",
+      "lastChecked": "2026-09-16T06:20:44.546Z",
+      "lastNewItem": "2026-09-16T06:20:44.546Z",
+      "lastSuccess": "2026-09-16T06:20:44.546Z"
+    },
+    "legistar": {
+      "firstChecked": "2026-09-16T06:20:44.546Z",
+      "lastChecked": "2026-09-16T06:20:44.546Z",
+      "lastNewItem": "2026-09-16T06:20:44.546Z",
+      "lastSuccess": "2026-09-16T06:20:44.546Z"
+    }
+  }
+}
