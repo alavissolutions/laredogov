@@ -23,3 +23,8 @@ Refresh with `npm run capture -- <source>` (see `scripts/capture-fixtures.ts`). 
 The Wayback Machine holds only redirects for the bids page, so no capture with real bid rows exists yet. Refresh `city-bids/bids.html` when the city posts a bid and extend the bids test then.
 
 One test (issue 07) derives a "before minutes were published" state from `legistar/events.json` by nulling the minutes and media fields of the July 27 Council record in memory; that is the only non-verbatim fixture and it is built inside the test where it is used.
+| `city-elections/general-2026.html` | `https://www.cityoflaredo.com/departments/2026-general-elections` | 2026-09-17 | headless Chromium; calendar, notices, voting-site PDFs, sub-page and ordinance links |
+| `city-elections/special-2026.html` | `https://www.cityoflaredo.com/departments/elections-2026/2026-special-elections` | 2026-09-17 | headless Chromium; District 8 special election page |
+| `city-elections/general-2026-candidates.html` | `https://www.cityoflaredo.com/departments/elections/2026-candidates-information` | 2026-09-17 | headless Chromium; one accordion table per Race, forum buttons without hrefs |
+| `city-elections/special-2026-candidates.html` | `https://www.cityoflaredo.com/departments/elections-2026/2026-special-election-candidates-information` | 2026-09-17 | headless Chromium; District 8 table whose first row has blank Name cells |
+| `city-finance/campaign-finance-reports.html` | `https://www.cityoflaredo.com/departments/city-secretary-s-office/campaign-finance-reports` | 2026-09-17 | headless Chromium; every filer since 2015 by filing date; all July 2026 officeholder reports are scanned image PDFs |
