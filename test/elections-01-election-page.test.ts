@@ -145,9 +145,12 @@ describe('Elections 01: the Election page from the city general election page', 
 
       const dir = await site.page(`/${lang}/directory/`);
       const entry = dir('#city-elections');
-      expect(entry.length).toBe(1);
-      expect(entry.find('h3').text().length).toBeGreaterThan(0);
-      expect(entry.find('dl').text().length).toBeGreaterThan(0);
+      expect(entry.find('h3').text()).toBe(lang === 'es' ? 'Páginas electorales de la ciudad' : 'City election pages');
+      expect(entry.find('.kind').text()).toMatch(lang === 'es' ? /^Canal/ : /^Feed/);
+      expect(entry.find('dl').text()).toContain(lang === 'es' ? 'Se actualiza' : 'Updates');
+      expect(entry.find('dl').text()).toContain(lang === 'es' ? 'Alrededor de cada elección' : 'Around each election');
+      // The Topic rule is stated on the entry, as it is for every other Feed (ADR-0004).
+      expect(entry.find('dl').text()).toContain(lang === 'es' ? 'Todo en Elecciones' : 'Everything under Elections');
       expect(entry.find(`a[href="${GENERAL_ELECTION_URL}"]`).length).toBe(1);
     }
   });

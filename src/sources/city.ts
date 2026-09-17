@@ -30,10 +30,10 @@ const UNIX_EPOCH_TICKS = 621_355_968_000_000_000n;
 export function cityDocumentPublishedAt(href: string): string | undefined {
   const m = /\/home\/show(?:published)?document(?:\/\d+\/|\?id=\d+&(?:amp;)?t=)(\d{15,20})/i.exec(href);
   if (!m) return undefined;
-  const ms = Number((BigInt(m[1]!) - UNIX_EPOCH_TICKS) / TICKS_PER_MS);
-  const when = new Date(ms);
+  const when = new Date(Number((BigInt(m[1]!) - UNIX_EPOCH_TICKS) / TICKS_PER_MS));
+  if (Number.isNaN(when.getTime())) return undefined;
   const year = when.getUTCFullYear();
-  if (Number.isNaN(ms) || year < 2000 || year > 2100) return undefined;
+  if (year < 2000 || year > 2100) return undefined;
   return when.toISOString();
 }
 
@@ -42,9 +42,9 @@ export function cityDocumentPublishedAt(href: string): string | undefined {
  * CMS's `?splash=<encoded>&____isexternal=true` wrapper unwrapped, and the city's own links put on
  * https (its CMS writes some of them as `http://`, which only redirects).
  */
-export function cityHref(href: string): string | undefined {
+export function cityHref(href: string, depth = 0): string | undefined {
   // An empty href would resolve to the city's home page; a button with no link has no URL at all.
-  if (!href.trim()) return undefined;
+  if (!href.trim() || depth > 4) return undefined;
   let url: URL;
   try {
     url = new URL(href, CITY_SITE);
@@ -52,7 +52,7 @@ export function cityHref(href: string): string | undefined {
     return undefined;
   }
   const splash = url.hostname.endsWith('cityoflaredo.com') ? url.searchParams.get('splash') : null;
-  if (splash) return cityHref(splash);
+  if (splash) return cityHref(splash, depth + 1);
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined;
   if (url.hostname === 'www.cityoflaredo.com' || url.hostname === 'cityoflaredo.com') {
     url.protocol = 'https:';

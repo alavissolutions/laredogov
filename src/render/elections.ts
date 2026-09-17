@@ -92,20 +92,23 @@ function linksSection(ctx: RenderContext, election: Election): string {
   const { lang } = ctx;
   const links = election.links.filter((l) => l.kind !== 'voting-site');
   if (links.length === 0) return '';
-  const groups: { heading: string; links: ElectionLink[] }[] = [];
+  const groups: { id: string; heading: string; links: ElectionLink[] }[] = [];
   for (const publisher of PUBLISHER_ORDER as readonly PublisherId[]) {
     const group = links.filter((l) => l.publisher === publisher);
-    if (group.length) groups.push({ heading: t(lang, `publisher.${publisher}`), links: group });
+    if (group.length) groups.push({ id: `election-links-${publisher}`, heading: t(lang, `publisher.${publisher}`), links: group });
   }
   const undeclared = links.filter((l) => !l.publisher);
-  if (undeclared.length) groups.push({ heading: t(lang, 'elections.links.other'), links: undeclared });
+  if (undeclared.length) groups.push({ id: 'election-links-other', heading: t(lang, 'elections.links.other'), links: undeclared });
 
   return `<section aria-labelledby="election-links">
 <h2 id="election-links">${esc(t(lang, 'elections.links'))}</h2>
 <p class="intro">${esc(t(lang, 'elections.links.intro'))}</p>
 <div class="election-links">
 ${groups
-  .map((g) => `<section>\n<h3>${esc(g.heading)}</h3>\n<ul class="link-list">\n${g.links.map(linkLine).join('\n')}\n</ul>\n</section>`)
+  .map(
+    (g) =>
+      `<section aria-labelledby="${g.id}">\n<h3 id="${g.id}">${esc(g.heading)}</h3>\n<ul class="link-list">\n${g.links.map(linkLine).join('\n')}\n</ul>\n</section>`,
+  )
   .join('\n')}
 </div>
 </section>`;
