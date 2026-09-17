@@ -60,9 +60,14 @@ ${election.calendar
 </ul>`;
 }
 
+/**
+ * The city gives several links the same label ("Where do I Vote?", "Election Ordinance") and tells
+ * them apart with its sub-label, so the sub-label goes inside the anchor: read on its own, out of
+ * context, every link still says which one it is.
+ */
 function linkLine(link: ElectionLink): string {
-  const note = link.note ? ` <span class="note">${esc(link.note)}</span>` : '';
-  return `<li><a href="${esc(link.url)}" rel="noopener">${esc(link.label)}</a>${note}</li>`;
+  const note = link.note ? `<span class="note">${esc(link.note)}</span>` : '';
+  return `<li><a href="${esc(link.url)}" rel="noopener">${esc(link.label)}${note}</a></li>`;
 }
 
 function votingSitesSection(ctx: RenderContext, election: Election): string {

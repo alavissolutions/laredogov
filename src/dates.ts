@@ -83,9 +83,11 @@ export function parseMonthNameDate(text: string): string | undefined {
   if (!m) return undefined;
   const month = MONTHS.findIndex((name) => name.startsWith(m[1]!.toLowerCase()));
   if (month < 0) return undefined;
-  const day = Number(m[2]);
-  if (day < 1 || day > 31) return undefined;
-  return `${m[3]}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  const [day, year] = [Number(m[2]), Number(m[3])];
+  // Date.UTC rolls a day that does not exist into the next month, so a round trip rejects it.
+  const roundTrip = new Date(Date.UTC(year, month, day));
+  if (roundTrip.getUTCMonth() !== month || roundTrip.getUTCDate() !== day) return undefined;
+  return roundTrip.toISOString().slice(0, 10);
 }
 
 /** "5:30 PM" -> "17:30" */

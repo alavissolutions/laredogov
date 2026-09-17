@@ -1,7 +1,9 @@
+import { readFile, writeFile } from 'node:fs/promises';
 import type { CheerioAPI } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { cityElections, GENERAL_CANDIDATES_URL, GENERAL_ELECTION_URL } from '../src/sources/city-elections.js';
 import { electionFixtures, FIXTURE_NOW } from './fixtures/fetcher.js';
+import { fixtureRoot } from './fixtures/paths.js';
 import { daysAfter, newPanelTitles, Site } from './helpers.js';
 
 const GENERAL = '/elections/2026-general/';
@@ -110,10 +112,23 @@ describe('Elections 01: the Election page from the city general election page', 
       expect(groups).toContain(lang === 'es' ? 'Secretaría de Estado de Texas' : 'Texas Secretary of State');
       const webb = $('.election-links section').filter((_, e) => /Webb/.test($(e).find('h3').text()));
       expect(webb.text()).toContain('Sample Ballots');
-      expect(webb.find('a[href^="https://www.webbcountytx.gov/"]').length).toBe(2);
-      expect($('.election-links a[href^="https://teamrv-mvp.sos.texas.gov/"]').length).toBe(1);
+      // Buttons and accordion links alike: sample ballots, register to vote, the elections office.
+      expect(webb.find('a[href^="https://www.webbcountytx.gov/"]').length).toBe(3);
+      expect(webb.text()).toContain('Webb County Elections Office');
+      const sos = $('.election-links section').filter((_, e) => /Texas|Secretar/.test($(e).find('h3').text()));
+      expect(sos.find('a').length).toBe(2);
+      expect(sos.text()).toContain('Important Election Dates');
       // The city's own sub-pages stay with the city, unwrapped from the CMS splash redirect.
       expect($(`.election-links a[href="${GENERAL_CANDIDATES_URL}"]`).length).toBe(1);
+      expect($('.election-links').text()).toContain('Political Sign Regulations');
+      // The state forms a filer fills in and the district-map ordinances are out of scope.
+      expect($('.election-links a[href*="ethics.state.tx.us"]').length).toBe(0);
+      expect($('.election-links a[href*="showpublisheddocument/2898"]').length).toBe(0);
+
+      // Each link carries its own accessible name: the city reuses labels and distinguishes them
+      // with a sub-label, so the sub-label sits inside the anchor.
+      const names = $('.election-links a, .voting-sites a').map((_, e) => $(e).text()).get();
+      expect(new Set(names).size).toBe(names.length);
 
       // No iframe and no third-party script anywhere on the page (the city embeds YouTube; the site does not).
       expect($('iframe').length).toBe(0);
@@ -155,12 +170,50 @@ describe('Elections 01: the Election page from the city general election page', 
     }
   });
 
+  it('links a forum once the city posts one', async () => {
+    // The city's forum buttons have no href yet, so this is the recorded candidates page with one
+    // href added, the way issue 07 derives a "before minutes" state from the Legistar capture.
+    const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
+    const linked = candidates.replace(
+      '<a target="_self" title="Click here to open Mayor - Tuesday, 10-06-26 at 7:30 pm" class="button-link">',
+      '<a target="_self" href="https://www.youtube.com/watch?v=mayorforum" title="Click here to open Mayor - Tuesday, 10-06-26 at 7:30 pm" class="button-link">',
+    );
+    expect(linked).not.toBe(candidates);
+
+    const site = await Site.create();
+    const { data } = await site.build({
+      fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: linked },
+      now: FIXTURE_NOW,
+      sources: [cityElections],
+    });
+    expect(data.elections[0]!.forums[0]).toEqual({
+      label: 'Mayor',
+      start: '2026-10-07T00:30:00.000Z',
+      url: 'https://www.youtube.com/watch?v=mayorforum',
+    });
+    const $ = await site.page(`/en${GENERAL}`);
+    expect($('.election-forums a').attr('href')).toBe('https://www.youtube.com/watch?v=mayorforum');
+    // The five forums the city has not linked still show their date and nothing to open.
+    expect($('.election-forums li')).toHaveLength(6);
+    expect($('.election-forums a')).toHaveLength(1);
+  });
+
+  it('adds the Election to a data file written before Elections existed', async () => {
+    const site = await Site.create();
+    await writeFile(site.dataFile, JSON.stringify({ version: 1, items: [], meetings: [], bodies: [], sources: {} }));
+    const { data } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections] });
+    expect(data.elections).toHaveLength(1);
+    expect(JSON.parse(await readFile(site.dataFile, 'utf8')).elections).toHaveLength(1);
+  });
+
   it('reads each city page once and logs what it found', async () => {
     const site = await Site.create();
     const log: string[] = [];
     const { requests } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections], log });
     expect(requests.map((r) => r.url)).toEqual([GENERAL_ELECTION_URL, GENERAL_CANDIDATES_URL]);
-    expect(log.some((l) => /^city-elections: 1 Election/.test(l))).toBe(true);
+    expect(log.some((l) => /^city-elections: 1 Election, 14 calendar entries, 3 notices, 2 voting-site lists, 6 forum entries/.test(l))).toBe(true);
+    // The links the declared accordion exclusions leave out are counted, not silently dropped.
+    expect(log.some((l) => /14 skipped: Candidate Forms/.test(l))).toBe(true);
     expect(log).toContain('city-elections: ok, 5 new Items');
   });
 });

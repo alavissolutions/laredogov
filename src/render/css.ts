@@ -57,6 +57,7 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .election-calendar time,.election-forums time{display:block;font-size:.875rem;color:var(--muted)}
 .voting-sites li,.link-list li{padding:.3rem 0}
 .link-list .note,.voting-sites .note{display:block;font-size:.8rem;color:var(--muted)}
+.link-list a,.voting-sites a{display:inline-block}
 .election-links>section>h3{margin-top:1rem}
 @media (min-width:40rem){.election-calendar time,.election-forums time{display:inline-block;min-width:16rem}}
 @media (min-width:40rem){h1{font-size:2rem}body{font-size:17px}}

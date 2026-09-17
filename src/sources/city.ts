@@ -1,3 +1,5 @@
+import { fromCentral } from '../dates.js';
+
 /** Shared by the City of Laredo govAccess adapters (Newsroom, Calendar, Bids, Elections). */
 export const CITY_SITE = 'https://www.cityoflaredo.com';
 
@@ -21,20 +23,25 @@ const TICKS_PER_MS = 10_000n;
 const UNIX_EPOCH_TICKS = 621_355_968_000_000_000n;
 
 /**
- * When the city's CMS published a document, read from the `<ticks>` cache-buster its own document
- * links carry. Those ticks are a .NET timestamp: verified 2026-09-17 against the early-voting list
- * (ticks say 2026-09-02, and the city's own filename is `EV Sites 090226.pdf`) and against the
- * notice the city dates June 12, 2026 on its page. It is the only date the city gives for a
- * document it does not list beside a date; a link without usable ticks simply has no date.
+ * When the city's CMS posted a document, from the `<ticks>` its own document links carry. This is
+ * the CMS's stamp, not a date the city prints: where the city prints a date beside a link, that
+ * printed date is the Publisher's date and wins. It is used only for a document the city posts with
+ * no date at all, such as its lists of voting sites.
+ *
+ * The ticks are a .NET `DateTime` of the city's own wall clock, which is Central: across the 569
+ * document links in the recorded election and finance fixtures they fall between 07:00 and 19:00
+ * read as Central, and between 01:00 and 14:00 read as UTC, so they are read as Central here
+ * (checked 2026-09-17). The one document that can be cross-checked agrees: the early-voting list
+ * stamps 2026-09-02 and the city's own filename for it is `EV Sites 090226.pdf`.
  */
-export function cityDocumentPublishedAt(href: string): string | undefined {
+export function cityDocumentPostedAt(href: string): string | undefined {
   const m = /\/home\/show(?:published)?document(?:\/\d+\/|\?id=\d+&(?:amp;)?t=)(\d{15,20})/i.exec(href);
   if (!m) return undefined;
-  const when = new Date(Number((BigInt(m[1]!) - UNIX_EPOCH_TICKS) / TICKS_PER_MS));
-  if (Number.isNaN(when.getTime())) return undefined;
-  const year = when.getUTCFullYear();
+  const wall = new Date(Number((BigInt(m[1]!) - UNIX_EPOCH_TICKS) / TICKS_PER_MS));
+  if (Number.isNaN(wall.getTime())) return undefined;
+  const year = wall.getUTCFullYear();
   if (year < 2000 || year > 2100) return undefined;
-  return when.toISOString();
+  return fromCentral(wall.toISOString().slice(0, 10), wall.toISOString().slice(11, 16)).toISOString();
 }
 
 /**
@@ -51,12 +58,17 @@ export function cityHref(href: string, depth = 0): string | undefined {
   } catch {
     return undefined;
   }
-  const splash = url.hostname.endsWith('cityoflaredo.com') ? url.searchParams.get('splash') : null;
+  const splash = isCityHost(url.hostname) ? url.searchParams.get('splash') : null;
   if (splash) return cityHref(splash, depth + 1);
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined;
-  if (url.hostname === 'www.cityoflaredo.com' || url.hostname === 'cityoflaredo.com') {
+  if (isCityHost(url.hostname)) {
     url.protocol = 'https:';
     url.hostname = 'www.cityoflaredo.com';
   }
   return url.toString();
+}
+
+/** The city's own host, and only it: `evilcityoflaredo.com` is not the City of Laredo. */
+function isCityHost(hostname: string): boolean {
+  return hostname === 'cityoflaredo.com' || hostname.endsWith('.cityoflaredo.com');
 }

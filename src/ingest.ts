@@ -84,14 +84,22 @@ function mergeBodies(data: DataFile, source: SourceAdapter, bodies: ReadonlyArra
 
 /**
  * Elections are re-read whole on every run: the Publisher's page is the record, so the incoming
- * version replaces the stored one and only first-seen survives.
+ * version replaces the stored one and only first-seen survives. The one exception is a list that
+ * comes back empty. An Election page that briefly loses its calendar, its links, or its forum
+ * schedule, or that the Publisher strips after election day, must not empty the record (spec: the
+ * pages stay up, frozen), so an empty list never overwrites one that has entries.
  */
 function mergeElections(data: DataFile, source: SourceAdapter, elections: readonly NewElection[], stamp: string): void {
   const byId = new Map(data.elections.map((e) => [e.id, e]));
   for (const incoming of elections) {
     const existing = byId.get(incoming.id);
-    if (existing) Object.assign(existing, incoming, { lastSeenLive: stamp });
-    else {
+    if (existing) {
+      const kept = { calendar: existing.calendar, links: existing.links, forums: existing.forums };
+      Object.assign(existing, incoming, { lastSeenLive: stamp });
+      if (incoming.calendar.length === 0) existing.calendar = kept.calendar;
+      if (incoming.links.length === 0) existing.links = kept.links;
+      if (incoming.forums.length === 0) existing.forums = kept.forums;
+    } else {
       const election: Election = { ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp };
       data.elections.push(election);
       byId.set(election.id, election);

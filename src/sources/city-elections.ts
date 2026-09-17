@@ -15,7 +15,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { dayOf, fromCentral, parseMonthNameDate, to24h } from '../dates.js';
 import type { ElectionCalendarEntry, ElectionForum, ElectionLink, PublisherId } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
-import { CITY_SITE, cityDocumentId, cityDocumentPublishedAt, cityHref, collapse } from './city.js';
+import { CITY_SITE, cityDocumentId, cityDocumentPostedAt, cityHref, collapse } from './city.js';
 import type { NewElection, NewItem, SourceAdapter } from './types.js';
 
 /** A cheerio selection, as the other city adapters spell it. */
@@ -62,6 +62,7 @@ export const VOTING_SITE_LABELS: readonly string[] = ['Early Voting Sites', 'Ele
  */
 export const LINK_PUBLISHERS: Record<string, PublisherId> = {
   'www.cityoflaredo.com': 'city-of-laredo',
+  'www.sos.state.tx.us': 'texas-sos',
   'www.openlaredo.com': 'city-of-laredo',
   'open-laredo.opendata.arcgis.com': 'city-of-laredo',
   'www.webbcountytx.gov': 'webb-county',
@@ -69,6 +70,13 @@ export const LINK_PUBLISHERS: Record<string, PublisherId> = {
   'teamrv-mvp.sos.texas.gov': 'texas-sos',
   'www.sos.texas.gov': 'texas-sos',
 };
+
+/**
+ * The accordions on an election page whose links this site does not carry, by the city's own
+ * heading: the state forms a filer fills in and the district-map ordinances are both out of scope
+ * for a resident (spec, Out of Scope). Every other accordion's links are shown.
+ */
+export const SKIPPED_ACCORDIONS: readonly string[] = ['Candidate Forms', 'Candidate Instruction Guides', 'District Maps'];
 
 /** One row of the city's notices table. */
 export interface NoticeLink {
@@ -84,6 +92,8 @@ export interface ParsedElectionPage {
   calendar: ElectionCalendarEntry[];
   notices: NoticeLink[];
   links: ElectionLink[];
+  /** How many links the declared accordion exclusions left out, for the run log. */
+  skippedLinks: number;
 }
 
 function headingOf(el: Selection): string {
@@ -111,11 +121,29 @@ export function parseElectionPage(html: string): ParsedElectionPage {
   }
 
   const links: ElectionLink[] = [];
-  for (const anchor of column.find('div.vi-img-overlay-buttons a.vi-img-overlay-link').toArray()) {
-    const link = parseButton($(anchor));
-    if (link) links.push(link);
+  const byUrl = new Set<string>();
+  const add = (link: ElectionLink | undefined) => {
+    if (!link || byUrl.has(link.url)) return;
+    byUrl.add(link.url);
+    links.push(link);
+  };
+  for (const anchor of column.find('div.vi-img-overlay-buttons a.vi-img-overlay-link').toArray()) add(parseButton($(anchor)));
+
+  // The city also keeps links in accordions: the county elections office, the state's election
+  // dates, its own sign regulations. They are the same kind of link as a button, so they are read
+  // the same way, minus the accordions declared above.
+  let skippedLinks = 0;
+  for (const item of column.find('.accordion_widget .accordion-item').toArray()) {
+    const $item = $(item);
+    const heading = collapse($item.find('.accordion-heading').first().text());
+    const anchors = $item.find('.accordion-content a').toArray();
+    if (SKIPPED_ACCORDIONS.includes(heading)) {
+      skippedLinks += anchors.length;
+      continue;
+    }
+    for (const anchor of anchors) add(parseAccordionLink($(anchor)));
   }
-  return { title, calendar, notices, links };
+  return { title, calendar, notices, links, skippedLinks };
 }
 
 /** A calendar row is `date | dash | what happens`. A row with no date is a spacer or a continuation. */
@@ -133,7 +161,11 @@ function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEnt
   return out;
 }
 
-/** A notice row is `date | dash | link`. The link text is the city's own name for the notice. */
+/**
+ * A notice row is `date | dash | link`. The link text is the city's own name for the notice.
+ * The general page writes the date out ("August 19, 2026"); the special election page writes some
+ * of its notice dates as `MM-DD-YY`, which issue 04 has to handle when it wires that page up.
+ */
 function parseNoticeRows($: CheerioAPI, table: Selection): NoticeLink[] {
   const out: NoticeLink[] = [];
   for (const row of table.find('tr').toArray()) {
@@ -163,6 +195,15 @@ function parseButton(anchor: Selection): ElectionLink | undefined {
     url,
     ...(publisher ? { publisher } : {}),
   };
+}
+
+/** An accordion link carries its label in its text, or, when the city leaves that empty, in `title`. */
+function parseAccordionLink(anchor: Selection): ElectionLink | undefined {
+  const url = cityHref(anchor.attr('href') ?? '');
+  const label = collapse(anchor.text()) || collapse(anchor.attr('title') ?? '');
+  if (!url || !label) return undefined;
+  const publisher = LINK_PUBLISHERS[new URL(url).hostname];
+  return { kind: 'link', label, url, ...(publisher ? { publisher } : {}) };
 }
 
 /**
@@ -221,9 +262,23 @@ export const cityElections: SourceAdapter = {
     let votingSites = 0;
     let forumCount = 0;
 
+    let skippedLinks = 0;
     for (const page of ELECTION_PAGES) {
       const parsed = parseElectionPage(ensureOk(await fetcher.fetch(page.url, 'browser')).body);
-      const forums = parseForums(ensureOk(await fetcher.fetch(page.candidatesUrl, 'browser')).body);
+      // The heading is the Election's title. Without it the record would fail validation inside
+      // saveData, which is outside ingest's per-Source failure path and would take the whole build
+      // down, so this Source fails here instead and every other Source still publishes.
+      if (!parsed.title) throw new Error(`no election heading on ${page.url}; the city changed the page`);
+      skippedLinks += parsed.skippedLinks;
+
+      // Forums live on the candidates sub-page and are ancillary: if that page is unreachable the
+      // Election still gets its calendar, notices, and links.
+      let forums: ElectionForum[] = [];
+      try {
+        forums = parseForums(ensureOk(await fetcher.fetch(page.candidatesUrl, 'browser')).body);
+      } catch (err) {
+        log(`city-elections: ${page.candidatesUrl} unreadable, no forum schedule (${err instanceof Error ? err.message : String(err)})`);
+      }
       const id = `city-elections:${page.slug}`;
       elections.push({
         id,
@@ -257,16 +312,17 @@ export const cityElections: SourceAdapter = {
       for (const link of parsed.links) {
         if (link.kind !== 'voting-site') continue;
         const documentId = cityDocumentId(link.url);
-        const publishedAt = cityDocumentPublishedAt(link.url);
-        // The city prints no date beside these buttons. Without a publish stamp the list still
-        // appears on the Election page, but it cannot be dated, so it does not become an Item.
-        if (!documentId || !publishedAt || seen.has(documentId)) continue;
+        const postedAt = cityDocumentPostedAt(link.url);
+        // The city prints no date beside these buttons, so the Item carries the CMS's posting
+        // stamp. Without one the list still appears on the Election page but cannot be dated, so it
+        // does not become an Item.
+        if (!documentId || !postedAt || seen.has(documentId)) continue;
         seen.add(documentId);
         votingSites += 1;
         items.push({
           id: documentItemId(documentId),
           title: link.label,
-          date: dayOf(publishedAt),
+          date: dayOf(postedAt),
           url: link.url,
           topic: 'elections',
           election: { id, kind: 'voting-site' },
@@ -275,9 +331,11 @@ export const cityElections: SourceAdapter = {
     }
 
     const calendarEntries = elections.reduce((n, e) => n + e.calendar.length, 0);
+    const links = elections.reduce((n, e) => n + e.links.length, 0);
     log(
       `city-elections: ${elections.length} Election${elections.length === 1 ? '' : 's'}, ${calendarEntries} calendar entries, ` +
-        `${notices} notices, ${votingSites} voting-site lists, ${forumCount} forum entries`,
+        `${notices} notices, ${votingSites} voting-site lists, ${forumCount} forum entries, ${links} links ` +
+        `(${skippedLinks} skipped: ${SKIPPED_ACCORDIONS.join(', ')})`,
     );
     return { items, elections };
   },
