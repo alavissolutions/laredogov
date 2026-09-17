@@ -44,6 +44,30 @@ _Avoid_: Notification, update, activity
 A resident-facing category an Item is filed under. Every Item has exactly one Topic. Every Topic has its own RSS feed.
 _Avoid_: Category, tag, section
 
+**Election**:
+One election day run by a Publisher, such as the City of Laredo's 2026 general election or a 2026 special election. An Election has Races.
+_Avoid_: Ballot, vote, cycle
+
+**Race**:
+One office or proposition on an Election's ballot, such as Mayor or Council District 3. An office Race has Candidates; a proposition Race has a question and no Candidates.
+_Avoid_: Contest, seat, position, measure
+
+**Candidate**:
+A person the Publisher lists by name under a Race. A row the Publisher has not yet named (a treasurer appointment with no name) is not a Candidate until the name appears. A person who files for Races in two Elections is two Candidates. A Candidate page shows only what the Publisher posted under their name and the Figures copied from it; the site never labels anyone an incumbent.
+_Avoid_: Nominee, contender, politician, incumbent, filer
+
+**Filing**:
+Something the Publisher posts under a Candidate's name: a treasurer appointment, a ballot application, or a campaign finance report for a stated period (including reports the same person filed as an officeholder, labelled as such). Its kind and period come from where the Publisher placed it, never from reading it. Every Filing links to where the Publisher put it. A finance report Filing is also an Item in the Elections Topic because the Publisher dates it; a ballot application is not, because the Publisher does not.
+_Avoid_: Document, report, attachment, upload
+
+**Alias**:
+A name the Publisher uses for a Candidate somewhere other than the Race table, declared by the owner so a Filing posted under that spelling attaches to the right Candidate. Only an exact Alias match attaches a Filing; anything else is reported as unmatched.
+_Avoid_: Nickname, variant, fuzzy match
+
+**Figure**:
+A number copied from a Filing, such as total contributions for a reporting period, together with the Filing it came from and whether the owner has verified it against that Filing. Figures are totals the Candidate reported; individual contributors and their addresses are never Figures.
+_Avoid_: Stat, metric, data point, amount
+
 ## Topics
 
 The fixed list: **Meetings**, **News and Notices**, **Public Safety**, **Events**, **Taxes and Property**, **Roads and Transit**, **Health**, **Jobs and Bids**, **Elections**.
