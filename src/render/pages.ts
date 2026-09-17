@@ -6,6 +6,7 @@ import { t, tKey } from '../i18n/strings.js';
 import { swagitArchiveFor } from '../sources/legistar.js';
 import { sourceById } from '../sources/index.js';
 import { BODY_ACTIVE_MONTHS, href, PATHS, rootHref, UNREACHABLE_WARNING_DAYS, type RenderContext } from './context.js';
+import { electionsPanel } from './elections.js';
 import { esc, layout, topicNav, type PageSpec } from './html.js';
 import { comingUp, comingUpLine, isCouncil, itemLine, itemList, meetingLine, recentItems } from './items.js';
 
@@ -37,8 +38,11 @@ export function topicPage(ctx: RenderContext, topic: Topic): string {
   const name = t(lang, `topic.${topic}`);
   const items = recentItems(ctx, topic);
   const feed = href(ctx, PATHS.topicFeed(topic));
+  // Elections is the one Topic with records of its own: the Elections it tracks open the page.
+  const panel = topic === 'elections' ? electionsPanel(ctx) : '';
   const body = `<h1>${esc(name)}</h1>
 <p class="intro">${esc(t(lang, 'topic.page.intro', { topic: name }))} <a href="${feed}">${esc(t(lang, 'topic.rss', { topic: name }))}</a></p>
+${panel}
 ${itemList(ctx, items, t(lang, 'topic.page.empty'))}
 <h2>${esc(t(lang, 'topic.all'))}</h2>
 ${topicNav(ctx)}`;

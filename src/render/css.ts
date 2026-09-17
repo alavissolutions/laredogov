@@ -50,5 +50,14 @@ form.search input{flex:1 1 14rem;font:inherit;padding:.5rem;border:1px solid var
 form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:.25rem}
 .site-footer{border-top:1px solid var(--line);background:var(--soft);font-size:.875rem;color:var(--muted);padding:1rem 0}
 .site-footer p{margin:.25rem 0}
+.elections-list>li{padding:.75rem 0;border-bottom:1px solid var(--line)}
+.elections-list .title{font-size:1.05rem}
+.election-calendar,.election-forums,.voting-sites,.link-list{list-style:none;margin:.5rem 0;padding:0}
+.election-calendar>li,.election-forums>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.election-calendar time,.election-forums time{display:block;font-size:.875rem;color:var(--muted)}
+.voting-sites li,.link-list li{padding:.3rem 0}
+.link-list .note,.voting-sites .note{display:block;font-size:.8rem;color:var(--muted)}
+.election-links>section>h3{margin-top:1rem}
+@media (min-width:40rem){.election-calendar time,.election-forums time{display:inline-block;min-width:16rem}}
 @media (min-width:40rem){h1{font-size:2rem}body{font-size:17px}}
 `;

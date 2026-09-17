@@ -24,14 +24,20 @@ export async function saveData(file: string, data: DataFile): Promise<void> {
     items: [...data.items].sort(byId),
     meetings: [...data.meetings].sort(byId),
     bodies: [...data.bodies].sort(byId),
+    elections: [...data.elections].sort(byId),
     sources: Object.fromEntries(Object.entries(data.sources).sort(([a], [b]) => a.localeCompare(b))),
   };
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, `${JSON.stringify(sorted, null, 2)}\n`);
 }
 
-/** The build refuses an Item with a missing or unknown Topic (ADR-0004). */
+/** The build refuses an Item with a missing or unknown Topic (ADR-0004), or an Election missing its key fields. */
 export function validateData(data: DataFile): void {
+  for (const election of data.elections) {
+    if (!election.slug || !election.title || !election.date || !election.url) {
+      throw new Error(`Election ${election.id} is missing slug, title, date, or url`);
+    }
+  }
   for (const item of data.items) {
     if (!isTopic(item.topic)) {
       throw new Error(`Item ${item.id} has no valid Topic (got ${JSON.stringify(item.topic)})`);

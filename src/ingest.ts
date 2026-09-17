@@ -1,9 +1,9 @@
 import { dayOf, formatDate } from './dates.js';
-import type { Body, DataFile, DocumentKind, Item, Meeting, MeetingDocument, SourceHealth } from './domain.js';
+import type { Body, DataFile, DocumentKind, Election, Item, Meeting, MeetingDocument, SourceHealth } from './domain.js';
 import { DOCUMENT_KINDS } from './domain.js';
 import type { Fetcher } from './fetcher/types.js';
 import { t } from './i18n/strings.js';
-import type { NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
+import type { NewElection, NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
 
 export interface IngestOptions {
   fetcher: Fetcher;
@@ -35,6 +35,7 @@ export async function ingest(data: DataFile, { fetcher, sources, now, log }: Ing
       const result = await source.run({ fetcher, previous: data, now, log });
       const added = mergeItems(data, source, result.items, stamp);
       if (result.bodies) mergeBodies(data, source, result.bodies);
+      if (result.elections) mergeElections(data, source, result.elections, stamp);
       if (result.meetings) {
         const streamLines = mergeMeetings(data, source, result.meetings, stamp);
         report.newItems += streamLines;
@@ -78,6 +79,23 @@ function mergeBodies(data: DataFile, source: SourceAdapter, bodies: ReadonlyArra
     const existing = byId.get(incoming.id);
     if (existing) Object.assign(existing, incoming);
     else data.bodies.push({ ...incoming, source: source.id, publisher: source.publisher });
+  }
+}
+
+/**
+ * Elections are re-read whole on every run: the Publisher's page is the record, so the incoming
+ * version replaces the stored one and only first-seen survives.
+ */
+function mergeElections(data: DataFile, source: SourceAdapter, elections: readonly NewElection[], stamp: string): void {
+  const byId = new Map(data.elections.map((e) => [e.id, e]));
+  for (const incoming of elections) {
+    const existing = byId.get(incoming.id);
+    if (existing) Object.assign(existing, incoming, { lastSeenLive: stamp });
+    else {
+      const election: Election = { ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp };
+      data.elections.push(election);
+      byId.set(election.id, election);
+    }
   }
 }
 

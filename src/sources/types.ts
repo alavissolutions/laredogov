@@ -1,4 +1,4 @@
-import type { Body, DataFile, DirectoryEntry, Item, Meeting, PublisherId, Topic } from '../domain.js';
+import type { Body, DataFile, DirectoryEntry, Election, Item, Meeting, PublisherId, Topic } from '../domain.js';
 import type { Fetcher } from '../fetcher/types.js';
 
 /** What an adapter returns for a new or re-seen Item; the build fills in first-seen and last-seen-live. */
@@ -6,6 +6,9 @@ export type NewItem = Omit<Item, 'firstSeen' | 'lastSeenLive' | 'source' | 'publ
 
 /** What an adapter returns for a Meeting; the build fills in first-seen and last-seen-live. */
 export type NewMeeting = Omit<Meeting, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+
+/** What an adapter returns for an Election; the build fills in first-seen and last-seen-live. */
+export type NewElection = Omit<Election, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
 
 export interface SourceRunContext {
   fetcher: Fetcher;
@@ -19,6 +22,7 @@ export interface SourceResult {
   items: NewItem[];
   meetings?: NewMeeting[];
   bodies?: Omit<Body, 'source' | 'publisher'>[];
+  elections?: NewElection[];
 }
 
 /**

@@ -72,6 +72,22 @@ export function parseUsDateTime(text: string): { iso: string; ymd: string; time?
   return { iso: fromCentral(ymd, hm).toISOString(), ymd, time: `${m[4]}:${m[5]} ${m[6]!.toUpperCase()}` };
 }
 
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+/**
+ * Parses a Publisher's written-out date, with or without a weekday: "Monday, November 03, 2025",
+ * "August 21, 2026". Returns the Central-time calendar date, or undefined when the text has none.
+ */
+export function parseMonthNameDate(text: string): string | undefined {
+  const m = /([A-Za-z]{3,9})\s+(\d{1,2}),?\s+(\d{4})/.exec(text);
+  if (!m) return undefined;
+  const month = MONTHS.findIndex((name) => name.startsWith(m[1]!.toLowerCase()));
+  if (month < 0) return undefined;
+  const day = Number(m[2]);
+  if (day < 1 || day > 31) return undefined;
+  return `${m[3]}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
 /** "5:30 PM" -> "17:30" */
 export function to24h(hour12: number, minute: number, ampm: string): string {
   let h = hour12 % 12;
