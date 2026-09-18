@@ -127,6 +127,18 @@ export interface ParsedElectionPage {
   links: ElectionLink[];
   /** How many links the declared accordion exclusions left out, for the run log. */
   skippedLinks: number;
+  /**
+   * Calendar rows the city wrote something in whose first cell holds no date this site can read, by
+   * the text of that cell, for the run log. A city typo in a month name would otherwise drop a
+   * filing deadline off the calendar with nobody told.
+   */
+  undatedRows: string[];
+  /**
+   * Calendar rows where the weekday the city printed is not the weekday its own date falls on, by
+   * the text of that cell, for the run log. The site renders the date, so a reader comparing with
+   * the city's page would otherwise see a different weekday and nobody would know which is wrong.
+   */
+  weekdayMismatches: string[];
 }
 
 function headingOf(el: Selection): string {
@@ -140,6 +152,8 @@ export function parseElectionPage(html: string): ParsedElectionPage {
 
   const calendar: ElectionCalendarEntry[] = [];
   const notices: NoticeLink[] = [];
+  const undatedRows: string[] = [];
+  const weekdayMismatches: string[] = [];
   for (const widget of column.find('div[id^=widget_]').toArray()) {
     // One widget mixes headings and tables, so a table belongs to the heading printed above it.
     let heading = '';
@@ -148,7 +162,7 @@ export function parseElectionPage(html: string): ParsedElectionPage {
       if (/^h[1-4]$/.test(tag)) heading = collapse($(child).text());
       else if (tag === 'table') {
         if (NOTICES_HEADING.test(heading)) notices.push(...parseNoticeRows($, $(child)));
-        else calendar.push(...parseCalendarRows($, $(child)));
+        else calendar.push(...parseCalendarRows($, $(child), undatedRows, weekdayMismatches));
       }
     }
   }
@@ -176,7 +190,7 @@ export function parseElectionPage(html: string): ParsedElectionPage {
     }
     for (const anchor of anchors) add(parseAccordionLink($(anchor)));
   }
-  return { title, calendar, notices, links, skippedLinks };
+  return { title, calendar, notices, links, skippedLinks, undatedRows, weekdayMismatches };
 }
 
 /**
@@ -200,7 +214,7 @@ function printedDate(text: string): string | undefined {
 }
 
 /** A calendar row is `date | dash | what happens`. A row with no date is a spacer or a continuation. */
-function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEntry[] {
+function parseCalendarRows($: CheerioAPI, table: Selection, undatedRows: string[], weekdayMismatches: string[]): ElectionCalendarEntry[] {
   const out: ElectionCalendarEntry[] = [];
   for (const row of table.find('tr').toArray()) {
     const cells = $(row).find('td');
@@ -209,7 +223,11 @@ function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEnt
     const description = collapse(cells.last().text());
     const dates = printedDates(label);
     const date = dates[0];
+    // An empty first cell is the spacing the city puts between its rows. One with text the site
+    // cannot read a date in is something else, and the owner is told rather than it being dropped.
+    if (!date && label && description) undatedRows.push(label);
     if (!date || !description) continue;
+    if (weekdayDisagrees(label, date)) weekdayMismatches.push(label);
     // The city has one cell per entry, so it writes an entry that spans days ("THANKSGIVING
     // HOLIDAY!") as both of its dates in that cell. Read as one day it would tell a voter the wrong
     // thing about the second, so the entry carries the last date the city printed as its end.
@@ -217,6 +235,25 @@ function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEnt
     out.push({ date, ...(last > date ? { endDate: last } : {}), label, description });
   }
   return out;
+}
+
+/**
+ * The city's own spellings of the weekdays it writes into its calendar labels. They are the city's
+ * words, not interface text: they are here to be checked against the date it printed beside them,
+ * never to be shown.
+ */
+const WEEKDAYS: readonly string[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+/**
+ * Whether the weekday the Publisher opened a label with is not the weekday its own date falls on.
+ * The special election page opens its first row "Monday, September 05, 2026", which is a Saturday
+ * (verified 2026-09-17): one of the two is a typo, and only the Publisher can say which.
+ */
+function weekdayDisagrees(label: string, date: string): boolean {
+  const m = /^([A-Za-z]+)/.exec(label);
+  if (!m) return false;
+  const printed = WEEKDAYS.indexOf(m[1]!.toLowerCase());
+  return printed >= 0 && printed !== new Date(`${date}T00:00:00Z`).getUTCDay();
 }
 
 /**
@@ -512,6 +549,9 @@ export const cityElections: SourceAdapter = {
     // many rows the city links it from. A second row linking the same document is logged, because
     // one PDF under two candidates is a city data-entry slip the owner should see.
     const filings = new Map<string, NewFiling>();
+    // Document ids already made into an Item, across every Election in this run. An Item's id is the
+    // city's document id, so one document is one Item and can belong to one Election: a document the
+    // city linked from both Election pages goes to the first one, which is the earlier election.
     const seen = new Set<string>();
     let notices = 0;
     let votingSites = 0;
@@ -526,6 +566,12 @@ export const cityElections: SourceAdapter = {
       // down, so this Source fails here instead and every other Source still publishes.
       if (!parsed.title) throw new Error(`no election heading on ${page.url}; the city changed the page`);
       skippedLinks += parsed.skippedLinks;
+      if (parsed.undatedRows.length) {
+        log(`city-elections: ${parsed.undatedRows.length} calendar row(s) on ${page.url} have text the site cannot read a date in (${parsed.undatedRows.join('; ')})`);
+      }
+      for (const label of parsed.weekdayMismatches) {
+        log(`city-elections: the city writes "${label}" on ${page.url}, whose weekday is not the one that date falls on; the date is shown`);
+      }
 
       // The candidates sub-page carries the Race tables and the forum schedule. It is a second page
       // and can fail on its own: if it is unreachable the Election still gets its calendar, notices,

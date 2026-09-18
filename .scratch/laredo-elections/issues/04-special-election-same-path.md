@@ -43,3 +43,21 @@ issues 01 and 02 already wrote.
 - Candidate ids are `${electionId}:${raceSlug}:${slug of the legal name}` and page paths carry the Election
   and the Race, so two Elections cannot collide. A test renames the special election's rows to two people
   already running for Mayor and asserts two Candidates, two ids, two pages.
+
+**2026-09-18, implementer, after review:** Review at `.scratch/laredo-elections/reviews/04-special-election-same-path.md`.
+Six findings and four nits; everything is fixed except one, deliberately.
+
+- The reviewer's first finding was real and voter-facing: both Elections post a list titled "Early Voting
+  Sites", so the New panel, the Topic page and the feed carried each title twice with nothing to tell them
+  apart. An Item that carries an Election now names it in its meta line and its RSS description, in the city's
+  own words; the Election's own page leaves the chip off so its notices do not repeat the page's own title.
+- **Left open on purpose:** the city dates its drawing notice `10-07-26`, the day of the drawing, so under the
+  site's printed-date-plus-90-day-window rule it is in no feed until 7 October. That rule is the site's, not
+  this ticket's (the general page has the same shape), and the fix — counting an Item as new by its city date
+  *or* its `firstSeen` — changes how every Source's Items enter every feed on the site. It wants its own issue
+  and the owner's say-so. Box 3 is ticked on the reading that the two August notices are in the feed under the
+  city's dates, the October one is on the Election page from the day the city posts it, and it joins the feed
+  on its own date. Worth raising with the owner.
+- Two smaller ones are now run-log lines rather than silence: a calendar row whose first cell has text the site
+  can read no date in, and a row whose printed weekday is not the weekday its date falls on (the city opens its
+  filing window "Monday, September 05, 2026", which is a Saturday).

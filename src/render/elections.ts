@@ -278,7 +278,7 @@ ${calendarSection(ctx, election)}
 </section>
 <section aria-labelledby="election-notices">
 <h2 id="election-notices">${esc(t(lang, 'elections.notices'))}</h2>
-<div class="election-notices">${itemList(ctx, notices, t(lang, 'elections.notices.empty'))}</div>
+<div class="election-notices">${itemList(ctx, notices, t(lang, 'elections.notices.empty'), { omitElection: true })}</div>
 </section>
 <section aria-labelledby="election-voting-sites">
 <h2 id="election-voting-sites">${esc(t(lang, 'elections.votingSites'))}</h2>

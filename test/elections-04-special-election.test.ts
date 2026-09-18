@@ -140,8 +140,10 @@ describe('Elections 04: the special election through the same path', () => {
         'Priscilla "Gordiloca" Treviño',
         'Mario Trevino',
       ]);
-      // Names the city did not print appear nowhere on the page.
-      expect(race('main').text()).not.toContain('Mendoza,');
+      // The treasurer the city named on that row is named only as the treasurer. The site never
+      // borrows a treasurer's name for the candidate the city has not named (CONTEXT.md).
+      const mendoza = race('main *').filter((_, e) => race(e).children().length === 0 && /Isabella Mendoza/.test(race(e).text()));
+      expect(mendoza.map((_, e) => race(e).closest('td,th').attr('class') ?? race(e).closest('td,th').prop('tagName')).get()).toEqual(['treasurer']);
     }
 
     // The same people and links in both languages.
@@ -150,6 +152,21 @@ describe('Elections 04: the special election through the same path', () => {
       return $('table.race-table a').map((_, a) => $(a).attr('href')).get();
     };
     expect(await hrefs('es')).toEqual(await hrefs('en'));
+  });
+
+  it('records one day when the city writes the same date into a calendar cell twice', async () => {
+    // A cell holding one date twice is one day, not a range: the end is kept only when it is later.
+    const page = await readFile(`${fixtureRoot}/city-elections/special-2026.html`, 'utf8');
+    const repeated = page.replace('Friday, November 27, 2026', 'Thursday, November 26, 2026');
+    expect(repeated).not.toBe(page);
+
+    const site = await Site.create();
+    const { data } = await site.build({ fixtures: { ...electionFixtures, [SPECIAL_ELECTION_URL]: repeated }, now: FIXTURE_NOW, sources: [cityElections] });
+    const holiday = data.elections.find((e) => e.id === SPECIAL)!.calendar.find((e) => e.description === 'THANKSGIVING HOLIDAY!')!;
+    expect(holiday.date).toBe('2026-11-26');
+    expect(holiday.endDate).toBeUndefined();
+    const $ = await site.page(`/en${SPECIAL_PATH}`);
+    expect($('.election-calendar li').filter((_, li) => /THANKSGIVING/.test($(li).text())).find('time')).toHaveLength(1);
   });
 
   it('lists both Elections on the Elections Topic page, upcoming first', async () => {
@@ -202,6 +219,25 @@ describe('Elections 04: the special election through the same path', () => {
     // every other Item. The Election page's list of notices is the record and is not windowed, so
     // the notice is on the Election page from the day the city posts it.
     expect(rss).not.toContain('Notice of Drawing for Order on Special Election Ballot');
+
+    // Both Elections post a list under the very same title for different weeks, so every place a
+    // reader meets one out of context says which Election it belongs to, in the city's own words.
+    const home = await site.page('/en/');
+    const earlyVoting = home('section[aria-labelledby="new"] .items > li').filter((_, li) => home(li).find('.title').text() === 'Early Voting Sites');
+    expect(earlyVoting).toHaveLength(2);
+    // Newest first, so the general election's list (posted 2 September) sits above the special
+    // election's (1 September) under the same title, which is exactly the pair a reader must be
+    // able to tell apart.
+    expect(earlyVoting.find('.election').map((_, a) => home(a).text()).get()).toEqual([
+      'CITY OF LAREDO 2026 GENERAL ELECTION',
+      'CITY OF LAREDO 2026 SPECIAL ELECTION',
+    ]);
+    expect(earlyVoting.find('.election').map((_, a) => home(a).attr('href')).get()).toEqual(['/en/elections/2026-general/', `/en${SPECIAL_PATH}`]);
+    expect(rss).toContain('City of Laredo · Elections · CITY OF LAREDO 2026 SPECIAL ELECTION');
+    expect(rss).toContain('City of Laredo · Elections · CITY OF LAREDO 2026 GENERAL ELECTION');
+    // On the Election's own page every line would repeat its title, so the chip is left off there.
+    const page = await site.page(`/en${SPECIAL_PATH}`);
+    expect(page('.election-notices .election')).toHaveLength(0);
 
     // A second unchanged build adds nothing.
     const again = await site.build({ fixtures: electionFixtures, now: daysAfter(FIXTURE_NOW, 1), sources: [cityElections] });
@@ -287,6 +323,32 @@ describe('Elections 04: the special election through the same path', () => {
     // The city's one forum button on the special candidates page carries no date yet. It is not
     // shown as a schedule and it is not dropped in silence: the owner is told it is waiting.
     expect(log).toContain(`city-elections: 1 forum button(s) on ${SPECIAL_CANDIDATES_URL} carry no date yet (District 8)`);
+    // The city opens its filing window "Monday, September 05, 2026", which is a Saturday. Only the
+    // city can say which of the two it meant, so the site shows the date and tells the owner.
+    expect(log).toContain(
+      `city-elections: the city writes "Monday, September 05, 2026" on ${SPECIAL_ELECTION_URL}, whose weekday is not the one that date falls on; the date is shown`,
+    );
+    // Nothing else on either page disagrees with itself, and no calendar row is dropped unread.
+    expect(log.filter((l) => /whose weekday is not the one/.test(l))).toHaveLength(1);
+    expect(log.filter((l) => /cannot read a date in/.test(l))).toHaveLength(0);
+  });
+
+  it('tells the owner when the city writes a calendar row it cannot read a date in', async () => {
+    // A month the city misspells would otherwise drop a filing deadline off the calendar in silence.
+    const page = await readFile(`${fixtureRoot}/city-elections/special-2026.html`, 'utf8');
+    const typo = page.replace('Monday, October 05, 2026', 'Monday, Octber 05, 2026');
+    expect(typo).not.toBe(page);
+
+    const site = await Site.create();
+    const log: string[] = [];
+    const { data } = await site.build({ fixtures: { ...electionFixtures, [SPECIAL_ELECTION_URL]: typo }, now: FIXTURE_NOW, sources: [cityElections], log });
+
+    const calendar = data.elections.find((e) => e.id === SPECIAL)!.calendar;
+    expect(calendar).toHaveLength(7);
+    expect(calendar.some((e) => /Last Day to File/.test(e.description))).toBe(false);
+    expect(log).toContain(
+      `city-elections: 1 calendar row(s) on ${SPECIAL_ELECTION_URL} have text the site cannot read a date in (Monday, Octber 05, 2026)`,
+    );
   });
 
   it('keeps the special election when the city makes its candidates sub-page unreachable', async () => {
