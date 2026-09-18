@@ -77,10 +77,7 @@ export const bidsFixtures: Record<string, FixtureBody> = {
   [BIDS_URL]: fixture('city-bids/bids.html'),
 };
 
-/**
- * The two 2026 Election pages and their candidates sub-pages. The special election's pages are
- * recorded and mapped here although only the general pair is read until issue 04 wires it up.
- */
+/** The two 2026 Election pages and their candidates sub-pages; the Source reads all four (issue 04). */
 export const electionFixtures: Record<string, FixtureBody> = {
   [GENERAL_ELECTION_URL]: fixture('city-elections/general-2026.html'),
   [GENERAL_CANDIDATES_URL]: fixture('city-elections/general-2026-candidates.html'),

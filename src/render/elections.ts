@@ -17,7 +17,18 @@
  */
 import { formatDate, formatTime, sortValue } from '../dates.js';
 import { PUBLISHER_ORDER } from '../directory/entries.js';
-import type { Candidate, Election, ElectionItemKind, ElectionLink, Filing, Item, PublisherId, Race, UnnamedRow } from '../domain.js';
+import type {
+  Candidate,
+  Election,
+  ElectionCalendarEntry,
+  ElectionItemKind,
+  ElectionLink,
+  Filing,
+  Item,
+  PublisherId,
+  Race,
+  UnnamedRow,
+} from '../domain.js';
 import { earliestCoverageStart } from '../elections/coverage.js';
 import { t } from '../i18n/strings.js';
 import { href, PATHS, type RenderContext } from './context.js';
@@ -61,13 +72,22 @@ function calendarSection(ctx: RenderContext, election: Election): string {
   const { lang } = ctx;
   if (election.calendar.length === 0) return `<p class="empty">${esc(t(lang, 'elections.calendar.empty'))}</p>`;
   return `<ul class="election-calendar">
-${election.calendar
-  .map(
-    (entry) =>
-      `<li><time datetime="${esc(entry.date)}">${esc(formatDate(lang, entry.date, 'long'))}</time> <span class="what">${esc(entry.description)}</span></li>`,
-  )
-  .join('\n')}
+${election.calendar.map((entry) => `<li>${calendarWhen(ctx, entry)} <span class="what">${esc(entry.description)}</span></li>`).join('\n')}
 </ul>`;
+}
+
+/**
+ * The day an entry falls on, or, for an entry the Publisher spans over days, both of its ends. Both
+ * go in one `.when` cell, so a two-day entry stays one column beside its description rather than
+ * splitting into two.
+ */
+function calendarWhen(ctx: RenderContext, entry: ElectionCalendarEntry): string {
+  const { lang } = ctx;
+  const day = (date: string) => `<time datetime="${esc(date)}">${esc(formatDate(lang, date, 'long'))}</time>`;
+  const when = entry.endDate
+    ? `${day(entry.date)} <span class="through">${esc(t(lang, 'elections.calendar.through'))}</span> ${day(entry.endDate)}`
+    : day(entry.date);
+  return `<span class="when">${when}</span>`;
 }
 
 /**
@@ -394,7 +414,7 @@ ${calendarSection(ctx, election)}
 </section>
 <section aria-labelledby="election-notices">
 <h2 id="election-notices">${esc(t(lang, 'elections.notices'))}</h2>
-<div class="election-notices">${itemList(ctx, notices, t(lang, 'elections.notices.empty'))}</div>
+<div class="election-notices">${itemList(ctx, notices, t(lang, 'elections.notices.empty'), { omitElection: true })}</div>
 </section>
 <section aria-labelledby="election-voting-sites">
 <h2 id="election-voting-sites">${esc(t(lang, 'elections.votingSites'))}</h2>

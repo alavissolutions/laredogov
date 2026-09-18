@@ -126,7 +126,8 @@ describe('Elections 03: Candidate pages', () => {
 
     const index = JSON.parse(await site.file('/search-index.json')) as { t: string; a?: string; s?: string; o: string; p: string; d: string }[];
     const entries = index.filter((e) => e.s?.startsWith('/elections/'));
-    expect(entries).toHaveLength(16);
+    // 16 general Candidates and 3 special (ticket 04); the unnamed District 8 row has no page.
+    expect(entries).toHaveLength(19);
     const gonzalez = entries.find((e) => e.s === GONZALEZ)!;
     // The name on the ballot is what a reader sees; the legal name is matched on too.
     expect(gonzalez).toMatchObject({ t: 'JD Gonzalez', a: 'Jose David Gonzalez', o: 'elections', p: 'city-of-laredo', d: '2026-11-03' });
@@ -147,7 +148,12 @@ describe('Elections 03: Candidate pages', () => {
       });
     expect(hit('jose david gonzalez').map((e) => e.s)).toEqual([GONZALEZ]);
     expect(hit('JD Gonzalez').map((e) => e.s)).toEqual([GONZALEZ]);
-    expect(hit('Treviño').map((e) => e.s)).toEqual(['/elections/2026-general/mayor/victor-d-trevino/']);
+    // Three Treviños across the two Elections (ticket 04); all answer to the accented spelling.
+    expect(hit('Treviño').map((e) => e.s)).toEqual([
+      '/elections/2026-general/mayor/victor-d-trevino/',
+      '/elections/2026-special/district-8/priscilla-gordiloca-trevino/',
+      '/elections/2026-special/district-8/mario-trevino/',
+    ]);
 
     // The page sends the reader to the site's own page, in their language, and says that the date
     // on a Candidate hit is election day rather than the day something was posted.
@@ -193,11 +199,12 @@ describe('Elections 03: Candidate pages', () => {
       sources: [cityElections],
     });
 
-    expect(data.candidates).toHaveLength(15);
+    expect(data.candidates).toHaveLength(18); // 15 general after the blanked row, plus 3 special
     for (const lang of ['en', 'es'] as const) {
       for (const candidate of data.candidates) {
         const race = data.races.find((r) => r.id === candidate.raceId)!;
-        expect(await site.exists(`/${lang}/elections/2026-general/${race.slug}/${candidate.slug}/`)).toBe(true);
+        const election = data.elections.find((e) => e.id === race.electionId)!;
+        expect(await site.exists(`/${lang}/elections/${election.slug}/${race.slug}/${candidate.slug}/`)).toBe(true);
       }
       // Nobody is named on the row the city left blank, so there is no page and no link to one.
       expect(await site.exists(`/${lang}/elections/2026-general/mayor/poncho-casso/`)).toBe(false);
@@ -225,7 +232,7 @@ describe('Elections 03: Candidate pages', () => {
       log,
     });
 
-    expect(data.candidates).toHaveLength(15);
+    expect(data.candidates).toHaveLength(18); // 15 general after the blanked row, plus 3 special
     expect(data.candidates.some((c) => c.slug === '')).toBe(false);
     expect(data.races.find((r) => r.slug === 'mayor')!.unnamedRows).toHaveLength(1);
     expect(log.some((l) => /name cell\(s\) hold a placeholder rather than a name/.test(l))).toBe(true);

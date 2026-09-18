@@ -318,8 +318,10 @@ verified:
     expect(report.failed).toEqual(['city-finance']);
     expect(log.join('\n')).toContain('city-finance: FAILED');
     expect(log.join('\n')).toContain('line 2: a list item outside');
-    // The election pages still published, and the Race page still shows the city\u2019s table.
-    expect(data.candidates.length).toBe(16);
+    // The election pages still published, and the Race pages still show the city's tables: both
+    // Elections, sixteen Candidates in the general and three in the special.
+    expect(data.candidates.length).toBe(19);
+    expect(data.elections).toHaveLength(2);
     expect(data.filings.every((f) => f.kind !== 'finance-report')).toBe(true);
     const $ = await site.page('/en/elections/2026-general/district-1/');
     expect($('table.race-table tbody tr').length).toBe(2);

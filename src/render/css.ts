@@ -54,7 +54,7 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .elections-list .title{font-size:1.05rem}
 .election-calendar,.election-forums,.voting-sites,.link-list{list-style:none;margin:.5rem 0;padding:0}
 .election-calendar>li,.election-forums>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
-.election-calendar time,.election-forums time{display:block;font-size:.875rem;color:var(--muted)}
+.election-calendar .when,.election-forums time{display:block;font-size:.875rem;color:var(--muted)}
 .voting-sites li,.link-list li{padding:.3rem 0}
 .link-list .note,.voting-sites .note{display:block;font-size:.8rem;color:var(--muted)}
 .link-list a,.voting-sites a{display:inline-block}
@@ -81,6 +81,6 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .unmatched-reports>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
 .unmatched-reports .note{display:block;font-size:.8rem;color:var(--muted)}
 .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-@media (min-width:40rem){.election-calendar time,.election-forums time{display:inline-block;min-width:16rem}}
+@media (min-width:40rem){.election-calendar .when,.election-forums time{display:inline-block;min-width:16rem;vertical-align:top}}
 @media (min-width:40rem){h1{font-size:2rem}body{font-size:17px}}
 `;

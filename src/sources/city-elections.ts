@@ -13,7 +13,7 @@
  * 2026-09-17.
  */
 import { load, type CheerioAPI } from 'cheerio';
-import { dayOf, fromCentral, parseMonthNameDate, to24h } from '../dates.js';
+import { dayOf, fromCentral, parseMonthNameDates, parseNumericDate, to24h } from '../dates.js';
 import type { ElectionCalendarEntry, ElectionForum, ElectionLink, FilingKind, PublisherId, UnnamedRow } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
 import { CITY_SITE, cityDocumentId, cityDocumentPostedAt, cityHref, collapse } from './city.js';
@@ -54,8 +54,8 @@ export interface ElectionQuestion {
 
 /**
  * The Elections in scope, declared rather than discovered: the city has no index of its election
- * pages, and each one is a hand-built page under its own path. The December 5, 2026 District 8
- * special election joins this table with issue 04.
+ * pages, and each one is a hand-built page under its own path. Every Election here goes through the
+ * same path: one Election record, its Races, its Candidates, its Filings, and its notice Items.
  */
 export const ELECTION_PAGES: readonly ElectionPage[] = [
   {
@@ -66,6 +66,15 @@ export const ELECTION_PAGES: readonly ElectionPage[] = [
     // The city's non-binding question on pediatric hospital services, resolution 2026R221 (doc
     // 24357), linked from the "Election Ordinance" button labelled below (verified 2026-09-17).
     questions: [{ slug: 'pediatric-hospital-services', linkNote: 'Non-Binding Election-Pediatric Hospital Services' }],
+  },
+  {
+    slug: '2026-special',
+    date: '2026-12-05',
+    url: SPECIAL_ELECTION_URL,
+    candidatesUrl: SPECIAL_CANDIDATES_URL,
+    // The city called this election by resolution to fill the District 8 vacancy and put nothing
+    // else on its ballot, so it has no question Race (verified 2026-09-17).
+    questions: [],
   },
 ];
 
@@ -118,6 +127,18 @@ export interface ParsedElectionPage {
   links: ElectionLink[];
   /** How many links the declared accordion exclusions left out, for the run log. */
   skippedLinks: number;
+  /**
+   * Calendar rows the city wrote something in whose first cell holds no date this site can read, by
+   * the text of that cell, for the run log. A city typo in a month name would otherwise drop a
+   * filing deadline off the calendar with nobody told.
+   */
+  undatedRows: string[];
+  /**
+   * Calendar rows where the weekday the city printed is not the weekday its own date falls on, by
+   * the text of that cell, for the run log. The site renders the date, so a reader comparing with
+   * the city's page would otherwise see a different weekday and nobody would know which is wrong.
+   */
+  weekdayMismatches: string[];
 }
 
 function headingOf(el: Selection): string {
@@ -131,6 +152,8 @@ export function parseElectionPage(html: string): ParsedElectionPage {
 
   const calendar: ElectionCalendarEntry[] = [];
   const notices: NoticeLink[] = [];
+  const undatedRows: string[] = [];
+  const weekdayMismatches: string[] = [];
   for (const widget of column.find('div[id^=widget_]').toArray()) {
     // One widget mixes headings and tables, so a table belongs to the heading printed above it.
     let heading = '';
@@ -139,7 +162,7 @@ export function parseElectionPage(html: string): ParsedElectionPage {
       if (/^h[1-4]$/.test(tag)) heading = collapse($(child).text());
       else if (tag === 'table') {
         if (NOTICES_HEADING.test(heading)) notices.push(...parseNoticeRows($, $(child)));
-        else calendar.push(...parseCalendarRows($, $(child)));
+        else calendar.push(...parseCalendarRows($, $(child), undatedRows, weekdayMismatches));
       }
     }
   }
@@ -167,35 +190,82 @@ export function parseElectionPage(html: string): ParsedElectionPage {
     }
     for (const anchor of anchors) add(parseAccordionLink($(anchor)));
   }
-  return { title, calendar, notices, links, skippedLinks };
+  return { title, calendar, notices, links, skippedLinks, undatedRows, weekdayMismatches };
+}
+
+/**
+ * The dates a Publisher printed in a cell of one of its own tables, in the order it printed them.
+ * The city writes these two ways on its own election pages, and which way is not a rule of the table
+ * it is in: the general page writes them out ("August 19, 2026") and the special election page
+ * writes three of its notice dates as `10-07-26` (both verified 2026-09-17). A cell holding neither
+ * form has no date; a cell holding two is a Publisher spanning days, which only the written-out form
+ * has room for ("Thursday, November 26, 2026 Friday, November 27, 2026").
+ */
+function printedDates(text: string): string[] {
+  const written = parseMonthNameDates(text);
+  if (written.length) return written;
+  const numeric = parseNumericDate(text);
+  return numeric ? [numeric] : [];
+}
+
+/** The first date a Publisher printed in a cell, for the cells that hold only one. */
+function printedDate(text: string): string | undefined {
+  return printedDates(text)[0];
 }
 
 /** A calendar row is `date | dash | what happens`. A row with no date is a spacer or a continuation. */
-function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEntry[] {
+function parseCalendarRows($: CheerioAPI, table: Selection, undatedRows: string[], weekdayMismatches: string[]): ElectionCalendarEntry[] {
   const out: ElectionCalendarEntry[] = [];
   for (const row of table.find('tr').toArray()) {
     const cells = $(row).find('td');
     if (cells.length < 2) continue;
     const label = collapse(cells.first().text());
     const description = collapse(cells.last().text());
-    const date = parseMonthNameDate(label);
+    const dates = printedDates(label);
+    const date = dates[0];
+    // An empty first cell is the spacing the city puts between its rows. One with text the site
+    // cannot read a date in is something else, and the owner is told rather than it being dropped.
+    if (!date && label && description) undatedRows.push(label);
     if (!date || !description) continue;
-    out.push({ date, label, description });
+    if (weekdayDisagrees(label, date)) weekdayMismatches.push(label);
+    // The city has one cell per entry, so it writes an entry that spans days ("THANKSGIVING
+    // HOLIDAY!") as both of its dates in that cell. Read as one day it would tell a voter the wrong
+    // thing about the second, so the entry carries the last date the city printed as its end.
+    const last = dates[dates.length - 1]!;
+    out.push({ date, ...(last > date ? { endDate: last } : {}), label, description });
   }
   return out;
 }
 
 /**
- * A notice row is `date | dash | link`. The link text is the city's own name for the notice.
- * The general page writes the date out ("August 19, 2026"); the special election page writes some
- * of its notice dates as `MM-DD-YY`, which issue 04 has to handle when it wires that page up.
+ * The city's own spellings of the weekdays it writes into its calendar labels. They are the city's
+ * words, not interface text: they are here to be checked against the date it printed beside them,
+ * never to be shown.
+ */
+const WEEKDAYS: readonly string[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+/**
+ * Whether the weekday the Publisher opened a label with is not the weekday its own date falls on.
+ * The special election page opens its first row "Monday, September 05, 2026", which is a Saturday
+ * (verified 2026-09-17): one of the two is a typo, and only the Publisher can say which.
+ */
+function weekdayDisagrees(label: string, date: string): boolean {
+  const m = /^([A-Za-z]+)/.exec(label);
+  if (!m) return false;
+  const printed = WEEKDAYS.indexOf(m[1]!.toLowerCase());
+  return printed >= 0 && printed !== new Date(`${date}T00:00:00Z`).getUTCDay();
+}
+
+/**
+ * A notice row is `date | dash | link`. The link text is the city's own name for the notice, and the
+ * date beside it is the city's own date for it, in either of the two forms the city writes.
  */
 function parseNoticeRows($: CheerioAPI, table: Selection): NoticeLink[] {
   const out: NoticeLink[] = [];
   for (const row of table.find('tr').toArray()) {
     const cells = $(row).find('td');
     if (cells.length < 2) continue;
-    const date = parseMonthNameDate(collapse(cells.first().text()));
+    const date = printedDate(collapse(cells.first().text()));
     const anchor = cells.last().find('a').first();
     const url = cityHref(anchor.attr('href') ?? '');
     const title = collapse(anchor.text());
@@ -426,18 +496,29 @@ export function nameSlug(name: string): string {
     .slice(0, 80);
 }
 
+export interface ParsedForums {
+  forums: ElectionForum[];
+  /**
+   * Buttons the city put under its FORUMS heading with no date in them, by the text it gave them,
+   * for the run log. The special election page has one ("District 8"): the city has named the forum
+   * and not yet said when. A forum with no date is not a schedule, so it is not shown as one, and
+   * the owner is told rather than the button being dropped in silence.
+   */
+  undated: string[];
+}
+
 /**
  * The candidate forums the city lists under its own FORUMS heading on the candidates sub-page.
  * The buttons carry the date and time in their text and, as of 2026-09-17, no href at all: the city
  * adds one when it posts the video, so until then a forum shows its date and nothing to open.
  */
-export function parseForums(html: string): ElectionForum[] {
+export function parseForums(html: string): ParsedForums {
   const $ = load(html);
+  const out: ParsedForums = { forums: [], undated: [] };
   const children = $('#ColumnUserControl1').children().toArray();
   const start = children.findIndex((el) => FORUMS_HEADING.test(headingOf($(el))));
-  if (start < 0) return [];
+  if (start < 0) return out;
 
-  const out: ElectionForum[] = [];
   for (const el of children.slice(start + 1)) {
     const $el = $(el);
     if (!$el.hasClass('int_buttons')) {
@@ -446,7 +527,8 @@ export function parseForums(html: string): ElectionForum[] {
     }
     for (const anchor of $el.find('a.button-link').toArray()) {
       const forum = parseForumButton($(anchor));
-      if (forum) out.push(forum);
+      if (forum) out.forums.push(forum);
+      else out.undated.push(collapse($(anchor).text()));
     }
   }
   return out;
@@ -483,6 +565,9 @@ export const cityElections: SourceAdapter = {
     // many rows the city links it from. A second row linking the same document is logged, because
     // one PDF under two candidates is a city data-entry slip the owner should see.
     const filings = new Map<string, NewFiling>();
+    // Document ids already made into an Item, across every Election in this run. An Item's id is the
+    // city's document id, so one document is one Item and can belong to one Election: a document the
+    // city linked from both Election pages goes to the first one, which is the earlier election.
     const seen = new Set<string>();
     let notices = 0;
     let votingSites = 0;
@@ -497,6 +582,12 @@ export const cityElections: SourceAdapter = {
       // down, so this Source fails here instead and every other Source still publishes.
       if (!parsed.title) throw new Error(`no election heading on ${page.url}; the city changed the page`);
       skippedLinks += parsed.skippedLinks;
+      if (parsed.undatedRows.length) {
+        log(`city-elections: ${parsed.undatedRows.length} calendar row(s) on ${page.url} have text the site cannot read a date in (${parsed.undatedRows.join('; ')})`);
+      }
+      for (const label of parsed.weekdayMismatches) {
+        log(`city-elections: the city writes "${label}" on ${page.url}, whose weekday is not the one that date falls on; the date is shown`);
+      }
 
       // The candidates sub-page carries the Race tables and the forum schedule. It is a second page
       // and can fail on its own: if it is unreachable the Election still gets its calendar, notices,
@@ -507,7 +598,11 @@ export const cityElections: SourceAdapter = {
       } catch (err) {
         log(`city-elections: ${page.candidatesUrl} unreadable, no Races or forum schedule (${err instanceof Error ? err.message : String(err)})`);
       }
-      const forums: ElectionForum[] = candidatesHtml ? parseForums(candidatesHtml) : [];
+      const parsedForums: ParsedForums = candidatesHtml ? parseForums(candidatesHtml) : { forums: [], undated: [] };
+      const forums = parsedForums.forums;
+      if (parsedForums.undated.length) {
+        log(`city-elections: ${parsedForums.undated.length} forum button(s) on ${page.candidatesUrl} carry no date yet (${parsedForums.undated.join(', ')})`);
+      }
       const id = `city-elections:${page.slug}`;
       elections.push({
         id,

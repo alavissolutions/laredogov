@@ -125,3 +125,14 @@ note rather than silently, and the wording is the coordinator's to amend. Import
 - The broken `http://` link is recorded as listed-with-nothing-to-open and logged, not as a Filing.
 - Every city string is escaped; the quoted nicknames survive into RSS escaped.
 - The unmatched list is per Election rather than per Race, with the comment and the intro sentence saying why.
+
+## After the review: merged with the special election (issue 04)
+
+`feat/laredo-elections` gained issue 04 while this ticket was in review, so the branch was merged with it
+and the whole suite re-run (76 tests green, typecheck clean; one conflict, the import list in
+`src/render/elections.ts`). With both Elections live, finding 4's fix does what it was meant to: the
+District 8 special election's Race table carries the same January 15 and July 15, 2026 columns as the
+general election's, and its own unmatched list, although its calendar opens on 2026-09-05, after both
+deadlines. No report in the recorded fixture attaches to a Candidate in both Elections (no name the city
+uses appears in both tables), so the two-Elections case stays covered by the test that seeds the data file
+with what two builds would have left behind.
