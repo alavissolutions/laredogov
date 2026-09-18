@@ -133,7 +133,7 @@ describe('Elections 04: the special election through the same path', () => {
       // The unnamed row keeps its place at the top of the city's ballot order and names nobody.
       expect(rows.eq(0).hasClass('unnamed')).toBe(true);
       expect(rows.eq(0).find('th').text()).toBe(lang === 'es' ? 'Nombre del candidato aún no publicado' : 'Candidate name not yet posted');
-      expect(rows.eq(0).find('td.treasurer a').text()).toBe('Isabella Mendoza');
+      expect(rows.eq(0).find('td.treasurer a').contents().first().text()).toBe('Isabella Mendoza');
       expect(rows.eq(0).find('td.application .empty').text()).toBe(lang === 'es' ? 'No publicado' : 'Not posted');
       expect(rows.map((_, tr) => race(tr).find('th').first().text()).get().slice(1)).toEqual([
         'Irma Morales Lopez',
@@ -142,14 +142,25 @@ describe('Elections 04: the special election through the same path', () => {
       ]);
       // The treasurer the city named on that row is named only as the treasurer. The site never
       // borrows a treasurer's name for the candidate the city has not named (CONTEXT.md).
-      const mendoza = race('main *').filter((_, e) => race(e).children().length === 0 && /Isabella Mendoza/.test(race(e).text()));
+      // The treasurer link carries a visually hidden document label after the name (ticket 03), so
+      // match on an element's own text nodes rather than on leaf elements.
+      const ownText = (e: Parameters<typeof race>[0]) =>
+        race(e)
+          .contents()
+          .filter((_, n) => n.type === 'text')
+          .text();
+      const mendoza = race('main *').filter((_, e) => /Isabella Mendoza/.test(ownText(e)));
       expect(mendoza.map((_, e) => race(e).closest('td,th').attr('class') ?? race(e).closest('td,th').prop('tagName')).get()).toEqual(['treasurer']);
     }
 
     // The same people and links in both languages.
     const hrefs = async (lang: string) => {
       const $ = await site.page(`/${lang}${SPECIAL_PATH}district-8/`);
-      return $('table.race-table a').map((_, a) => $(a).attr('href')).get();
+      // Candidate name cells link to the site's own page in the reader's language (ticket 03);
+      // strip that prefix so the same people and the same city documents compare equal.
+      return $('table.race-table a')
+        .map((_, a) => ($(a).attr('href') ?? '').replace(/^\/(en|es)\//, '/'))
+        .get();
     };
     expect(await hrefs('es')).toEqual(await hrefs('en'));
   });
