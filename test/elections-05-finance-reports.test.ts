@@ -273,7 +273,7 @@ verified:
       filings: [],
       ...stamps,
     }));
-    await site.writeData({ version: 1, items: [], meetings: [], bodies: [], elections, races, candidates, filings: [], sources: {} });
+    await site.writeData({ version: 1, items: [], meetings: [], bodies: [], elections, races, candidates, filings: [], figures: [], sources: {} });
 
     const { data } = await site.build({ fixtures: financeFixtures, now: FIXTURE_NOW, sources: [cityFinance] });
 

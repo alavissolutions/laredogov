@@ -1,4 +1,4 @@
-import type { Body, Candidate, DataFile, DirectoryEntry, Election, Filing, Item, Meeting, PublisherId, Race, Topic } from '../domain.js';
+import type { Body, Candidate, DataFile, DirectoryEntry, Election, Figure, Filing, Item, Meeting, PublisherId, Race, Topic } from '../domain.js';
 import type { Fetcher } from '../fetcher/types.js';
 
 /** What an adapter returns for a new or re-seen Item; the build fills in first-seen and last-seen-live. */
@@ -14,6 +14,7 @@ export type NewElection = Omit<Election, 'firstSeen' | 'lastSeenLive' | 'source'
 export type NewRace = Omit<Race, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
 export type NewCandidate = Omit<Candidate, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
 export type NewFiling = Omit<Filing, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+export type NewFigure = Omit<Figure, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
 
 export interface SourceRunContext {
   fetcher: Fetcher;
@@ -37,6 +38,7 @@ export interface SourceResult {
   races?: NewRace[];
   candidates?: NewCandidate[];
   filings?: NewFiling[];
+  figures?: NewFigure[];
 }
 
 /**

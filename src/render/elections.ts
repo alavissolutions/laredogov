@@ -10,6 +10,11 @@
  * it named, and the ballot application it linked. A row the city has not named is shown as such and
  * is nobody (CONTEXT.md). Finance report columns join the table with issue 05.
  *
+ * The Figures copied from a finance report (user stories 3 and 8) show on both pages, and only once
+ * the owner has checked them against the report: until then the reader is told so and given the
+ * link, because an unchecked number under a real person's name is worse than no number at all
+ * (note on ADR-0001).
+ *
  * A Candidate page (user stories 6, 8, 9) is one name from that table: both names as the city
  * printed them, the Race, the treasurer, and every Filing the city posted under the name, each
  * under a plain label with the city's own words for it, its link, and the date the site last saw it
@@ -23,6 +28,7 @@ import type {
   ElectionCalendarEntry,
   ElectionItemKind,
   ElectionLink,
+  Figure,
   Filing,
   Item,
   PublisherId,
@@ -30,7 +36,7 @@ import type {
   UnnamedRow,
 } from '../domain.js';
 import { earliestCoverageStart } from '../elections/coverage.js';
-import { t } from '../i18n/strings.js';
+import { t, type StringKey } from '../i18n/strings.js';
 import { href, PATHS, type RenderContext } from './context.js';
 import { esc, layout, topicNav } from './html.js';
 import { itemList } from './items.js';
@@ -258,6 +264,36 @@ export function candidateReports(ctx: RenderContext, candidate: Candidate): Fili
     .sort((a, b) => (b.period?.date ?? '').localeCompare(a.period?.date ?? '') || a.id.localeCompare(b.id));
 }
 
+/** The Figure copied from one Filing, whether or not the owner has checked it yet. */
+export function figureFor(ctx: RenderContext, filing: Filing): Figure | undefined {
+  return ctx.data.figures.find((f) => f.filingId === filing.id);
+}
+
+/**
+ * A total as the form it was copied from prints it: dollars and cents, grouped in threes, in both
+ * languages. The number is the Publisher's, printed on a United States form in United States
+ * money, and this site does not restyle what the Publisher wrote any more than it translates a
+ * name (spec: Names, Language).
+ */
+export function formatMoney(amount: number): string {
+  const [whole = '0', cents = '00'] = amount.toFixed(2).split('.');
+  return `$${whole.replace(/\B(?=(\d{3})+$)/g, ',')}.${cents}`;
+}
+
+/** The four totals, in the order the cover sheet prints them. */
+function figureList(ctx: RenderContext, figure: Figure): string {
+  const { lang } = ctx;
+  const rows: [StringKey, number][] = [
+    ['figure.contributions', figure.totals.contributions],
+    ['figure.expenditures', figure.totals.expenditures],
+    ['figure.contributionsMaintained', figure.totals.contributionsMaintained],
+    ['figure.outstandingLoans', figure.totals.outstandingLoans],
+  ];
+  return `<dl class="figure">${rows
+    .map(([key, amount]) => `<dt>${esc(t(lang, key))}</dt><dd>${esc(formatMoney(amount))}</dd>`)
+    .join('')}</dl>`;
+}
+
 /** A column heading: what the column is, and the Publisher's own filing deadline, in the reader's date. */
 function financeHeader(ctx: RenderContext, period: { label: string; date: string }): string {
   const { lang } = ctx;
@@ -284,9 +320,15 @@ function financeCell(ctx: RenderContext, candidate: Candidate | undefined, perio
       // Two reports for one deadline (an amendment, a corrected form) would otherwise give their
       // links the same name read out of the table, so each says which document it opens.
       const which = reports.length > 1 ? `, ${t(lang, 'race.finance.document', { id: report.documentId })}` : '';
-      return `<a href="${esc(report.url)}" rel="noopener">${esc(t(lang, 'race.finance.filed'))}<span class="visually-hidden"> ${esc(name)}, ${esc(
+      const figure = figureFor(ctx, report);
+      // Three states, and the link in all three: the totals once the owner has checked them, the
+      // plain fact that they have not been checked yet until then (user story 3), and, for a
+      // report nothing could be read out of, the link on its own as before (issue 05).
+      const label = figure && !figure.verified ? t(lang, 'figure.awaiting') : t(lang, 'race.finance.filed');
+      const link = `<a href="${esc(report.url)}" rel="noopener">${esc(label)}<span class="visually-hidden"> ${esc(name)}, ${esc(
         formatDate(lang, period.date, 'short'),
       )}${esc(which)}</span></a>`;
+      return figure?.verified ? `${link}${figureList(ctx, figure)}` : link;
     })
     .join(' ');
   return `<td class="finance">${links}</td>`;
@@ -437,6 +479,20 @@ ${topicNav(ctx)}`;
   });
 }
 
+/**
+ * What was copied from one Filing, under the line that links it: the four totals once the owner has
+ * checked them against the report, and until then the plain fact that they have not been, with the
+ * link above to read them for oneself (user stories 3 and 8, note on ADR-0001). A report the
+ * extractor read nothing out of adds nothing here; it is the link and the date, as it was before.
+ */
+function figureBlock(ctx: RenderContext, filing: Filing): string {
+  const { lang } = ctx;
+  const figure = figureFor(ctx, filing);
+  if (!figure) return '';
+  if (!figure.verified) return `<span class="figure-awaiting"><strong>${esc(t(lang, 'figure.awaiting'))}</strong> ${esc(t(lang, 'figure.awaiting.note'))}</span>`;
+  return `${figureList(ctx, figure)}<span class="figure-note">${esc(t(lang, 'figure.note'))}</span>`;
+}
+
 /** One Filing: the site's plain label, the city's own words for it, and when it was last seen live. */
 function filingLine(ctx: RenderContext, filing: Filing): string {
   const { lang } = ctx;
@@ -460,7 +516,7 @@ function filingLine(ctx: RenderContext, filing: Filing): string {
   const seen = esc(t(lang, 'candidate.lastSeenLive', { date: formatDate(lang, filing.lastSeenLive, 'short') }));
   return `<li${report ? ' class="finance-report"' : ''}>${period}<a href="${esc(filing.url)}" rel="noopener">${esc(
     t(lang, `filing.${filing.kind}`),
-  )}${note}</a><span class="meta"><time datetime="${esc(filing.lastSeenLive)}">${seen}</time></span></li>`;
+  )}${note}</a><span class="meta"><time datetime="${esc(filing.lastSeenLive)}">${seen}</time></span>${figureBlock(ctx, filing)}</li>`;
 }
 
 /**

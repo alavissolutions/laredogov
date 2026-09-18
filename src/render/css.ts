@@ -77,6 +77,12 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .race-table th.finance .what{display:block;text-transform:none;letter-spacing:0;font-weight:400}
 .race-table td.finance a{display:inline-block}
 .filings time.period{display:inline-block;min-width:7rem;font-size:.875rem;color:var(--muted)}
+.figure{display:grid;grid-template-columns:auto auto;gap:.1rem .75rem;margin:.35rem 0 0;font-size:.85rem}
+.figure dt{font-weight:400;font-size:.85rem;color:var(--muted)}
+.figure dd{margin:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figure-note,.figure-awaiting{display:block;font-size:.8rem;color:var(--muted);margin:.25rem 0 0}
+.race-table td.finance .figure{max-width:16rem}
+.filings .figure{max-width:24rem}
 .unmatched-reports{list-style:none;margin:.5rem 0;padding:0}
 .unmatched-reports>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
 .unmatched-reports .note{display:block;font-size:.8rem;color:var(--muted)}

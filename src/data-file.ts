@@ -28,6 +28,7 @@ export async function saveData(file: string, data: DataFile): Promise<void> {
     races: [...data.races].sort(byId),
     candidates: [...data.candidates].sort(byId),
     filings: [...data.filings].sort(byId),
+    figures: [...data.figures].sort(byId),
     sources: Object.fromEntries(Object.entries(data.sources).sort(([a], [b]) => a.localeCompare(b))),
   };
   await mkdir(path.dirname(file), { recursive: true });
@@ -59,6 +60,10 @@ export function validateData(data: DataFile): void {
     if (!filing.documentId || !filing.url || !filing.label) {
       throw new Error(`Filing ${filing.id} is missing documentId, url, or label`);
     }
+  }
+  for (const figure of data.figures) {
+    // A Figure with no Filing behind it could not be checked against anything (note on ADR-0001).
+    if (!figure.filingId || !figure.documentId) throw new Error(`Figure ${figure.id} is missing filingId or documentId`);
   }
   for (const item of data.items) {
     if (!isTopic(item.topic)) {

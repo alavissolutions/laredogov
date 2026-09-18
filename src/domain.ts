@@ -244,6 +244,49 @@ export interface Filing {
   raceId?: string;
   electionId?: string;
   url: string;
+  /**
+   * The filename the Publisher's document store sent with the document, kept for the owner so they
+   * recognise the file they open. It is never parsed for a name or an office (spec: Fetching).
+   */
+  documentFilename?: string;
+  /**
+   * Set on a document the extractor read nothing out of: every report the Publisher has posted for
+   * this cycle is a scan from a copier with no text layer. It is what a reader sees nothing extra
+   * for, and it is what stops the build spending half a minute on the same document every run.
+   */
+  unreadable?: boolean;
+  publisher: PublisherId;
+  source: string;
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** The four totals a campaign finance report prints on its cover sheet, in whole dollars and cents. */
+export interface FigureTotals {
+  /** Total political contributions, not the unitemized subtotal printed above it on the form. */
+  contributions: number;
+  expenditures: number;
+  /** Total political contributions maintained as of the last day of the reporting period. */
+  contributionsMaintained: number;
+  /** Total principal amount of all outstanding loans as of the last day of the reporting period. */
+  outstandingLoans: number;
+}
+
+/**
+ * A number copied from a Filing (CONTEXT.md), with the Filing it came from and whether the owner
+ * has checked it against that Filing. A wrong number under a Candidate's name is a fairness
+ * problem, so a Figure is stored as soon as it is read and rendered only once the owner has listed
+ * its document id in the hand-kept file (note on ADR-0001). The Publisher's document is not kept.
+ */
+export interface Figure {
+  /** `${source}:figure:${documentId}`: one Figure per Filing, so a re-read replaces it. */
+  id: string;
+  filingId: string;
+  /** The Publisher's document id, which is what the owner lists to verify it (user story 19). */
+  documentId: string;
+  totals: FigureTotals;
+  /** True once the owner has listed `documentId` under `verified` in the hand-kept file. */
+  verified: boolean;
   publisher: PublisherId;
   source: string;
   firstSeen: string;
@@ -298,11 +341,12 @@ export interface DataFile {
   races: Race[];
   candidates: Candidate[];
   filings: Filing[];
+  figures: Figure[];
   sources: Record<string, SourceHealth>;
 }
 
 export function emptyData(): DataFile {
-  return { version: 1, items: [], meetings: [], bodies: [], elections: [], races: [], candidates: [], filings: [], sources: {} };
+  return { version: 1, items: [], meetings: [], bodies: [], elections: [], races: [], candidates: [], filings: [], figures: [], sources: {} };
 }
 
 /** Directory entries describe every Source and Lookup, ingested or not. */

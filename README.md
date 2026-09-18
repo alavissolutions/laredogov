@@ -45,7 +45,7 @@ npm test
 
 There is one seam: the build, with the fetcher swapped. Every test runs the whole build (ingest then render) against recorded fixtures into a temporary directory and asserts on what a resident or the owner sees: the data file, the HTML, the RSS, the search index. No adapter or renderer is tested in isolation.
 
-Fixtures are real captures from the live Sources; see `test/fixtures/README.md` for what each one is and how to refresh it (`npm run capture -- <source>`).
+Fixtures are real captures from the live Sources; see `test/fixtures/README.md` for what each one is and how to refresh it (`npm run capture -- <source>`). The two campaign finance report PDFs are the one exception: the city has posted no readable report to capture and this project keeps no copy of a real one (ADR-0001), so they are written by `npm run make:pdf-fixtures`.
 
 ## Adding a Source
 
@@ -60,6 +60,7 @@ src/
   domain.ts         Item, Meeting, Body, Topic, Publisher, DataFile
   fetcher/          http, headless browser, fixture fetchers behind one interface
   sources/          one adapter per Feed
+  elections/        the owner's hand-kept file, coverage dates, and the cover-sheet reader
   directory/        Directory-only entries
   i18n/strings.ts   every interface string, English and Spanish
   render/           pages, RSS, search index, CSS

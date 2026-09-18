@@ -9,6 +9,15 @@
  * money on another's page, so a report attaches to a Candidate only by an exact name or an Alias
  * the owner declared (ADR-0005), and everything else is recorded, shown, and logged as unmatched.
  *
+ * The four cover-sheet totals on each report are Figures (issue 06). A report is downloaded once,
+ * the first run that sees its document id, and only for the filing deadlines this site's Elections
+ * cover: the page carries a decade of filings and the city's document store answers a browser
+ * navigation in roughly twenty-five seconds, so a first build would otherwise run for hours
+ * (user story 20, spec: Cost). What is read is stored unverified and shows on the site only once
+ * the owner has listed the document id in the hand-kept file (note on ADR-0001). Every report the
+ * city has posted for this cycle is a scan with no text layer, so in practice nearly all of them
+ * come back unreadable, which is a Filing with a link and no numbers, and a line in the run log.
+ *
  * The page's older sections are hand-built tables and nested lists rather than the plain list the
  * recent deadlines use, so the office is read from what the city printed above or beside the link,
  * and in the January 15, 2023 and January 15, 2015 lists from inside the link itself, where the
@@ -18,11 +27,12 @@
 import { load, type CheerioAPI } from 'cheerio';
 import { parseMonthNameDate } from '../dates.js';
 import { earliestCoverageStart } from '../elections/coverage.js';
-import { loadHandKept } from '../elections/hand-kept.js';
-import type { Candidate } from '../domain.js';
-import { ensureOk } from '../fetcher/types.js';
+import { figureId, readCoverSheet } from '../elections/figures.js';
+import { loadHandKept, type HandKeptElections } from '../elections/hand-kept.js';
+import type { Candidate, DataFile } from '../domain.js';
+import { ensureOk, type Fetcher } from '../fetcher/types.js';
 import { CITY_SITE, cityDocumentId, cityHref, collapse } from './city.js';
-import type { NewFiling, NewItem, SourceAdapter } from './types.js';
+import type { NewFigure, NewFiling, NewItem, SourceAdapter } from './types.js';
 
 export const CAMPAIGN_FINANCE_URL = `${CITY_SITE}/departments/city-secretary-s-office/campaign-finance-reports`;
 
@@ -211,6 +221,7 @@ export const cityFinance: SourceAdapter = {
     // report can attach to a Candidate the same build first recorded.
     const byName = candidatesByName(previous.candidates, handKept.aliases);
     const filings = new Map<string, NewFiling>();
+    const previousFigures = new Map(previous.figures.map((f) => [f.documentId, f]));
     const items: NewItem[] = [];
     const unmatched: string[] = [];
     // Where this site's election coverage begins. The city's finance page carries every report
@@ -218,6 +229,10 @@ export const cityFinance: SourceAdapter = {
     // recorded so a Candidate's history is whole, but they are not news (spec: Item rules).
     const coverage = earliestCoverageStart(previous.elections);
     let duplicates = 0;
+
+    // What an earlier run already learned about each document, so nothing is downloaded twice.
+    const seenBefore = new Map(previous.filings.filter((f) => f.kind === 'finance-report').map((f) => [f.documentId, f]));
+    const toDownload: NewFiling[] = [];
 
     for (const period of parsed.periods) {
       for (const report of period.reports) {
@@ -229,7 +244,8 @@ export const cityFinance: SourceAdapter = {
           continue;
         }
         const attachedTo = byName.get(report.filerName.trim()) ?? [];
-        filings.set(id, {
+        const before = seenBefore.get(report.documentId);
+        const filing: NewFiling = {
           id,
           documentId: report.documentId,
           kind: 'finance-report',
@@ -239,8 +255,17 @@ export const cityFinance: SourceAdapter = {
           period: { label: period.label, date: period.date },
           ...(attachedTo.length ? { attachedTo: [...attachedTo] } : {}),
           url: report.url,
-        });
+          // What a run before this one found in the document itself. The page is re-read whole
+          // every run, so anything the document said has to be carried across by hand.
+          ...(before?.documentFilename ? { documentFilename: before.documentFilename } : {}),
+          ...(before?.unreadable ? { unreadable: true } : {}),
+        };
+        filings.set(id, filing);
         const inCoverage = coverage !== undefined && period.date >= coverage;
+        // The document is opened once, the first run that sees it, and only for the deadlines this
+        // site covers. A document a run before this one already read, or already found nothing in,
+        // is never opened again; one whose download failed is tried once more next run.
+        if (inCoverage && !previousFigures.has(report.documentId) && !filing.unreadable) toDownload.push(filing);
         // Only the deadlines this site's Elections cover are the owner's job: a decade of reports
         // filed before the earliest Election opened would bury the lines that need an Alias.
         if (inCoverage && attachedTo.length === 0) {
@@ -273,6 +298,8 @@ export const cityFinance: SourceAdapter = {
       }
     }
 
+    const figures = await copyFigures({ fetcher, toDownload, previousFigures, handKept, log });
+
     if (parsed.undated.length) log(`city-finance: no date in the heading "${parsed.undated.join('", "')}"; nothing filed under it`);
     if (duplicates) log(`city-finance: ${duplicates} report(s) the city lists under more than one heading; kept as one Filing each`);
     // An Alias under a Candidate id that is nobody attaches nothing, and a fifty-character id is
@@ -292,6 +319,74 @@ export const cityFinance: SourceAdapter = {
         `${unmatched.length} in the periods this site covers with no Candidate`,
     );
     if (!coverage) log('city-finance: no Election with a calendar yet, so no report is dated into the Elections feed');
-    return { items, filings: [...filings.values()] };
+    // What the owner does next: check a PDF against its Figure and add its id to the file, and
+    // decide what to do about the reports nothing can be read from (user story 18).
+    const awaiting = figures.filter((f) => !f.verified).length;
+    const unreadable = [...filings.values()].filter((f) => f.unreadable).length;
+    log(
+      `city-finance: ${awaiting} Figure${awaiting === 1 ? '' : 's'} awaiting review, ` +
+        `${unreadable} report${unreadable === 1 ? '' : 's'} the extractor could not read`,
+    );
+    return { items, filings: [...filings.values()], figures };
   },
 };
+
+interface CopyFiguresOptions {
+  fetcher: Fetcher;
+  /** The reports whose documents this run opens, in the order the city lists them. */
+  toDownload: readonly NewFiling[];
+  previousFigures: ReadonlyMap<string, DataFile['figures'][number]>;
+  handKept: HandKeptElections;
+  log: (message: string) => void;
+}
+
+/**
+ * The Figures this run stands behind: the ones a run before it copied, with the owner's
+ * verification read afresh so listing a document id shows its totals on the next build and nothing
+ * is downloaded for it, and one new Figure per document this run could read.
+ *
+ * Documents are opened one at a time. The city's store answers a browser navigation and nothing
+ * else, in roughly twenty-five seconds, and this site asks it for no more at once than a person
+ * reading the page would (ADR-0001, spec: Fetching).
+ */
+async function copyFigures({ fetcher, toDownload, previousFigures, handKept, log }: CopyFiguresOptions): Promise<NewFigure[]> {
+  const figures: NewFigure[] = [];
+  for (const [documentId, figure] of previousFigures) {
+    const { id, filingId: from, totals } = figure;
+    figures.push({ id, filingId: from, documentId, totals, verified: handKept.verified.has(documentId) });
+  }
+  let downloaded = 0;
+  for (const filing of toDownload) {
+    let document;
+    try {
+      document = ensureOk(await fetcher.download(filing.url));
+    } catch (err) {
+      // One document the store would not hand over is not a reason to fail the Source and lose
+      // every other report on the page; the next run asks for it again.
+      log(`city-finance: the city's store did not hand over document ${filing.documentId} (${err instanceof Error ? err.message : String(err)})`);
+      continue;
+    }
+    downloaded += 1;
+    // The store's own filename, kept for the owner and never read for a name (spec: Fetching).
+    if (document.filename) filing.documentFilename = document.filename;
+    const totals = readCoverSheet(document.bytes);
+    if (!totals) {
+      filing.unreadable = true;
+      log(
+        `city-finance: nothing could be read from document ${filing.documentId} ("${filing.filerName}"` +
+          `, ${filing.period?.label ?? 'no filing period'}); the site links it with no totals`,
+      );
+      continue;
+    }
+    figures.push({
+      id: figureId('city-finance', filing.documentId),
+      filingId: filing.id,
+      documentId: filing.documentId,
+      totals,
+      // A Figure is never published on this site's own say-so (note on ADR-0001).
+      verified: handKept.verified.has(filing.documentId),
+    });
+  }
+  if (downloaded) log(`city-finance: opened ${downloaded} campaign finance report${downloaded === 1 ? '' : 's'} the site had not read before`);
+  return figures;
+}

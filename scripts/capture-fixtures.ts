@@ -71,6 +71,7 @@ try {
   }
   if (all || wanted.has('city-finance')) {
     await save('city-finance/campaign-finance-reports.html', CAMPAIGN_FINANCE_URL, 'browser');
+    console.log('The two report PDFs under city-finance/ are written, not captured: npm run make:pdf-fixtures. See README there.');
   }
 } finally {
   await fetcher.close();

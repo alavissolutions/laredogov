@@ -6,12 +6,15 @@
 
 **Status:** ready-for-agent
 
-- [ ] Two PDF fixtures: one readable July 2026 officeholder report, one unreadable stub
-- [ ] Extracted totals match the readable fixture's cover sheet
-- [ ] Awaiting review until verified, then all four totals with period, Filing link, and last-seen-live date, in both languages
-- [ ] Unreadable report degrades to a link; build succeeds
-- [ ] Second build downloads nothing
-- [ ] Log counts present
+- [x] Two PDF fixtures: one readable July 2026 officeholder report, one unreadable stub
+  - Neither is a capture, on the coordinator's assumption below: no readable report exists in the city's filings, and a real scan is a megabyte this project does not keep (ADR-0001). Both are written by `npm run make:pdf-fixtures` and documented as written in `test/fixtures/README.md`. The readable one is a text-layer FORM C/OH cover sheet with invented totals standing in for document 23838; the unreadable one is one image and no font, which every real report is. Every document URL but 23838's answers with the scan, so the recorded build reads one report and finds nothing in twenty.
+- [x] Extracted totals match the readable fixture's cover sheet
+  - Including the hazard the form itself sets: boxes 17 and 19 are the unitemized subtotals and their labels contain the labels of boxes 18 and 20 word for word, so the extractor matches the six labels against each other and takes each amount from between one label and the next. Sanity-checked by hand against two of the real scans: both report unreadable in milliseconds rather than crashing.
+- [x] Awaiting review until verified, then all four totals with period, Filing link, and last-seen-live date, in both languages
+- [x] Unreadable report degrades to a link; build succeeds
+- [x] Second build downloads nothing
+  - A document is opened once, the first run that sees its id, and only for the filing deadlines this site's Elections cover: the page carries 504 reports back to 2015 and the city's store takes roughly 25 seconds per navigation, so downloading all of them would be hours (spec: Cost). A report the extractor found nothing in is marked on its Filing so it is not opened again either; a download that failed outright is tried once more next run.
+- [x] Log counts present
 
 ## Comments
 

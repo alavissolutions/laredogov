@@ -41,6 +41,7 @@ export async function ingest(data: DataFile, { fetcher, sources, now, handKeptFi
       if (result.races) mergeRecords(data.races, source, result.races, stamp);
       if (result.candidates) mergeRecords(data.candidates, source, result.candidates, stamp);
       if (result.filings) mergeRecords(data.filings, source, result.filings, stamp);
+      if (result.figures) mergeRecords(data.figures, source, result.figures, stamp);
       if (result.meetings) {
         const streamLines = mergeMeetings(data, source, result.meetings, stamp);
         report.newItems += streamLines;
@@ -113,7 +114,7 @@ function mergeElections(data: DataFile, source: SourceAdapter, elections: readon
 }
 
 /**
- * Races, Candidates, and Filings are re-read whole on every run like Elections: the Publisher's
+ * Races, Candidates, Filings, and Figures are re-read whole on every run like Elections: the Publisher's
  * table is the record, so an incoming version replaces the stored one and only first-seen survives.
  * Replacing rather than assigning matters because a field the Publisher clears (a treasurer cell it
  * empties, a Filing that stops belonging to a Candidate) must clear here too. Nothing is ever

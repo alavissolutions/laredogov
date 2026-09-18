@@ -15,7 +15,7 @@ import { CAMPAIGN_FINANCE_URL } from '../../src/sources/city-finance.js';
 import { CONTROL_DEPARTMENT, departmentListUrl, NEWSROOM_URL } from '../../src/sources/city-newsroom.js';
 import { FEED_URL } from '../../src/sources/laredo-utilities.js';
 import { bodiesUrl, eventsUrl } from '../../src/sources/legistar.js';
-import { fixture } from './paths.js';
+import { document, fixture } from './paths.js';
 
 /** The instant the main fixtures were captured; tests pass it as `now`. */
 export const FIXTURE_NOW = new Date('2026-09-16T12:00:00Z');
@@ -85,9 +85,27 @@ export const electionFixtures: Record<string, FixtureBody> = {
   [SPECIAL_CANDIDATES_URL]: fixture('city-elections/special-2026-candidates.html'),
 };
 
+/**
+ * The campaign finance reports the build opens (issue 06). Both are written rather than captured,
+ * because the city has posted no readable report to capture and this project does not keep a copy
+ * of a real one (ADR-0001); see `scripts/make-pdf-fixtures.ts` and the README beside them.
+ *
+ * Document 23838 is Gilbert Gonzalez's July 15, 2026 report, the one the readable cover sheet
+ * stands in for. Every other document the city links answers with the scan, which is what every
+ * real report for this cycle is.
+ */
+export const financeDocumentFixtures: Record<string, FixtureBody> = {
+  'https://www.cityoflaredo.com/home/showpublisheddocument/23838/639197320934130000': document(
+    'city-finance/synthetic-cover-sheet.pdf',
+    'CFR D1 Gilbert Gonzalez 010126063026.pdf',
+  ),
+  'https://www.cityoflaredo.com/home/showpublisheddocument/*': document('city-finance/synthetic-scanned.pdf', 'CFR scanned.pdf'),
+};
+
 /** The city's campaign finance page: every report filed with the City Secretary since 2015. */
 export const financeFixtures: Record<string, FixtureBody> = {
   [CAMPAIGN_FINANCE_URL]: fixture('city-finance/campaign-finance-reports.html'),
+  ...financeDocumentFixtures,
 };
 
 export function allFixtures(): Record<string, FixtureBody> {
