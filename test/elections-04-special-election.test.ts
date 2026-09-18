@@ -41,7 +41,8 @@ describe('Elections 04: the special election through the same path', () => {
     // Every other entry is the one day the city gave it.
     expect(special.calendar.filter((e) => e.endDate !== undefined)).toHaveLength(1);
 
-    // The city has scheduled no forum for this election, so the Election carries none.
+    // The city has named a District 8 forum and not yet said when: no date, no link, just a button.
+    // A forum with no date is not a schedule, so it is not shown as one (the owner is told below).
     expect(special.forums).toEqual([]);
     // Its own lists of where to vote, which are not the general election's.
     expect(special.links.filter((l) => l.kind === 'voting-site').map((l) => l.label)).toEqual(['Early Voting Sites', 'Election Day Sites']);
@@ -111,6 +112,10 @@ describe('Elections 04: the special election through the same path', () => {
       const holiday = $('.election-calendar li').filter((_, li) => /THANKSGIVING/.test($(li).text()));
       expect(holiday.find('time').map((_, e) => $(e).attr('datetime')).get()).toEqual(['2026-11-26', '2026-11-27']);
       expect(holiday.find('.through').text()).toBe(lang === 'es' ? 'hasta' : 'through');
+      // Both ends sit in the one cell every other entry's single date sits in, so a two-day entry
+      // stays beside its description instead of splitting the row into two columns.
+      expect(holiday.find('.when time')).toHaveLength(2);
+      expect($('.election-calendar .when')).toHaveLength(8);
       // Its own notices, newest first, in the city's own words.
       expect($('.election-notices .title').map((_, e) => $(e).text()).get()).toEqual([
         'Notice of Drawing for Order on Special Election Ballot',
@@ -279,6 +284,9 @@ describe('Elections 04: the special election through the same path', () => {
     // Seven office Races across the two Elections, and the one row the city has not named.
     expect(log).toContain('city-elections: 8 Races (7 offices, 1 question), 19 Candidates, 1 row the city has not named, 39 Filings');
     expect(log).toContain('city-elections: ok, 10 new Items');
+    // The city's one forum button on the special candidates page carries no date yet. It is not
+    // shown as a schedule and it is not dropped in silence: the owner is told it is waiting.
+    expect(log).toContain(`city-elections: 1 forum button(s) on ${SPECIAL_CANDIDATES_URL} carry no date yet (District 8)`);
   });
 
   it('keeps the special election when the city makes its candidates sub-page unreachable', async () => {

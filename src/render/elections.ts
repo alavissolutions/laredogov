@@ -59,12 +59,18 @@ ${election.calendar.map((entry) => `<li>${calendarWhen(ctx, entry)} <span class=
 </ul>`;
 }
 
-/** The day an entry falls on, or, for an entry the Publisher spans over days, both of its ends. */
+/**
+ * The day an entry falls on, or, for an entry the Publisher spans over days, both of its ends. Both
+ * go in one `.when` cell, so a two-day entry stays one column beside its description rather than
+ * splitting into two.
+ */
 function calendarWhen(ctx: RenderContext, entry: ElectionCalendarEntry): string {
   const { lang } = ctx;
   const day = (date: string) => `<time datetime="${esc(date)}">${esc(formatDate(lang, date, 'long'))}</time>`;
-  if (!entry.endDate) return day(entry.date);
-  return `${day(entry.date)} <span class="through">${esc(t(lang, 'elections.calendar.through'))}</span> ${day(entry.endDate)}`;
+  const when = entry.endDate
+    ? `${day(entry.date)} <span class="through">${esc(t(lang, 'elections.calendar.through'))}</span> ${day(entry.endDate)}`
+    : day(entry.date);
+  return `<span class="when">${when}</span>`;
 }
 
 /**

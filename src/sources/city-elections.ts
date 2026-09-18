@@ -443,18 +443,29 @@ export function nameSlug(name: string): string {
     .slice(0, 80);
 }
 
+export interface ParsedForums {
+  forums: ElectionForum[];
+  /**
+   * Buttons the city put under its FORUMS heading with no date in them, by the text it gave them,
+   * for the run log. The special election page has one ("District 8"): the city has named the forum
+   * and not yet said when. A forum with no date is not a schedule, so it is not shown as one, and
+   * the owner is told rather than the button being dropped in silence.
+   */
+  undated: string[];
+}
+
 /**
  * The candidate forums the city lists under its own FORUMS heading on the candidates sub-page.
  * The buttons carry the date and time in their text and, as of 2026-09-17, no href at all: the city
  * adds one when it posts the video, so until then a forum shows its date and nothing to open.
  */
-export function parseForums(html: string): ElectionForum[] {
+export function parseForums(html: string): ParsedForums {
   const $ = load(html);
+  const out: ParsedForums = { forums: [], undated: [] };
   const children = $('#ColumnUserControl1').children().toArray();
   const start = children.findIndex((el) => FORUMS_HEADING.test(headingOf($(el))));
-  if (start < 0) return [];
+  if (start < 0) return out;
 
-  const out: ElectionForum[] = [];
   for (const el of children.slice(start + 1)) {
     const $el = $(el);
     if (!$el.hasClass('int_buttons')) {
@@ -463,7 +474,8 @@ export function parseForums(html: string): ElectionForum[] {
     }
     for (const anchor of $el.find('a.button-link').toArray()) {
       const forum = parseForumButton($(anchor));
-      if (forum) out.push(forum);
+      if (forum) out.forums.push(forum);
+      else out.undated.push(collapse($(anchor).text()));
     }
   }
   return out;
@@ -524,7 +536,11 @@ export const cityElections: SourceAdapter = {
       } catch (err) {
         log(`city-elections: ${page.candidatesUrl} unreadable, no Races or forum schedule (${err instanceof Error ? err.message : String(err)})`);
       }
-      const forums: ElectionForum[] = candidatesHtml ? parseForums(candidatesHtml) : [];
+      const parsedForums: ParsedForums = candidatesHtml ? parseForums(candidatesHtml) : { forums: [], undated: [] };
+      const forums = parsedForums.forums;
+      if (parsedForums.undated.length) {
+        log(`city-elections: ${parsedForums.undated.length} forum button(s) on ${page.candidatesUrl} carry no date yet (${parsedForums.undated.join(', ')})`);
+      }
       const id = `city-elections:${page.slug}`;
       elections.push({
         id,
