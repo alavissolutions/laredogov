@@ -19,6 +19,12 @@ export interface SourceRunContext {
   fetcher: Fetcher;
   /** The data file as it stood before this run, so an adapter can skip unchanged detail pages. */
   previous: DataFile;
+  /**
+   * The owner's hand-kept elections file, read by the Sources that need it and never written
+   * (ADR-0005). It is a path rather than its contents so a file the owner has mistyped fails the
+   * one Source that reads it, in the run log, with the rest of the build still publishing.
+   */
+  handKeptFile: string;
   now: Date;
   log: (message: string) => void;
 }

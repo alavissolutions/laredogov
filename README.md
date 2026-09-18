@@ -64,6 +64,7 @@ src/
   i18n/strings.ts   every interface string, English and Spanish
   render/           pages, RSS, search index, CSS
 data/laredo.json    the system of record, committed by the scheduled job
+data/elections.yaml the owner's hand-kept file: candidate name Aliases and verified Figures (ADR-0005), read by the build and never written
 test/               seam tests and recorded fixtures
 ```
 

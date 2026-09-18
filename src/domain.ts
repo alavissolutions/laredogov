@@ -221,6 +221,20 @@ export interface Filing {
   label: string;
   /** The office the Publisher filed it under, in the Publisher's words. */
   office?: string;
+  /**
+   * The Publisher's own spelling of the name it posted the Filing under, on a page that lists
+   * filers rather than Candidates (its campaign finance page). It is what a reader sees for a
+   * report no Candidate answers to, and it is what an Alias is declared against (ADR-0005).
+   */
+  filerName?: string;
+  /** The filing period the Publisher posted it under: its own heading, and that heading's date. */
+  period?: { label: string; date: string };
+  /**
+   * The Candidates this Filing attaches to by exact name or declared Alias (ADR-0005), for a
+   * Filing the Publisher posted outside a Race table. One report can belong to two Candidates: the
+   * same person filing while they run in two Elections is two Candidates (CONTEXT.md).
+   */
+  attachedTo?: string[];
   candidateId?: string;
   raceId?: string;
   electionId?: string;

@@ -11,10 +11,11 @@ import { ensureOk, type FetchMode } from '../src/fetcher/types.js';
 import { BIDS_URL } from '../src/sources/city-bids.js';
 import { monthUrl } from '../src/sources/city-calendar.js';
 import { GENERAL_CANDIDATES_URL, GENERAL_ELECTION_URL, SPECIAL_CANDIDATES_URL, SPECIAL_ELECTION_URL } from '../src/sources/city-elections.js';
+import { CAMPAIGN_FINANCE_URL } from '../src/sources/city-finance.js';
 import { CONTROL_DEPARTMENT, DEPARTMENT_TOPICS, departmentListUrl, NEWSROOM_URL } from '../src/sources/city-newsroom.js';
 import { FEED_URL } from '../src/sources/laredo-utilities.js';
 import { bodiesUrl, eventsUrl } from '../src/sources/legistar.js';
-import { CAMPAIGN_FINANCE_URL, FIXTURE_NOW } from '../test/fixtures/fetcher.js';
+import { FIXTURE_NOW } from '../test/fixtures/fetcher.js';
 import { fixtureRoot } from '../test/fixtures/paths.js';
 
 const fetcher = productionFetcher();
@@ -69,7 +70,6 @@ try {
     await save('city-elections/special-2026-candidates.html', SPECIAL_CANDIDATES_URL, 'browser');
   }
   if (all || wanted.has('city-finance')) {
-    // The campaign finance Source lands with issue 05; its page is captured here already.
     await save('city-finance/campaign-finance-reports.html', CAMPAIGN_FINANCE_URL, 'browser');
   }
 } finally {

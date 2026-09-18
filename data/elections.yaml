@@ -1,0 +1,24 @@
+# The owner's hand-kept elections file (ADR-0005). The build reads it and never writes it, so
+# nothing here ever collides with the scheduled job's commits.
+#
+# aliases: the other spellings the city uses for a candidate. The city's campaign finance page and
+# its candidate tables spell the same person differently ("Gilberto Gonzalez" and "Gilbert
+# Gonzalez", "Victor Daniel Trevino" and "Dr. Victor D. Treviño"), and a finance report attaches to
+# a candidate only when the name matches one of these exactly, character for character after
+# trimming. Nothing is guessed. Every report the build could not attach is named in the run log
+# with the city's spelling, the office, and the filing deadline; add that spelling under the
+# candidate it belongs to, which is the candidate's id in data/laredo.json:
+#
+#   aliases:
+#     city-elections:2026-general:mayor:victor-daniel-trevino:
+#       - Dr. Victor D. Treviño
+#
+# verified: the document ids whose four cover-sheet totals the owner has checked against the PDF.
+# A total shows on the site only once its document id is listed here (ADR-0001):
+#
+#   verified:
+#     - 23842
+#
+# Nothing is declared yet.
+aliases:
+verified:

@@ -19,6 +19,7 @@ import { formatDate, formatTime, sortValue } from '../dates.js';
 import { PUBLISHER_ORDER } from '../directory/entries.js';
 import type { Candidate, Election, ElectionItemKind, ElectionLink, Filing, Item, PublisherId, Race, UnnamedRow } from '../domain.js';
 import { t } from '../i18n/strings.js';
+import { coverageStart } from '../elections/coverage.js';
 import { href, PATHS, type RenderContext } from './context.js';
 import { esc, layout, topicNav } from './html.js';
 import { itemList } from './items.js';
@@ -206,10 +207,70 @@ function applicationCell(ctx: RenderContext, name: string, filings: readonly Fil
   )}</span></a></td>`;
 }
 
+/**
+ * The filing periods a Race table has a column for: every deadline the Publisher has a heading for
+ * since this Election's own calendar opened, in date order (user story 1). Older deadlines are on
+ * the Candidates' own pages, where a decade of one person's filings is history rather than a
+ * comparison; a table one column wider per year would be unreadable on a phone.
+ */
+export function financePeriods(ctx: RenderContext, election: Election): { label: string; date: string }[] {
+  const opens = coverageStart(election);
+  if (!opens) return [];
+  const byDate = new Map<string, { label: string; date: string }>();
+  for (const filing of financeReports(ctx)) {
+    if (!filing.period || filing.period.date < opens) continue;
+    byDate.set(filing.period.date, filing.period);
+  }
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** Every finance report the Publisher has posted, whoever it belongs to. */
+function financeReports(ctx: RenderContext): Filing[] {
+  return ctx.data.filings.filter((f) => f.kind === 'finance-report');
+}
+
+/** The reports the Publisher posted under a name this Candidate answers to, newest period first. */
+export function candidateReports(ctx: RenderContext, candidate: Candidate): Filing[] {
+  return financeReports(ctx)
+    .filter((f) => f.attachedTo?.includes(candidate.id))
+    .sort((a, b) => (b.period?.date ?? '').localeCompare(a.period?.date ?? '') || a.id.localeCompare(b.id));
+}
+
+/** A column heading: what the column is, and the Publisher's own filing deadline, in the reader's date. */
+function financeHeader(ctx: RenderContext, period: { label: string; date: string }): string {
+  const { lang } = ctx;
+  return `<th scope="col" class="finance"><span class="what">${esc(t(lang, 'race.finance'))}</span><time datetime="${esc(period.date)}">${esc(
+    formatDate(lang, period.date, 'short'),
+  )}</time></th>`;
+}
+
+/**
+ * One cell of the comparison: the report the Publisher posted for that deadline, or a plain "not
+ * posted" so a blank never reads as a missing part of this site (user story 2). A name the
+ * Publisher listed under a deadline with nothing to open reads the same way, because that is what
+ * it means: the Publisher has posted no report. The link says whose report and for which deadline
+ * it is, for a reader who meets it out of the table.
+ */
+function financeCell(ctx: RenderContext, candidate: Candidate | undefined, period: { label: string; date: string }, name: string): string {
+  const { lang } = ctx;
+  const reports = candidate ? candidateReports(ctx, candidate).filter((f) => f.period?.date === period.date) : [];
+  if (reports.length === 0) return `<td class="finance"><span class="empty">${esc(t(lang, 'race.notPosted'))}</span></td>`;
+  const links = reports
+    .map(
+      (report) =>
+        `<a href="${esc(report.url)}" rel="noopener">${esc(t(lang, 'race.finance.filed'))}<span class="visually-hidden"> ${esc(name)}, ${esc(
+          formatDate(lang, period.date, 'short'),
+        )}</span></a>`,
+    )
+    .join(' ');
+  return `<td class="finance">${links}</td>`;
+}
+
 /** The comparison table: one row per Candidate, in the Publisher's ballot order. */
 function raceTable(ctx: RenderContext, election: Election, race: Race): string {
   const { lang } = ctx;
   const rows = raceRows(ctx, race);
+  const periods = financePeriods(ctx, election);
   if (rows.length === 0) return `<p class="empty">${esc(t(lang, 'race.candidates.empty'))}</p>`;
   const body = rows
     .map((row) => {
@@ -225,11 +286,12 @@ function raceTable(ctx: RenderContext, election: Election, race: Race): string {
       const heading = named
         ? `<a href="${href(ctx, PATHS.candidate(election.slug, race.slug, row.candidate.slug))}">${esc(name)}</a>`
         : esc(name);
+      const finance = periods.map((period) => financeCell(ctx, named ? row.candidate : undefined, period, linkName)).join('');
       return `<tr${named ? '' : ' class="unnamed"'}><th scope="row">${heading}</th>${treasurerCell(ctx, source.treasurer, filings)}${applicationCell(
         ctx,
         linkName,
         filings,
-      )}</tr>`;
+      )}${finance}</tr>`;
     })
     .join('\n');
   return `<div class="table-scroll">
@@ -237,12 +299,45 @@ function raceTable(ctx: RenderContext, election: Election, race: Race): string {
 <caption class="visually-hidden">${esc(race.title)}</caption>
 <thead><tr><th scope="col">${esc(t(lang, 'race.nameOnBallot'))}</th><th scope="col">${esc(t(lang, 'race.treasurer'))}</th><th scope="col">${esc(
     t(lang, 'race.application'),
-  )}</th></tr></thead>
+  )}</th>${periods.map((period) => financeHeader(ctx, period)).join('')}</tr></thead>
 <tbody>
 ${body}
 </tbody>
 </table>
 </div>`;
+}
+
+/**
+ * The reports the Publisher posted for the deadlines this table covers that no Candidate answers
+ * to yet (user story 4). They are listed under the table exactly as the Publisher posted them, so
+ * nothing the Publisher published is hidden by this site's bookkeeping while the owner is behind on
+ * declaring a spelling (ADR-0005). They belong to no Race in particular, which is why they are
+ * listed under each of them.
+ */
+export function unmatchedReports(ctx: RenderContext, election: Election): Filing[] {
+  const dates = new Set(financePeriods(ctx, election).map((p) => p.date));
+  return financeReports(ctx)
+    .filter((f) => f.period && dates.has(f.period.date) && !f.attachedTo?.length)
+    .sort((a, b) => (b.period?.date ?? '').localeCompare(a.period?.date ?? '') || (a.filerName ?? '').localeCompare(b.filerName ?? ''));
+}
+
+function unmatchedSection(ctx: RenderContext, election: Election): string {
+  const { lang } = ctx;
+  const reports = unmatchedReports(ctx, election);
+  if (reports.length === 0) return '';
+  return `<section aria-labelledby="race-unmatched">
+<h2 id="race-unmatched">${esc(t(lang, 'race.unmatched'))}</h2>
+<p class="intro">${esc(t(lang, 'race.unmatched.intro'))}</p>
+<ul class="unmatched-reports">
+${reports
+  .map((report) => {
+    // The Publisher's own spelling of the name, its own office, and the deadline it filed it under.
+    const where = [report.office, report.period ? formatDate(lang, report.period.date, 'short') : ''].filter(Boolean).join(' · ');
+    return `<li><a href="${esc(report.url)}" rel="noopener">${esc(report.filerName ?? report.label)}<span class="note">${esc(where)}</span></a></li>`;
+  })
+  .join('\n')}
+</ul>
+</section>`;
 }
 
 /** A question Race: the Publisher's own wording and the document that called the question. */
@@ -267,7 +362,8 @@ export function racePage(ctx: RenderContext, election: Election, race: Race): st
 <h2 id="race-candidates">${esc(t(lang, isQuestion ? 'elections.races' : 'race.candidates'))}</h2>
 <p class="intro">${esc(t(lang, isQuestion ? 'race.question.intro' : 'race.candidates.intro'))}</p>
 ${isQuestion ? questionSection(ctx, race) : raceTable(ctx, election, race)}
-</section>`;
+</section>
+${isQuestion ? '' : unmatchedSection(ctx, election)}`;
   return layout(ctx, {
     title: race.title,
     path: PATHS.race(election.slug, race.slug),
@@ -322,24 +418,46 @@ function filingLine(ctx: RenderContext, filing: Filing): string {
   // city posts two documents of one kind often enough (an amended treasurer appointment, one
   // finance report per period) that the plain label alone would name two links the same. It is the
   // Publisher's wording and is never translated.
-  const note = filing.label ? `<span class="note">${esc(filing.label)}</span>` : '';
+  //
+  // A finance report says instead which filing deadline the city posted it under and which office
+  // it filed the report under, because that is what tells two of them apart and because a report a
+  // sitting officeholder filed is shown under the office the city filed it under, never relabelled
+  // (user story 7, spec: no incumbent label).
+  const report = filing.kind === 'finance-report' && filing.period !== undefined;
+  // The deadline is printed once, in the reader's language, beside the line; the note carries the
+  // one thing left that the Publisher wrote, which is the office it filed the report under.
+  const where = report ? filing.office ?? '' : filing.label;
+  const note = where ? `<span class="note">${esc(where)}</span>` : '';
+  const period = report
+    ? `<time class="period" datetime="${esc(filing.period!.date)}">${esc(formatDate(lang, filing.period!.date, 'short'))}</time> `
+    : '';
   const seen = esc(t(lang, 'candidate.lastSeenLive', { date: formatDate(lang, filing.lastSeenLive, 'short') }));
-  return `<li><a href="${esc(filing.url)}" rel="noopener">${esc(t(lang, `filing.${filing.kind}`))}${note}</a><span class="meta"><time datetime="${esc(
-    filing.lastSeenLive,
-  )}">${seen}</time></span></li>`;
+  return `<li${report ? ' class="finance-report"' : ''}>${period}<a href="${esc(filing.url)}" rel="noopener">${esc(
+    t(lang, `filing.${filing.kind}`),
+  )}${note}</a><span class="meta"><time datetime="${esc(filing.lastSeenLive)}">${seen}</time></span></li>`;
 }
 
+/**
+ * Everything the Publisher posted under this Candidate's name: what it put in its Race table, in
+ * the order it listed it, then every finance report the Publisher posted under a name this
+ * Candidate answers to, newest deadline first (user stories 6 and 7).
+ */
 function filingsSection(ctx: RenderContext, candidate: Candidate): string {
   const { lang } = ctx;
-  const filings = filingsOf(ctx, candidate.filings);
+  const reports = candidateReports(ctx, candidate);
+  const filings = [...filingsOf(ctx, candidate.filings), ...reports];
   const list =
     filings.length === 0
       ? `<p class="empty">${esc(t(lang, 'candidate.filings.empty'))}</p>`
       : `<ul class="filings">\n${filings.map((f) => filingLine(ctx, f)).join('\n')}\n</ul>`;
+  // A candidate with no report says so: this site's own bookkeeping never leaves a silent gap
+  // where the reader cannot tell a missing report from a missing feature (user story 2).
+  const none = reports.length === 0 ? `<p class="empty finance-reports-empty">${esc(t(lang, 'candidate.finance.empty'))}</p>` : '';
   return `<section aria-labelledby="candidate-filings">
 <h2 id="candidate-filings">${esc(t(lang, 'candidate.filings'))}</h2>
 <p class="intro">${esc(t(lang, 'candidate.filings.intro'))}</p>
 ${list}
+${none}
 </section>`;
 }
 

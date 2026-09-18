@@ -73,6 +73,13 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .race-table tbody th{font-weight:600;min-width:9rem}
 .race-table .empty{color:var(--muted)}
 .race-table tr.unnamed th{font-weight:400;color:var(--muted);font-style:italic}
+.race-table th.finance{white-space:nowrap}
+.race-table th.finance .what{display:block;text-transform:none;letter-spacing:0;font-weight:400}
+.race-table td.finance a{display:inline-block}
+.filings time.period{display:inline-block;min-width:7rem;font-size:.875rem;color:var(--muted)}
+.unmatched-reports{list-style:none;margin:.5rem 0;padding:0}
+.unmatched-reports>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.unmatched-reports .note{display:block;font-size:.8rem;color:var(--muted)}
 .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 @media (min-width:40rem){.election-calendar time,.election-forums time{display:inline-block;min-width:16rem}}
 @media (min-width:40rem){h1{font-size:2rem}body{font-size:17px}}

@@ -9,6 +9,8 @@ export interface IngestOptions {
   fetcher: Fetcher;
   sources: readonly SourceAdapter[];
   now: Date;
+  /** The owner's hand-kept elections file (ADR-0005); the Sources that need it read it themselves. */
+  handKeptFile: string;
   log: (message: string) => void;
 }
 
@@ -22,7 +24,7 @@ export interface IngestReport {
  * slot and the rest of the build proceeds (user story 36). Adapters run in registry order and each sees
  * the data as updated by the adapters before it.
  */
-export async function ingest(data: DataFile, { fetcher, sources, now, log }: IngestOptions): Promise<IngestReport> {
+export async function ingest(data: DataFile, { fetcher, sources, now, handKeptFile, log }: IngestOptions): Promise<IngestReport> {
   const stamp = now.toISOString();
   const report: IngestReport = { newItems: 0, failed: [] };
 
@@ -32,7 +34,7 @@ export async function ingest(data: DataFile, { fetcher, sources, now, log }: Ing
     health.firstChecked ??= stamp;
     health.lastChecked = stamp;
     try {
-      const result = await source.run({ fetcher, previous: data, now, log });
+      const result = await source.run({ fetcher, previous: data, now, handKeptFile, log });
       const added = mergeItems(data, source, result.items, stamp);
       if (result.bodies) mergeBodies(data, source, result.bodies);
       if (result.elections) mergeElections(data, source, result.elections, stamp);

@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { load, type CheerioAPI } from 'cheerio';
@@ -38,6 +38,24 @@ export class Site {
       log: (m) => logs?.push(m),
     });
     return { ...result, requests: fetcher.requests };
+  }
+
+  /** The owner's hand-kept elections file, which the build reads and never writes (ADR-0005). */
+  get handKeptFile(): string {
+    return path.join(this.dir, 'elections.yaml');
+  }
+
+  async writeHandKept(contents: string): Promise<void> {
+    await writeFile(this.handKeptFile, contents);
+  }
+
+  async handKept(): Promise<string> {
+    return readFile(this.handKeptFile, 'utf8');
+  }
+
+  /** Seeds the data file with records an earlier build would have left behind. */
+  async writeData(data: DataFile): Promise<void> {
+    await writeFile(this.dataFile, `${JSON.stringify(data, null, 2)}\n`);
   }
 
   async data(): Promise<DataFile> {

@@ -11,6 +11,7 @@ import {
   SPECIAL_CANDIDATES_URL,
   SPECIAL_ELECTION_URL,
 } from '../../src/sources/city-elections.js';
+import { CAMPAIGN_FINANCE_URL } from '../../src/sources/city-finance.js';
 import { CONTROL_DEPARTMENT, departmentListUrl, NEWSROOM_URL } from '../../src/sources/city-newsroom.js';
 import { FEED_URL } from '../../src/sources/laredo-utilities.js';
 import { bodiesUrl, eventsUrl } from '../../src/sources/legistar.js';
@@ -87,13 +88,7 @@ export const electionFixtures: Record<string, FixtureBody> = {
   [SPECIAL_CANDIDATES_URL]: fixture('city-elections/special-2026-candidates.html'),
 };
 
-/**
- * The campaign finance page, recorded with the election pages so issue 05 does not have to fetch it
- * again. Every other fixture map keys off a URL its adapter exports; the finance adapter does not
- * exist yet, so the URL lives here until issue 05 moves it there.
- */
-export const CAMPAIGN_FINANCE_URL = 'https://www.cityoflaredo.com/departments/city-secretary-s-office/campaign-finance-reports';
-
+/** The city's campaign finance page: every report filed with the City Secretary since 2015. */
 export const financeFixtures: Record<string, FixtureBody> = {
   [CAMPAIGN_FINANCE_URL]: fixture('city-finance/campaign-finance-reports.html'),
 };
