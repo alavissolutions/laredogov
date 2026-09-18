@@ -66,14 +66,19 @@ describe('Elections 03: Candidate pages', () => {
     const filings = $('ul.filings > li');
     expect(filings.length).toBe(2);
     // The site's own plain label, so a reader knows what the document is before opening it.
-    expect(filings.eq(0).find('a').text()).toBe('Campaign treasurer appointment');
+    expect(filings.eq(0).find('a').contents().first().text()).toBe('Campaign treasurer appointment');
     expect(filings.eq(0).find('a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/23926/639203242118170000');
     // The city's own words for the same document, so the reader can match it on the city's page.
     expect(filings.eq(0).find('.note').text()).toBe('Campaign Treasurer Application');
     expect(filings.eq(0).find('.meta').text()).toContain('Sep 16, 2026');
-    expect(filings.eq(1).find('a').text()).toBe('Application for a place on the ballot');
+    expect(filings.eq(1).find('a').contents().first().text()).toBe('Application for a place on the ballot');
     expect(filings.eq(1).find('a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/23928/639203245618530000');
     expect(filings.eq(1).find('.note').text()).toBe('Application for a Place on the Ballot');
+
+    // The city posts two documents of one kind often enough that the plain label alone would name
+    // two links the same, so the city's own title for the document is inside the link.
+    const linkNames = $('main a').map((_, a) => $(a).text()).get();
+    expect(new Set(linkNames).size).toBe(linkNames.length);
 
     // The fixed sentence: what the page is and is not.
     const neutrality = $('main .neutrality').text();
@@ -109,8 +114,8 @@ describe('Elections 03: Candidate pages', () => {
 
     // Labels, headings, and the neutrality sentence are interface text and are translated.
     expect(es('main dl dt').first().text()).toBe('Nombre legal');
-    expect(es('ul.filings > li').eq(0).find('a').text()).toBe('Nombramiento de tesorero de campaña');
-    expect(es('ul.filings > li').eq(1).find('a').text()).toBe('Solicitud de lugar en la boleta');
+    expect(es('ul.filings > li').eq(0).find('a').contents().first().text()).toBe('Nombramiento de tesorero de campaña');
+    expect(es('ul.filings > li').eq(1).find('a').contents().first().text()).toBe('Solicitud de lugar en la boleta');
     expect(es('main .neutrality').text()).not.toBe(en('main .neutrality').text());
     expect(es('main .neutrality').text().length).toBeGreaterThan(20);
   });
@@ -126,10 +131,30 @@ describe('Elections 03: Candidate pages', () => {
     // The name on the ballot is what a reader sees; the legal name is matched on too.
     expect(gonzalez).toMatchObject({ t: 'JD Gonzalez', a: 'Jose David Gonzalez', o: 'elections', p: 'city-of-laredo', d: '2026-11-03' });
 
-    // The page's own search matches both names and sends the reader to the site's page, in their language.
+    // The search box folds a hit the way the page does: the shown name plus the name it also
+    // answers to, accents stripped. Either name a resident types finds this page.
+    const fold = (value: string) =>
+      value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    const hit = (query: string) =>
+      index.filter((e) => {
+        const hay = fold(`${e.t} ${e.a ?? ''}`);
+        return fold(query)
+          .split(/\s+/)
+          .every((word) => hay.includes(word));
+      });
+    expect(hit('jose david gonzalez').map((e) => e.s)).toEqual([GONZALEZ]);
+    expect(hit('JD Gonzalez').map((e) => e.s)).toEqual([GONZALEZ]);
+    expect(hit('Treviño').map((e) => e.s)).toEqual(['/elections/2026-general/mayor/victor-d-trevino/']);
+
+    // The page sends the reader to the site's own page, in their language, and says that the date
+    // on a Candidate hit is election day rather than the day something was posted.
     const script = (await site.page('/es/search/'))('script:not([src])').text();
     expect(script).toContain('it.a');
     expect(script).toContain('"pageHref":"/es"');
+    expect(script).toContain('Día de la elección {date}');
   });
 
   it('derives the slug from the name on ballot: ASCII, hyphenated, numbered when two would collide', async () => {
@@ -180,5 +205,54 @@ describe('Elections 03: Candidate pages', () => {
     const $ = await site.page('/en/elections/2026-general/mayor/');
     expect($('table.race-table tbody tr').eq(3).find('th a')).toHaveLength(0);
     expect($('table.race-table tbody th a')).toHaveLength(4);
+  });
+
+  it('names nobody when the city fills a name cell with a placeholder, and keeps the Race page', async () => {
+    // A dash in the name cells is data entry, not a name: it would slug to nothing, and a page with
+    // no slug of its own would be written over the Race's own page.
+    const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
+    const dashes = candidates
+      .replace('<td>Alfonso I. Casso</td>', '<td>-</td>')
+      .replace('<td style="text-align: center;">&nbsp;Poncho Casso</td>', '<td style="text-align: center;">-</td>');
+    expect(dashes).not.toBe(candidates);
+
+    const site = await Site.create();
+    const log: string[] = [];
+    const { data } = await site.build({
+      fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: dashes },
+      now: FIXTURE_NOW,
+      sources: [cityElections],
+      log,
+    });
+
+    expect(data.candidates).toHaveLength(15);
+    expect(data.candidates.some((c) => c.slug === '')).toBe(false);
+    expect(data.races.find((r) => r.slug === 'mayor')!.unnamedRows).toHaveLength(1);
+    expect(log.some((l) => /name cell\(s\) hold a placeholder rather than a name/.test(l))).toBe(true);
+    // The Race page is still the Race page, with the row shown as not yet posted.
+    const $ = await site.page('/en/elections/2026-general/mayor/');
+    expect($('h1').text()).toBe('Mayor');
+    expect($('table.race-table tbody tr').eq(3).find('th').text()).toBe('Candidate name not yet posted');
+  });
+
+  it('heads the page with the legal name when the city leaves the name on ballot blank', async () => {
+    const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
+    const noBallotName = candidates.replace('<td style="text-align: center;">JD Gonzalez<br>', '<td style="text-align: center;">&nbsp;<br>');
+    expect(noBallotName).not.toBe(candidates);
+
+    const site = await Site.create();
+    const { data } = await site.build({
+      fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: noBallotName },
+      now: FIXTURE_NOW,
+      sources: [cityElections],
+    });
+
+    // The city named this person, so the page is theirs; its slug comes from the name it did print.
+    const gonzalez = data.candidates.find((c) => c.name === 'Jose David Gonzalez')!;
+    expect(gonzalez.slug).toBe('jose-david-gonzalez');
+    const $ = await site.page('/en/elections/2026-general/mayor/jose-david-gonzalez/');
+    expect($('h1').text()).toBe('Jose David Gonzalez');
+    expect(details($)['Name on ballot']).toBe('Not posted');
+    expect($('ul.filings > li')).toHaveLength(2);
   });
 });

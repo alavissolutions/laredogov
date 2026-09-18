@@ -197,6 +197,8 @@ export function searchPage(ctx: RenderContext): string {
     // Pages of this site are indexed by their language-independent path; this is the reader's tree.
     pageHref: href(ctx, ''),
     officialDocument: t(lang, 'item.officialDocument'),
+    // A Candidate page is dated by its election day, which is not a posting date and says so.
+    electionDay: t(lang, 'search.electionDay', { date: '{date}' }),
     stream: Object.fromEntries(DOCUMENT_KINDS.map((kind) => [kind, t(lang, `stream.${kind}`, { body: '{body}', date: '{date}' })])),
   };
   const body = `<h1>${esc(t(lang, 'search.title'))}</h1>
@@ -227,7 +229,7 @@ var hits=index.filter(function(it){var h=hay(it);return words.every(function(w){
 hits.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0;});
 var head='<p>'+(hits.length===1?L.one:L.results.replace('{count}',hits.length))+'</p>';
 if(!hits.length){out.innerHTML='<p>'+esc(L.none)+'</p>';return;}
-out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.s?L.pageHref+it.s:(it.m?L.meetingHref.replace('ID',it.m):it.u);var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(title(it))+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
+out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.s?L.pageHref+it.s:(it.m?L.meetingHref.replace('ID',it.m):it.u);var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(title(it))+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(it.s?L.electionDay.replace('{date}',fmt(it.d)):fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
 function run(){var q=input.value;if(!q.trim()){out.innerHTML='';return;}out.innerHTML='<p>'+esc(L.loading)+'</p>';load().then(function(){render(q);});}
 form.addEventListener('submit',function(e){e.preventDefault();run();try{history.replaceState(null,'','?q='+encodeURIComponent(input.value));}catch(err){}});
 input.addEventListener('input',function(){if(index){render(input.value);}});

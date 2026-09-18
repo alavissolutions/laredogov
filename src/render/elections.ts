@@ -318,11 +318,13 @@ ${topicNav(ctx)}`;
 /** One Filing: the site's plain label, the city's own words for it, and when it was last seen live. */
 function filingLine(ctx: RenderContext, filing: Filing): string {
   const { lang } = ctx;
-  // The city's own title for the link is kept beside the plain label so a reader can find the same
-  // row on the city's page; it is the Publisher's wording and is never translated.
+  // The city's own title for the link goes inside the anchor, as it does on the Election page: the
+  // city posts two documents of one kind often enough (an amended treasurer appointment, one
+  // finance report per period) that the plain label alone would name two links the same. It is the
+  // Publisher's wording and is never translated.
   const note = filing.label ? `<span class="note">${esc(filing.label)}</span>` : '';
   const seen = esc(t(lang, 'candidate.lastSeenLive', { date: formatDate(lang, filing.lastSeenLive, 'short') }));
-  return `<li><a href="${esc(filing.url)}" rel="noopener">${esc(t(lang, `filing.${filing.kind}`))}</a>${note}<span class="meta"><time datetime="${esc(
+  return `<li><a href="${esc(filing.url)}" rel="noopener">${esc(t(lang, `filing.${filing.kind}`))}${note}</a><span class="meta"><time datetime="${esc(
     filing.lastSeenLive,
   )}">${seen}</time></span></li>`;
 }

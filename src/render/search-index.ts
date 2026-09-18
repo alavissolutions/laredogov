@@ -64,7 +64,8 @@ function candidateEntries(data: DataFile): SearchIndexEntry[] {
       d: election.date,
       p: candidate.publisher,
       o: 'elections',
-      // Where the city posted this person; the reader opens the site's page from `s`.
+      // The Election's own page at the Publisher. A Candidate entry is opened from `s`, the page
+      // this site makes of the record; `u` is what the site would fall back to without one.
       u: election.url,
       s: PATHS.candidate(election.slug, race.slug, candidate.slug),
       ...(candidate.name && candidate.name !== shown ? { a: candidate.name } : {}),

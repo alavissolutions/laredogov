@@ -122,9 +122,10 @@ describe('Elections 02: Race pages with the comparison table', () => {
       $('table.race-table tbody th a')
         .map((_, a) => $(a).attr('href')!)
         .get()
-        .every((url) => url.startsWith(`/${lang}/elections/`));
-    expect(own(es, 'es')).toBe(true);
-    expect(own(en, 'en')).toBe(true);
+        .map((url) => url.replace(`/${lang}/`, '/'));
+    expect(own(es, 'es')).toEqual(own(en, 'en'));
+    expect(own(en, 'en')).toHaveLength(5);
+    expect(own(en, 'en')[0]).toBe('/elections/2026-general/mayor/victor-d-trevino/');
   });
 
   it('opens every Race from the Election page, in the city ballot order', async () => {

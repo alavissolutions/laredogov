@@ -304,6 +304,8 @@ export interface ParsedRaces {
   mismatchedLinks: number;
   /** Write-in rows the city filled in, which this site does not yet show, for the run log. */
   writeInRows: number;
+  /** Name cells holding a placeholder instead of a name, for the run log. */
+  placeholderNames: number;
 }
 
 /**
@@ -312,7 +314,7 @@ export interface ParsedRaces {
  */
 export function parseRaces(html: string): ParsedRaces {
   const $ = load(html);
-  const out: ParsedRaces = { races: [], unreadable: [], mismatchedLinks: 0, writeInRows: 0 };
+  const out: ParsedRaces = { races: [], unreadable: [], mismatchedLinks: 0, writeInRows: 0, placeholderNames: 0 };
   for (const item of $('#ColumnUserControl1 .accordion_widget .accordion-item').toArray()) {
     const $item = $(item);
     const title = collapse($item.find('.accordion-heading').first().text());
@@ -379,11 +381,25 @@ function parseRaceRow($: CheerioAPI, cells: Selection, columns: Map<ColumnRole, 
       else out.mismatchedLinks += 1;
     }
   }
-  const name = text('name');
+  const name = printedName(text('name'), out);
+  const ballotName = printedName(text('ballotName'), out);
   const treasurer = text('treasurer');
   // A row with nothing in it is the spacing the city puts between its blocks.
-  if (!name && !treasurer && filings.length === 0) return undefined;
-  return { name, ballotName: text('ballotName'), ...(treasurer ? { treasurer } : {}), filings };
+  if (!name && !ballotName && !treasurer && filings.length === 0) return undefined;
+  return { name, ballotName, ...(treasurer ? { treasurer } : {}), filings };
+}
+
+/**
+ * A name cell holding no letter or digit at all ("-", "\u2014", "***") is the city's placeholder for a
+ * name it has not printed, not a name: it would slug to nothing, and a Candidate page with no slug
+ * would take the Race's own URL. The row is then one the city has not named (CONTEXT.md), and the
+ * owner is told the cell was not empty.
+ */
+function printedName(value: string, out: ParsedRaces): string {
+  if (!value) return '';
+  if (nameSlug(value)) return value;
+  out.placeholderNames += 1;
+  return '';
 }
 
 /** A link in a Race table, kept only when the city's own anchor title matches its column. */
@@ -566,6 +582,10 @@ export const cityElections: SourceAdapter = {
         if (parsedRaces.unreadable.length) log(`city-elections: no readable candidate table under ${parsedRaces.unreadable.join(', ')}`);
         if (parsedRaces.mismatchedLinks) log(`city-elections: ${parsedRaces.mismatchedLinks} link(s) in the candidate tables are not titled as the column the city put them in; left out`);
         if (parsedRaces.writeInRows) log(`city-elections: ${parsedRaces.writeInRows} write-in row(s) the city filled in are not shown yet`);
+        if (parsedRaces.placeholderNames)
+          log(
+            `city-elections: ${parsedRaces.placeholderNames} name cell(s) hold a placeholder rather than a name; those rows are shown as not yet posted`,
+          );
       }
 
       for (const question of page.questions) {
