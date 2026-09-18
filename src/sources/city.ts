@@ -48,6 +48,11 @@ export function cityDocumentPostedAt(href: string): string | undefined {
  * The URL a reader should be sent to for an href on a city page: relative links resolved, the
  * CMS's `?splash=<encoded>&____isexternal=true` wrapper unwrapped, and the city's own links put on
  * https (its CMS writes some of them as `http://`, which only redirects).
+ *
+ * The hostname is the city's to choose and is left as the city wrote it. The city runs more than
+ * one host under its own domain — `click2gov.cityoflaredo.com` is its payments portal — and sending
+ * a reader to `www` instead lands them on a 404 (branch review finding 4). The one exception is the
+ * bare domain, which the city's own site answers by redirecting to `www`.
  */
 export function cityHref(href: string, depth = 0): string | undefined {
   // An empty href would resolve to the city's home page; a button with no link has no URL at all.
@@ -63,7 +68,7 @@ export function cityHref(href: string, depth = 0): string | undefined {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined;
   if (isCityHost(url.hostname)) {
     url.protocol = 'https:';
-    url.hostname = 'www.cityoflaredo.com';
+    if (url.hostname === 'cityoflaredo.com') url.hostname = 'www.cityoflaredo.com';
   }
   return url.toString();
 }

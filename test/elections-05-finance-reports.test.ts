@@ -43,7 +43,7 @@ describe('Elections 05: campaign finance reports attached by Alias', () => {
 
     // The city spells the District 1 candidate "Gilbert Gonzalez" on its finance page and on the
     // ballot line of its candidate table, so his reports attach with no Alias declared at all.
-    const district1 = data.candidates.find((c) => c.id === `${ELECTION}:district-1:gilberto-gonzalez`)!;
+    const district1 = data.candidates.find((c) => c.id === `${ELECTION}:district-1:gilbert-gonzalez`)!;
     expect(district1.ballotName).toBe('Gilbert Gonzalez');
     expect(report('23838').attachedTo).toEqual([district1.id]);
     // And an older report the city posted under his legal name attaches to the same Candidate.
@@ -51,7 +51,7 @@ describe('Elections 05: campaign finance reports attached by Alias', () => {
 
     // A sitting officeholder running for another office: the city filed Alyssa Cigarroa's report
     // under District 8, and it attaches to her Mayor Candidate under the office the city used.
-    const mayor = data.candidates.find((c) => c.id === `${ELECTION}:mayor:alyssa-cristine-cigarroa`)!;
+    const mayor = data.candidates.find((c) => c.id === `${ELECTION}:mayor:alyssa-cigarroa`)!;
     expect(report('23812')).toMatchObject({ office: 'District 8', attachedTo: [mayor.id] });
 
     // The city writes the mayor "Dr. Victor D. Treviño" on its finance page and "Victor Daniel
@@ -63,7 +63,7 @@ describe('Elections 05: campaign finance reports attached by Alias', () => {
 
   it('attaches a report the owner declared an Alias for, and reads the hand-kept file without writing it', async () => {
     const site = await Site.create();
-    const mayor = `${ELECTION}:mayor:victor-daniel-trevino`;
+    const mayor = `${ELECTION}:mayor:victor-d-trevino`;
     // The owner's file: one spelling the city uses on its finance page, declared under a Candidate.
     await site.writeHandKept(`# the owner's file, never written by the build (ADR-0005)
 aliases:
@@ -193,7 +193,7 @@ verified:
 
     // Once the owner declares the spelling, every report the city posted under it moves out of the
     // list and onto the Candidate: the city spells him the same way under both 2026 deadlines.
-    await site.writeHandKept(`aliases:\n  ${ELECTION}:mayor:victor-daniel-trevino:\n    - Dr. Victor D. Treviño\n`);
+    await site.writeHandKept(`aliases:\n  ${ELECTION}:mayor:victor-d-trevino:\n    - Dr. Victor D. Treviño\n`);
     await site.build({ fixtures, now: daysAfter(FIXTURE_NOW, 1), sources: [cityElections, cityFinance] });
     const after = await site.page('/en/elections/2026-general/mayor/');
     expect(after('.unmatched-reports li').length).toBe(16);

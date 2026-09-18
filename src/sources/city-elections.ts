@@ -370,6 +370,8 @@ export interface ParsedRaces {
   races: ParsedRace[];
   /** Accordion headings that hold a table this adapter could not read, for the run log. */
   unreadable: string[];
+  /** Headings with no letter or digit to make a URL from, for the run log. */
+  unsluggable: string[];
   /** Links whose anchor title did not match the column the city put them in, for the run log. */
   mismatchedLinks: number;
   /** Write-in rows the city filled in, which this site does not yet show, for the run log. */
@@ -384,7 +386,7 @@ export interface ParsedRaces {
  */
 export function parseRaces(html: string): ParsedRaces {
   const $ = load(html);
-  const out: ParsedRaces = { races: [], unreadable: [], mismatchedLinks: 0, writeInRows: 0, placeholderNames: 0 };
+  const out: ParsedRaces = { races: [], unreadable: [], unsluggable: [], mismatchedLinks: 0, writeInRows: 0, placeholderNames: 0 };
   for (const item of $('#ColumnUserControl1 .accordion_widget .accordion-item').toArray()) {
     const $item = $(item);
     const title = collapse($item.find('.accordion-heading').first().text());
@@ -396,9 +398,19 @@ export function parseRaces(html: string): ParsedRaces {
       out.unreadable.push(title);
       continue;
     }
+    // A heading with no letter or digit in it ("-", "\u2014", "***") is the city's spacing or its
+    // placeholder, not the name of a Race: it would slug to nothing, and a Race with no slug has no
+    // page to be on and fails validation inside saveData, where no Source's own failure path can
+    // catch it and nothing at all publishes. The heading is left out and the owner is told, the way
+    // a name cell holding a placeholder is (branch review finding 5).
+    const slug = RACE_SLUGS[title] ?? nameSlug(title);
+    if (!slug) {
+      out.unsluggable.push(title);
+      continue;
+    }
     const race: ParsedRace = {
       title,
-      slug: RACE_SLUGS[title] ?? nameSlug(title),
+      slug,
       declared: RACE_SLUGS[title] !== undefined,
       rows: [],
     };
@@ -540,7 +552,16 @@ const FORUM_TEXT = /^(.+?)\s*-\s*[A-Za-z]+,?\s*(\d{2})-(\d{2})-(\d{2})\s*at\s*(\
 function parseForumButton(anchor: Selection): ElectionForum | undefined {
   const m = FORUM_TEXT.exec(collapse(anchor.text()));
   if (!m) return undefined;
-  const start = fromCentral(`20${m[4]}-${m[2]}-${m[3]}`, to24h(Number(m[5]), Number(m[6]), `${m[7]}m`)).toISOString();
+  // The digits are the city's, and the city makes typos: a 13th month or a 45th day builds an
+  // instant that is not one, and the first thing that asks Intl about it throws and takes every
+  // Election, notice and Race down with it. So the date is parsed by the one parser that checks
+  // its own answer, and an hour or minute off the clock is refused beside it. A button this cannot
+  // read a date in is a button with no date: it is reported to the owner, with its own text, by
+  // the caller (branch review finding 2).
+  const ymd = parseNumericDate(`${m[2]}-${m[3]}-${m[4]}`);
+  const [hour, minute] = [Number(m[5]), Number(m[6])];
+  if (!ymd || hour < 1 || hour > 12 || minute > 59) return undefined;
+  const start = fromCentral(ymd, to24h(hour, minute, `${m[7]}m`)).toISOString();
   const url = cityHref(anchor.attr('href') ?? '');
   return { label: m[1]!.trim(), start, ...(url ? { url } : {}) };
 }
@@ -624,8 +645,7 @@ export const cityElections: SourceAdapter = {
           if (!parsed.declared) log(`city-elections: "${parsed.title}" is not in the declared Race table; its page is /${parsed.slug}/`);
           const raceId = `${id}:${parsed.slug}`;
           const unnamedRows: UnnamedRow[] = [];
-          const takenIds = new Set<string>();
-          const takenSlugs = new Set<string>();
+          const taken = new Set<string>();
           parsed.rows.forEach((row, rowOrder) => {
             const filed = row.filings.map((f) => ({ ...f, id: filingId(f.documentId) }));
             // A row the city has not named at all is not a Candidate (CONTEXT.md): it is shown on
@@ -636,7 +656,18 @@ export const cityElections: SourceAdapter = {
             if (printed && (!row.name || !row.ballotName)) {
               log(`city-elections: "${printed}" in ${parsed.title} has ${row.name ? 'no name on ballot' : 'no legal name'} on the city's table`);
             }
-            const candidateId = printed ? unique(`${raceId}:${nameSlug(printed)}`, takenIds) : undefined;
+            // A Candidate is the Race and the name on the ballot, which is the name the candidate
+            // filed to stand under and the only one of the two the city cannot revise: the legal
+            // name beside it is a cell the city fills in late and corrects (a middle name, a
+            // suffix, an accent), and an identity taken from that cell turns one person into two
+            // on the next run, with two rows in the Race table, two entries in the search index,
+            // two pages fighting over one path, and the owner's Alias left pointing at the person
+            // who used to be there (ADR-0005, branch review finding 1). The identity and the page's
+            // own path are made once, from the same name, so they can never disagree. Only a row
+            // the city has left unnamed on the ballot falls back to the legal name, and that row is
+            // already in the run log above.
+            const slug = printed ? unique(nameSlug(row.ballotName || row.name), taken) : undefined;
+            const candidateId = slug ? `${raceId}:${slug}` : undefined;
             for (const f of filed) {
               const already = filings.get(f.id);
               if (already) {
@@ -655,7 +686,7 @@ export const cityElections: SourceAdapter = {
                 url: f.url,
               });
             }
-            if (!candidateId) {
+            if (!candidateId || !slug) {
               unnamed += 1;
               unnamedRows.push({ order: rowOrder, ...(row.treasurer ? { treasurer: row.treasurer } : {}), filings: dedupe(filed.map((f) => f.id)) });
               return;
@@ -664,7 +695,7 @@ export const cityElections: SourceAdapter = {
               id: candidateId,
               raceId,
               electionId: id,
-              slug: unique(nameSlug(row.ballotName || row.name), takenSlugs),
+              slug,
               name: printed,
               ballotName: row.ballotName,
               ...(row.treasurer ? { treasurer: row.treasurer } : {}),
@@ -675,6 +706,11 @@ export const cityElections: SourceAdapter = {
           races.push({ id: raceId, electionId: id, slug: parsed.slug, title: parsed.title, kind: 'office', order: order++, unnamedRows });
         }
         if (parsedRaces.unreadable.length) log(`city-elections: no readable candidate table under ${parsedRaces.unreadable.join(', ')}`);
+        if (parsedRaces.unsluggable.length)
+          log(
+            `city-elections: ${parsedRaces.unsluggable.length} accordion heading(s) on ${page.candidatesUrl} have no letters or digits to make a page URL from ` +
+              `(${parsedRaces.unsluggable.join(', ')}); those Races are not shown`,
+          );
         if (parsedRaces.mismatchedLinks) log(`city-elections: ${parsedRaces.mismatchedLinks} link(s) in the candidate tables are not titled as the column the city put them in; left out`);
         if (parsedRaces.writeInRows) log(`city-elections: ${parsedRaces.writeInRows} write-in row(s) the city filled in are not shown yet`);
         if (parsedRaces.placeholderNames)

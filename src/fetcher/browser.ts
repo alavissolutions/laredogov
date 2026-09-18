@@ -32,6 +32,10 @@ export class BrowserSession {
     const page = await (await this.ctx()).newPage();
     try {
       const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
+      // This host has now been navigated, cookies and all, so a document out of its store does not
+      // need the referring page opened again for it: a Source that reads a page and then reaches
+      // for the documents on it pays for one navigation, not two (branch review finding 6).
+      this.warmed.add(origin(url));
       // Give client-side widgets a moment; the city calendar fills its grid after load.
       await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => undefined);
       const body = await page.content();
@@ -70,20 +74,29 @@ export class BrowserSession {
         (candidate) => candidate.href === url,
         async (route) => {
           try {
-            const res = await route.fetch();
+            // The budget is the document's: without it the request runs on Playwright's own
+            // default, so a store that is slow today gives up at thirty seconds however long the
+            // caller was willing to wait (branch review finding 3).
+            const res = await route.fetch({ timeout: timeoutMs });
             caught = {
               url: res.url(),
               status: res.status(),
               bytes: await res.body(),
               ...filenameOf(res.headers()['content-disposition']),
             };
+          } catch {
+            // A document the store would not hand over inside the budget: nothing is caught, the
+            // caller gets status 0, and the next run asks for it again.
           } finally {
             // The viewer is never wanted, and a page left hanging on an unfulfilled route times out.
             await route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }).catch(() => undefined);
           }
         },
       );
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
+      // The navigation is only the thing the document's own response travels on, and it is given a
+      // little more than the budget so the document's own timeout is what fires: a navigation that
+      // aborted first would leave the caller with a Playwright error instead of a response.
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: timeoutMs + NAVIGATION_GRACE_MS });
       // A route that never fired means the store redirected the navigation somewhere else.
       return caught ?? { url, status: 0, bytes: new Uint8Array() };
     } finally {
@@ -99,6 +112,9 @@ export class BrowserSession {
     this.warmed.clear();
   }
 }
+
+/** How much longer than the document's own budget the navigation carrying it is allowed to run. */
+const NAVIGATION_GRACE_MS = 5_000;
 
 function origin(url: string): string {
   try {

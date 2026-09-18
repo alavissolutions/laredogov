@@ -17,7 +17,7 @@ const AMENDED = '22178';
 /** Dr. Victor D. Treviño's, standing in for the scan every real report for this cycle is. */
 const SCANNED = '23842';
 
-const ALIAS = `aliases:\n  ${ELECTION}:district-1:gilberto-gonzalez:\n    - Gilbert Gonzalez\n`;
+const ALIAS = `aliases:\n  ${ELECTION}:district-1:gilbert-gonzalez:\n    - Gilbert Gonzalez\n`;
 
 describe('Elections 06: Figures copied from the report, then verified', () => {
   it('downloads each report the city posted for this cycle once and copies the four cover-sheet totals', async () => {

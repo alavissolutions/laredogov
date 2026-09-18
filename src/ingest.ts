@@ -127,9 +127,13 @@ function mergeRecords<T extends { id: string; source: string; publisher: Publish
   incoming: readonly Omit<T, 'source' | 'publisher' | 'firstSeen' | 'lastSeenLive'>[],
   stamp: string,
 ): void {
-  const byId = new Map(records.map((r) => [r.id, r]));
+  // Where each record sits, not what it is: the city's finance page hands back some six hundred
+  // Filings a run and the file only grows, so a run has to cost what it brought in rather than
+  // re-scanning everything stored for each one of them (branch review finding 8).
+  const indexById = new Map(records.map((r, index) => [r.id, index]));
   for (const record of incoming) {
-    const existing = byId.get(record.id);
+    const at = indexById.get(record.id);
+    const existing = at === undefined ? undefined : records[at];
     const merged = {
       ...record,
       source: source.id,
@@ -137,9 +141,12 @@ function mergeRecords<T extends { id: string; source: string; publisher: Publish
       firstSeen: existing?.firstSeen ?? stamp,
       lastSeenLive: stamp,
     } as T;
-    if (existing) records[records.indexOf(existing)] = merged;
-    else records.push(merged);
-    byId.set(merged.id, merged);
+    if (at === undefined) {
+      indexById.set(merged.id, records.length);
+      records.push(merged);
+    } else {
+      records[at] = merged;
+    }
   }
 }
 

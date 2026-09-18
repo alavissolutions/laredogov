@@ -41,9 +41,10 @@ describe('Elections 02: Race pages with the comparison table', () => {
     expect(inRace('district-1').map((c) => c.ballotName)).toEqual(['Lupe De Leon Jr', 'Gilbert Gonzalez']);
     expect(inRace('municipal-court-judge-position-1').map((c) => c.ballotName)).toEqual(['Nathan Henry Chu', 'Rudy Morales III']);
 
-    // Candidate identity is the Election, the Race, and the legal name the city printed.
+    // Candidate identity is the Election, the Race, and the name the city put on the ballot,
+    // which is the name the city cannot revise underneath him (branch review finding 1).
     const gonzalez = inRace('mayor')[1]!;
-    expect(gonzalez.id).toBe(`${ELECTION}:mayor:jose-david-gonzalez`);
+    expect(gonzalez.id).toBe(`${ELECTION}:mayor:jd-gonzalez`);
     expect(gonzalez.slug).toBe('jd-gonzalez');
     expect(gonzalez.ballotName).toBe('JD Gonzalez');
     expect(gonzalez.treasurer).toBe('Sonia Villarreal');

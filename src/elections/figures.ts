@@ -44,8 +44,12 @@ import type { FigureTotals } from '../domain.js';
  * document, and the build opens that document again when this number is higher than the one
  * recorded, so every report a weaker reader gave up on is re-read once rather than being written
  * off for good. Raise it whenever this file learns to read something it could not before.
+ *
+ * - 1: the first reader (issue 06).
+ * - 2 (2026-09-18, branch review finding 7): rows written a show operator at a time, and the `'`
+ *   and `"` operators, which 1 read as one unbroken run and so found no label in.
  */
-export const READER_VERSION = 1;
+export const READER_VERSION = 2;
 
 /** A stream that inflates to more than this is not a form; it is a way to take the whole run down. */
 const MAX_INFLATED = 64 << 20;
@@ -249,33 +253,53 @@ function decode(dict: string, data: Buffer): Buffer | undefined {
 const BREAKS = new Set(['Td', 'TD', 'T*', 'Tm', 'BT', 'ET']);
 
 /**
+ * The show operators that move to the next line before they show anything, which `T*` does on its
+ * own. They follow the string they show, so a row ends in front of that string, not after it.
+ * The window is wider than any whitespace a writer puts between an operand and its operator.
+ */
+const NEXT_LINE_SHOW = /^\s*['"]/;
+const NEXT_LINE_SHOW_WINDOW = 64;
+
+/**
  * The text a content stream shows, a line per row. Strings are read as PDF writes them, literal
  * `(...)` or hexadecimal `<...>`; the kerning numbers inside a `TJ` array become a space only when
  * they are wide enough to be one, so a number the writer kerned mid-way stays one number.
+ *
+ * Two strings shown one after the other with nothing between them are two things the form printed
+ * beside each other, so a space goes between them. A writer that lays out a row a word at a time
+ * without kerning is a writer this would otherwise read as one long run, and no label on the form
+ * would ever match (branch review finding 7). What is never separated is a number the writer split:
+ * 24, then 310.75, and 24,310 then .75, are one number in both halves' company.
  */
 function contentText(content: string): string {
   const lines: string[] = [];
   let row = '';
   let kern: number | undefined;
-  // A kern wide enough to be a space, between two runs that are both digits, is the writer
-  // splitting one number across two strings; a space there would make 24,310.75 into 24 and 310.75.
-  const spaced = (text: string) => kern !== undefined && kern <= -100 && !(/[\d,]$/.test(row) && /^[\d,]/.test(text));
+  // The writer splitting one number across two strings; a space there would make 24,310.75 into
+  // 24 and 310.75.
+  const splitsNumber = (text: string) => (/[\d,]$/.test(row) && /^[\d,]/.test(text)) || (/\d$/.test(row) && /^\.\d/.test(text));
+  // A kern wide enough to be a space is one; so is no kern at all between two strings shown in a row.
+  const spaced = (text: string) => row !== '' && !/\s$/.test(row) && (kern === undefined || kern <= -100) && !splitsNumber(text);
   const endRow = () => {
     if (row.trim()) lines.push(row.trim());
     row = '';
+  };
+  /** Shows a string, after ending the row when the operator waiting behind it moves to the next. */
+  const show = (text: string, next: number) => {
+    if (NEXT_LINE_SHOW.test(content.slice(next, next + NEXT_LINE_SHOW_WINDOW))) endRow();
+    row += (spaced(text) ? ' ' : '') + text;
+    kern = undefined;
   };
   let i = 0;
   while (i < content.length) {
     const c = content[i]!;
     if (c === '(') {
       const [text, next] = literalString(content, i);
-      row += (spaced(text) ? ' ' : '') + text;
-      kern = undefined;
+      show(text, next);
       i = next;
     } else if (c === '<' && content[i + 1] !== '<') {
       const [text, next] = hexString(content, i);
-      row += (spaced(text) ? ' ' : '') + text;
-      kern = undefined;
+      show(text, next);
       i = next;
     } else if (c === '%') {
       while (i < content.length && content[i] !== '\n') i += 1;

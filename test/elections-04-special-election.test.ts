@@ -312,7 +312,7 @@ describe('Elections 04: the special election through the same path', () => {
     });
 
     const gonzalez = data.candidates.filter((c) => c.name === 'Jose David Gonzalez');
-    expect(gonzalez.map((c) => c.id)).toEqual([`${GENERAL}:mayor:jose-david-gonzalez`, `${DISTRICT_8}:jose-david-gonzalez`]);
+    expect(gonzalez.map((c) => c.id)).toEqual([`${GENERAL}:mayor:jd-gonzalez`, `${DISTRICT_8}:jd-gonzalez`]);
     // The slug is the same word in both, and the Election and Race in the path keep them apart.
     expect(gonzalez.map((c) => c.slug)).toEqual(['jd-gonzalez', 'jd-gonzalez']);
     expect(new Set(data.candidates.map((c) => c.id)).size).toBe(data.candidates.length);

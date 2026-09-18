@@ -11,7 +11,7 @@
 # of its line, so a note goes on its own line above it, never after the name:
 #
 #   aliases:
-#     city-elections:2026-general:mayor:victor-daniel-trevino:
+#     city-elections:2026-general:mayor:victor-d-trevino:
 #       - Dr. Victor D. Treviño
 #
 # verified: the document ids whose four cover-sheet totals the owner has checked against the PDF.
