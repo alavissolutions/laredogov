@@ -12,7 +12,7 @@
  */
 import { formatDate, formatTime, sortValue } from '../dates.js';
 import { PUBLISHER_ORDER } from '../directory/entries.js';
-import type { Candidate, Election, ElectionItemKind, ElectionLink, Filing, Item, PublisherId, Race, UnnamedRow } from '../domain.js';
+import type { Candidate, Election, ElectionCalendarEntry, ElectionItemKind, ElectionLink, Filing, Item, PublisherId, Race, UnnamedRow } from '../domain.js';
 import { t } from '../i18n/strings.js';
 import { href, PATHS, type RenderContext } from './context.js';
 import { esc, layout, topicNav } from './html.js';
@@ -55,13 +55,16 @@ function calendarSection(ctx: RenderContext, election: Election): string {
   const { lang } = ctx;
   if (election.calendar.length === 0) return `<p class="empty">${esc(t(lang, 'elections.calendar.empty'))}</p>`;
   return `<ul class="election-calendar">
-${election.calendar
-  .map(
-    (entry) =>
-      `<li><time datetime="${esc(entry.date)}">${esc(formatDate(lang, entry.date, 'long'))}</time> <span class="what">${esc(entry.description)}</span></li>`,
-  )
-  .join('\n')}
+${election.calendar.map((entry) => `<li>${calendarWhen(ctx, entry)} <span class="what">${esc(entry.description)}</span></li>`).join('\n')}
 </ul>`;
+}
+
+/** The day an entry falls on, or, for an entry the Publisher spans over days, both of its ends. */
+function calendarWhen(ctx: RenderContext, entry: ElectionCalendarEntry): string {
+  const { lang } = ctx;
+  const day = (date: string) => `<time datetime="${esc(date)}">${esc(formatDate(lang, date, 'long'))}</time>`;
+  if (!entry.endDate) return day(entry.date);
+  return `${day(entry.date)} <span class="through">${esc(t(lang, 'elections.calendar.through'))}</span> ${day(entry.endDate)}`;
 }
 
 /**

@@ -85,6 +85,11 @@ export type ElectionItemKind = 'notice' | 'voting-site';
 export interface ElectionCalendarEntry {
   /** Central-time calendar date. */
   date: string;
+  /**
+   * The last day of an entry the Publisher printed as spanning more than one, such as a two-day
+   * holiday. Absent for the single day every other entry is.
+   */
+  endDate?: string;
   /** The date exactly as the Publisher printed it, kept for the data file's readers. */
   label: string;
   /** What the Publisher says happens that day; never translated. */

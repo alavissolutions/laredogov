@@ -8,19 +8,26 @@ import { daysAfter, Site } from './helpers.js';
 
 const ELECTION = 'city-elections:2026-general';
 
+/**
+ * This file is about the general Election's Races. The Source reads every Election the city keeps in
+ * one run (issue 04), so a count that would otherwise be of the whole data file is taken of the
+ * general Election's own records here; the two-Election totals belong to elections-04.
+ */
+const ofGeneral = <T extends { electionId?: string }>(records: readonly T[]): T[] => records.filter((r) => r.electionId === ELECTION);
+
 describe('Elections 02: Race pages with the comparison table', () => {
   it('records the city ballot order: six office Races, sixteen named Candidates, and their Filings', async () => {
     const site = await Site.create();
     const { data } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections] });
 
-    const offices = data.races.filter((r) => r.kind === 'office');
+    const offices = ofGeneral(data.races).filter((r) => r.kind === 'office');
     expect(offices.map((r) => r.slug)).toEqual(['mayor', 'district-1', 'district-2', 'district-3', 'district-6', 'municipal-court-judge-position-1']);
     // The city's own accordion headings, never translated or re-cased.
     expect(offices.map((r) => r.title)).toEqual(['Mayor', 'District 1', 'District 2', 'District 3', 'District 6', 'Municipal Court Judge - Position 1']);
     expect(offices.every((r) => r.electionId === ELECTION)).toBe(true);
     expect(offices[0]!.id).toBe(`${ELECTION}:mayor`);
 
-    expect(data.candidates).toHaveLength(16);
+    expect(ofGeneral(data.candidates)).toHaveLength(16);
     const inRace = (slug: string) =>
       data.candidates.filter((c) => c.raceId === `${ELECTION}:${slug}`).sort((a, b) => a.order - b.order);
     // Ballot order, and the legal names exactly as the city prints them.
@@ -57,7 +64,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     expect(filings[1]).toMatchObject({ documentId: '23928', kind: 'ballot-application', label: 'Application for a Place on the Ballot' });
     // One Filing per document the city links in the six tables: a treasurer appointment and an
     // application for each of the sixteen Candidates.
-    expect(data.filings).toHaveLength(32);
+    expect(ofGeneral(data.filings)).toHaveLength(32);
   });
 
   it('renders a Race page in both languages with the city table in ballot order', async () => {
@@ -170,7 +177,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     // The city prints no date beside these, so they are Filings and nothing else (CONTEXT.md).
     const filingUrls = new Set(data.filings.map((f) => f.url));
     expect(data.items.filter((i) => filingUrls.has(i.url))).toHaveLength(0);
-    expect(data.items.filter((i) => i.source === 'city-elections')).toHaveLength(5);
+    expect(data.items.filter((i) => i.election?.id === ELECTION)).toHaveLength(5);
 
     // The same document written the city's other way, with no cache-busting ticks, is one Filing.
     const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
@@ -185,9 +192,9 @@ describe('Elections 02: Race pages with the comparison table', () => {
       sources: [cityElections],
     });
     expect(again.report.newItems).toBe(0);
-    expect(again.data.filings).toHaveLength(32);
-    expect(again.data.candidates).toHaveLength(16);
-    expect(again.data.races).toHaveLength(7);
+    expect(ofGeneral(again.data.filings)).toHaveLength(32);
+    expect(ofGeneral(again.data.candidates)).toHaveLength(16);
+    expect(ofGeneral(again.data.races)).toHaveLength(7);
     const filing = again.data.filings.find((f) => f.documentId === '23928')!;
     expect(filing.id).toBe('city-elections:filing:23928');
     expect(filing.firstSeen).toBe(FIXTURE_NOW.toISOString());
@@ -212,7 +219,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     });
 
     // Nobody is named: no Candidate is created, and the treasurer is not turned into one.
-    expect(data.candidates).toHaveLength(15);
+    expect(ofGeneral(data.candidates)).toHaveLength(15);
     expect(data.candidates.some((c) => /Casso/.test(`${c.name} ${c.ballotName}`))).toBe(false);
     const mayor = data.races.find((r) => r.id === `${ELECTION}:mayor`)!;
     expect(mayor.unnamedRows).toHaveLength(1);
@@ -239,7 +246,8 @@ describe('Elections 02: Race pages with the comparison table', () => {
     const log: string[] = [];
     const { requests } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections], log });
     expect(requests.filter((r) => r.url === GENERAL_CANDIDATES_URL)).toHaveLength(1);
-    expect(log).toContain('city-elections: 7 Races (6 offices, 1 question), 16 Candidates, 0 rows the city has not named, 32 Filings');
+    // The summary is of the run, so it counts both Elections; elections-04 asserts the special half.
+    expect(log).toContain('city-elections: 8 Races (7 offices, 1 question), 19 Candidates, 1 row the city has not named, 39 Filings');
 
     // A Filing's kind comes from the column and the city's own anchor title. A link the city titles
     // as something else is not filed as a guess, and the owner is told (the filename is never read).
@@ -259,7 +267,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
       log: otherLog,
     });
     expect(data.filings.some((f) => f.documentId === '23928')).toBe(false);
-    expect(data.filings).toHaveLength(31);
+    expect(ofGeneral(data.filings)).toHaveLength(31);
     expect(otherLog.some((l) => /1 link\(s\) in the candidate tables are not titled as the column/.test(l))).toBe(true);
   });
 
@@ -275,7 +283,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     const { data } = await site.build({ fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: twice }, now: FIXTURE_NOW, sources: [cityElections], log });
 
     expect(new Set(data.filings.map((f) => f.id)).size).toBe(data.filings.length);
-    expect(data.filings).toHaveLength(31);
+    expect(ofGeneral(data.filings)).toHaveLength(31);
     expect(data.filings.filter((f) => f.documentId === '23928')).toHaveLength(1);
     expect(log.some((l) => /document 23928 is linked twice in District 1/.test(l))).toBe(true);
   });
@@ -295,7 +303,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     });
 
     // The city named this person, so the site names them too, under the name the city printed.
-    expect(data.candidates).toHaveLength(16);
+    expect(ofGeneral(data.candidates)).toHaveLength(16);
     const garza = data.candidates.find((c) => c.slug === 'jorge-a-garza')!;
     expect(garza.name).toBe('Jorge A. Garza');
     expect(garza.ballotName).toBe('Jorge A. Garza');

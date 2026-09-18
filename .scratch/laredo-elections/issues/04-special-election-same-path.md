@@ -6,10 +6,10 @@
 
 **Status:** ready-for-agent
 
-- [ ] Fixtures recorded for the special election page and its candidates sub-page
-- [ ] Two Elections in the data file; the special has 1 Race, 3 named Candidates, and 1 unnamed row
-- [ ] Special notices in the Elections RSS with the city's dates
-- [ ] Candidate slugs do not collide across Elections
+- [x] Fixtures recorded for the special election page and its candidates sub-page
+- [x] Two Elections in the data file; the special has 1 Race, 3 named Candidates, and 1 unnamed row
+- [x] Special notices in the Elections RSS with the city's dates
+- [x] Candidate slugs do not collide across Elections
 
 ## Comments
 
@@ -23,3 +23,23 @@ does not have to rediscover them.
   `{ slug: '2026-special', date: '2026-12-05', url: SPECIAL_ELECTION_URL, candidatesUrl: SPECIAL_CANDIDATES_URL }`.
   Both URLs are already exported and both fixtures are already mapped in `test/fixtures/fetcher.ts`.
   The special page's accordions include "Candidate Instruction Guides", already in `SKIPPED_ACCORDIONS`.
+
+**2026-09-18, implementer:** Done in `test/elections-04-special-election.test.ts`. The special election needed
+no new code path: one row in `ELECTION_PAGES` and a widened notice-date reader, and the Election, its Race, its
+three Candidates, its unnamed row, its seven Filings, its notices, and its pages all came out of the code
+issues 01 and 02 already wrote.
+
+- `parseNoticeRows` and `parseCalendarRows` now share one `printedDates`, which reads either form the city
+  writes a date in (`parseNumericDate` in `src/dates.ts` is new). The three `MM-DD-YY` notices parse.
+- The city writes its two-day Thanksgiving holiday as both dates in one calendar cell. Read as one day the
+  page told an early voter the wrong thing about the second, so `ElectionCalendarEntry` gained an optional
+  `endDate` and the calendar renders a range (`elections.calendar.through`, both languages). The special page
+  is the only page in the fixtures with such a row.
+- The city's drawing notice is dated `10-07-26`, three weeks after `FIXTURE_NOW`, so the New panel and the
+  Elections RSS leave it out until its own date, like every other future-dated Item. The Election page's
+  notices are not windowed, so it is on the Election page from the day the city posts it.
+- `elections-01` and `elections-02` now take their counts of the general Election's own records, because the
+  Source reads both Elections in one run; the run-log lines in both files are of the whole run.
+- Candidate ids are `${electionId}:${raceSlug}:${slug of the legal name}` and page paths carry the Election
+  and the Race, so two Elections cannot collide. A test renames the special election's rows to two people
+  already running for Mayor and asserts two Candidates, two ids, two pages.

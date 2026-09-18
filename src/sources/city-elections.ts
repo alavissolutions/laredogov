@@ -13,7 +13,7 @@
  * 2026-09-17.
  */
 import { load, type CheerioAPI } from 'cheerio';
-import { dayOf, fromCentral, parseMonthNameDate, to24h } from '../dates.js';
+import { dayOf, fromCentral, parseMonthNameDates, parseNumericDate, to24h } from '../dates.js';
 import type { ElectionCalendarEntry, ElectionForum, ElectionLink, FilingKind, PublisherId, UnnamedRow } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
 import { CITY_SITE, cityDocumentId, cityDocumentPostedAt, cityHref, collapse } from './city.js';
@@ -54,8 +54,8 @@ export interface ElectionQuestion {
 
 /**
  * The Elections in scope, declared rather than discovered: the city has no index of its election
- * pages, and each one is a hand-built page under its own path. The December 5, 2026 District 8
- * special election joins this table with issue 04.
+ * pages, and each one is a hand-built page under its own path. Every Election here goes through the
+ * same path: one Election record, its Races, its Candidates, its Filings, and its notice Items.
  */
 export const ELECTION_PAGES: readonly ElectionPage[] = [
   {
@@ -66,6 +66,15 @@ export const ELECTION_PAGES: readonly ElectionPage[] = [
     // The city's non-binding question on pediatric hospital services, resolution 2026R221 (doc
     // 24357), linked from the "Election Ordinance" button labelled below (verified 2026-09-17).
     questions: [{ slug: 'pediatric-hospital-services', linkNote: 'Non-Binding Election-Pediatric Hospital Services' }],
+  },
+  {
+    slug: '2026-special',
+    date: '2026-12-05',
+    url: SPECIAL_ELECTION_URL,
+    candidatesUrl: SPECIAL_CANDIDATES_URL,
+    // The city called this election by resolution to fill the District 8 vacancy and put nothing
+    // else on its ballot, so it has no question Race (verified 2026-09-17).
+    questions: [],
   },
 ];
 
@@ -170,6 +179,26 @@ export function parseElectionPage(html: string): ParsedElectionPage {
   return { title, calendar, notices, links, skippedLinks };
 }
 
+/**
+ * The dates a Publisher printed in a cell of one of its own tables, in the order it printed them.
+ * The city writes these two ways on its own election pages, and which way is not a rule of the table
+ * it is in: the general page writes them out ("August 19, 2026") and the special election page
+ * writes three of its notice dates as `10-07-26` (both verified 2026-09-17). A cell holding neither
+ * form has no date; a cell holding two is a Publisher spanning days, which only the written-out form
+ * has room for ("Thursday, November 26, 2026 Friday, November 27, 2026").
+ */
+function printedDates(text: string): string[] {
+  const written = parseMonthNameDates(text);
+  if (written.length) return written;
+  const numeric = parseNumericDate(text);
+  return numeric ? [numeric] : [];
+}
+
+/** The first date a Publisher printed in a cell, for the cells that hold only one. */
+function printedDate(text: string): string | undefined {
+  return printedDates(text)[0];
+}
+
 /** A calendar row is `date | dash | what happens`. A row with no date is a spacer or a continuation. */
 function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEntry[] {
   const out: ElectionCalendarEntry[] = [];
@@ -178,24 +207,28 @@ function parseCalendarRows($: CheerioAPI, table: Selection): ElectionCalendarEnt
     if (cells.length < 2) continue;
     const label = collapse(cells.first().text());
     const description = collapse(cells.last().text());
-    const date = parseMonthNameDate(label);
+    const dates = printedDates(label);
+    const date = dates[0];
     if (!date || !description) continue;
-    out.push({ date, label, description });
+    // The city has one cell per entry, so it writes an entry that spans days ("THANKSGIVING
+    // HOLIDAY!") as both of its dates in that cell. Read as one day it would tell a voter the wrong
+    // thing about the second, so the entry carries the last date the city printed as its end.
+    const last = dates[dates.length - 1]!;
+    out.push({ date, ...(last > date ? { endDate: last } : {}), label, description });
   }
   return out;
 }
 
 /**
- * A notice row is `date | dash | link`. The link text is the city's own name for the notice.
- * The general page writes the date out ("August 19, 2026"); the special election page writes some
- * of its notice dates as `MM-DD-YY`, which issue 04 has to handle when it wires that page up.
+ * A notice row is `date | dash | link`. The link text is the city's own name for the notice, and the
+ * date beside it is the city's own date for it, in either of the two forms the city writes.
  */
 function parseNoticeRows($: CheerioAPI, table: Selection): NoticeLink[] {
   const out: NoticeLink[] = [];
   for (const row of table.find('tr').toArray()) {
     const cells = $(row).find('td');
     if (cells.length < 2) continue;
-    const date = parseMonthNameDate(collapse(cells.first().text()));
+    const date = printedDate(collapse(cells.first().text()));
     const anchor = cells.last().find('a').first();
     const url = cityHref(anchor.attr('href') ?? '');
     const title = collapse(anchor.text());
