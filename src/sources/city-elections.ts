@@ -263,7 +263,7 @@ const WRITE_IN_HEADER = 'Write In Candidate';
  * title the city gives the anchor. Filenames are never read (spec: Names), and a link whose title
  * does not match its column is left out and counted in the run log rather than filed as a guess.
  * The title patterns allow for the city's own spellings ("for Place", "for a Place", "Special
- * Election Ballot", and the "Balllot" typo in the judge race).
+ * Election Ballot", and the "Balllot" typo in the judge race), as the pages stood on 2026-09-17.
  */
 const FILING_COLUMNS: readonly { column: ColumnRole; kind: FilingKind; title: RegExp }[] = [
   { column: 'treasurer', kind: 'treasurer-appointment', title: /campaign treasurer/i },
@@ -403,7 +403,7 @@ function parseFilingLink(anchor: Selection, kind: FilingKind, title: RegExp): Pa
 export function nameSlug(name: string): string {
   return name
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
@@ -463,7 +463,10 @@ export const cityElections: SourceAdapter = {
     const items: NewItem[] = [];
     const races: NewRace[] = [];
     const candidates: NewCandidate[] = [];
-    const filings: NewFiling[] = [];
+    // Keyed by the city's document id: identity is that id, so one document is one Filing however
+    // many rows the city links it from. A second row linking the same document is logged, because
+    // one PDF under two candidates is a city data-entry slip the owner should see.
+    const filings = new Map<string, NewFiling>();
     const seen = new Set<string>();
     let notices = 0;
     let votingSites = 0;
@@ -514,11 +517,22 @@ export const cityElections: SourceAdapter = {
           const takenSlugs = new Set<string>();
           parsed.rows.forEach((row, rowOrder) => {
             const filed = row.filings.map((f) => ({ ...f, id: filingId(f.documentId) }));
-            // A row the city has not named is not a Candidate (CONTEXT.md): it is shown on the Race
-            // page as not yet posted, with the treasurer appointment the city did post.
-            const candidateId = row.name ? unique(`${raceId}:${nameSlug(row.name)}`, takenIds) : undefined;
+            // A row the city has not named at all is not a Candidate (CONTEXT.md): it is shown on
+            // the Race page as not yet posted, with the treasurer appointment the city did post.
+            // A row with only one of the two names is a person the city has named, so it becomes a
+            // Candidate under the name the city printed, and the owner is told which cell is blank.
+            const printed = row.name || row.ballotName;
+            if (printed && (!row.name || !row.ballotName)) {
+              log(`city-elections: "${printed}" in ${parsed.title} has ${row.name ? 'no name on ballot' : 'no legal name'} on the city's table`);
+            }
+            const candidateId = printed ? unique(`${raceId}:${nameSlug(printed)}`, takenIds) : undefined;
             for (const f of filed) {
-              filings.push({
+              const already = filings.get(f.id);
+              if (already) {
+                log(`city-elections: document ${f.documentId} is linked twice in ${parsed.title}; kept as one Filing`);
+                continue;
+              }
+              filings.set(f.id, {
                 id: f.id,
                 documentId: f.documentId,
                 kind: f.kind,
@@ -532,7 +546,7 @@ export const cityElections: SourceAdapter = {
             }
             if (!candidateId) {
               unnamed += 1;
-              unnamedRows.push({ order: rowOrder, ...(row.treasurer ? { treasurer: row.treasurer } : {}), filings: filed.map((f) => f.id) });
+              unnamedRows.push({ order: rowOrder, ...(row.treasurer ? { treasurer: row.treasurer } : {}), filings: dedupe(filed.map((f) => f.id)) });
               return;
             }
             candidates.push({
@@ -540,11 +554,11 @@ export const cityElections: SourceAdapter = {
               raceId,
               electionId: id,
               slug: unique(nameSlug(row.ballotName || row.name), takenSlugs),
-              name: row.name,
+              name: printed,
               ballotName: row.ballotName,
               ...(row.treasurer ? { treasurer: row.treasurer } : {}),
               order: rowOrder,
-              filings: filed.map((f) => f.id),
+              filings: dedupe(filed.map((f) => f.id)),
             });
           });
           races.push({ id: raceId, electionId: id, slug: parsed.slug, title: parsed.title, kind: 'office', order: order++, unnamedRows });
@@ -624,15 +638,20 @@ export const cityElections: SourceAdapter = {
     const offices = races.length - questions;
     log(
       `city-elections: ${races.length} Races (${offices} office${offices === 1 ? '' : 's'}, ${questions} question${questions === 1 ? '' : 's'}), ` +
-        `${candidates.length} Candidates, ${unnamed} row${unnamed === 1 ? '' : 's'} the city has not named, ${filings.length} Filings`,
+        `${candidates.length} Candidates, ${unnamed} row${unnamed === 1 ? '' : 's'} the city has not named, ${filings.size} Filings`,
     );
-    return { items, elections, races, candidates, filings };
+    return { items, elections, races, candidates, filings: [...filings.values()] };
   },
 };
 
 /** A Filing's id: the city's own document id, so one document is one Filing wherever it is linked. */
 function filingId(documentId: string): string {
   return `city-elections:filing:${documentId}`;
+}
+
+/** The same document linked twice in one row is still one Filing. */
+function dedupe(ids: readonly string[]): string[] {
+  return [...new Set(ids)];
 }
 
 /** Keeps ids and slugs unique when the city prints two rows that would spell the same, e.g. `-2`. */

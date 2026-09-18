@@ -1,9 +1,9 @@
 import { dayOf, formatDate } from './dates.js';
-import type { Body, Candidate, DataFile, DocumentKind, Election, Filing, Item, Meeting, MeetingDocument, Race, SourceHealth } from './domain.js';
+import type { Body, DataFile, DocumentKind, Election, Item, Meeting, MeetingDocument, PublisherId, SourceHealth } from './domain.js';
 import { DOCUMENT_KINDS } from './domain.js';
 import type { Fetcher } from './fetcher/types.js';
 import { t } from './i18n/strings.js';
-import type { NewCandidate, NewElection, NewFiling, NewItem, NewMeeting, NewRace, SourceAdapter } from './sources/types.js';
+import type { NewElection, NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
 
 export interface IngestOptions {
   fetcher: Fetcher;
@@ -36,9 +36,9 @@ export async function ingest(data: DataFile, { fetcher, sources, now, log }: Ing
       const added = mergeItems(data, source, result.items, stamp);
       if (result.bodies) mergeBodies(data, source, result.bodies);
       if (result.elections) mergeElections(data, source, result.elections, stamp);
-      if (result.races) mergeRaces(data, source, result.races, stamp);
-      if (result.candidates) mergeCandidates(data, source, result.candidates, stamp);
-      if (result.filings) mergeFilings(data, source, result.filings, stamp);
+      if (result.races) mergeRecords(data.races, source, result.races, stamp);
+      if (result.candidates) mergeRecords(data.candidates, source, result.candidates, stamp);
+      if (result.filings) mergeRecords(data.filings, source, result.filings, stamp);
       if (result.meetings) {
         const streamLines = mergeMeetings(data, source, result.meetings, stamp);
         report.newItems += streamLines;
@@ -113,33 +113,30 @@ function mergeElections(data: DataFile, source: SourceAdapter, elections: readon
 /**
  * Races, Candidates, and Filings are re-read whole on every run like Elections: the Publisher's
  * table is the record, so an incoming version replaces the stored one and only first-seen survives.
- * Nothing is ever removed (spec: the pages stay up, frozen), so a Candidate the Publisher drops
- * from its table keeps their page and their last-seen-live date stops moving.
+ * Replacing rather than assigning matters because a field the Publisher clears (a treasurer cell it
+ * empties, a Filing that stops belonging to a Candidate) must clear here too. Nothing is ever
+ * removed (spec: the pages stay up, frozen), so a Candidate the Publisher drops from its table keeps
+ * their page and their last-seen-live date simply stops moving.
  */
-function mergeRaces(data: DataFile, source: SourceAdapter, races: readonly NewRace[], stamp: string): void {
-  const byId = new Map(data.races.map((r) => [r.id, r]));
-  for (const incoming of races) {
-    const existing = byId.get(incoming.id);
-    if (existing) Object.assign(existing, incoming, { lastSeenLive: stamp });
-    else data.races.push({ ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp });
-  }
-}
-
-function mergeCandidates(data: DataFile, source: SourceAdapter, candidates: readonly NewCandidate[], stamp: string): void {
-  const byId = new Map(data.candidates.map((c) => [c.id, c]));
-  for (const incoming of candidates) {
-    const existing = byId.get(incoming.id);
-    if (existing) Object.assign(existing, incoming, { lastSeenLive: stamp });
-    else data.candidates.push({ ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp });
-  }
-}
-
-function mergeFilings(data: DataFile, source: SourceAdapter, filings: readonly NewFiling[], stamp: string): void {
-  const byId = new Map(data.filings.map((f) => [f.id, f]));
-  for (const incoming of filings) {
-    const existing = byId.get(incoming.id);
-    if (existing) Object.assign(existing, incoming, { lastSeenLive: stamp });
-    else data.filings.push({ ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp });
+function mergeRecords<T extends { id: string; source: string; publisher: PublisherId; firstSeen: string; lastSeenLive: string }>(
+  records: T[],
+  source: SourceAdapter,
+  incoming: readonly Omit<T, 'source' | 'publisher' | 'firstSeen' | 'lastSeenLive'>[],
+  stamp: string,
+): void {
+  const byId = new Map(records.map((r) => [r.id, r]));
+  for (const record of incoming) {
+    const existing = byId.get(record.id);
+    const merged = {
+      ...record,
+      source: source.id,
+      publisher: source.publisher,
+      firstSeen: existing?.firstSeen ?? stamp,
+      lastSeenLive: stamp,
+    } as T;
+    if (existing) records[records.indexOf(existing)] = merged;
+    else records.push(merged);
+    byId.set(merged.id, merged);
   }
 }
 

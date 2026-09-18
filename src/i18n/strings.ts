@@ -90,6 +90,8 @@ const en = {
   'race.question.intro': 'A question on the ballot. The city lists no candidates for it.',
   'race.question.empty': 'The city has not posted the document for this question yet.',
   'race.description': 'Who the City of Laredo has posted as a candidate for {race}, with their campaign treasurer and ballot application.',
+  'race.question.description': 'A question the City of Laredo put on the ballot, with the city’s own document linked.',
+  'race.rowPosition': 'row {n}',
 
   'meetings.title': 'Meetings',
   'meetings.intro': 'Public meetings of the City of Laredo and its boards and commissions, from the city’s Legistar calendar. Meetings are convened under the Texas Open Meetings Act.',
@@ -389,6 +391,8 @@ const es: Record<keyof typeof en, string> = {
   'race.question.intro': 'Una pregunta en la boleta. La ciudad no enlista candidatos para ella.',
   'race.question.empty': 'La ciudad aún no ha publicado el documento de esta pregunta.',
   'race.description': 'Quién ha publicado la Ciudad de Laredo como candidato para {race}, con su tesorero de campaña y su solicitud de lugar en la boleta.',
+  'race.question.description': 'Una pregunta que la Ciudad de Laredo puso en la boleta, con el documento propio de la ciudad enlazado.',
+  'race.rowPosition': 'fila {n}',
 
   'meetings.title': 'Reuniones',
   'meetings.intro': 'Reuniones públicas de la Ciudad de Laredo y sus juntas y comisiones, tomadas del calendario Legistar de la ciudad. Las Reuniones se convocan conforme a la Ley de Reuniones Abiertas de Texas.',

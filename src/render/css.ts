@@ -63,9 +63,9 @@ form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent
 .races-list>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
 .races-list .title{font-size:1.05rem}
 .neutrality{font-size:.9rem;color:var(--muted);background:var(--soft);border-left:4px solid var(--line);padding:.5rem .75rem;margin:.75rem 0}
-.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.5rem 0;max-width:100%}
-.race-table{border-collapse:collapse;min-width:100%;font-size:.95rem}
-.race-table th,.race-table td{text-align:left;vertical-align:top;padding:.5rem .75rem;border-bottom:1px solid var(--line);white-space:normal}
+.table-scroll{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.5rem 0;max-width:100%}
+.race-table{border-collapse:collapse;min-width:34rem;width:100%;font-size:.95rem}
+.race-table th,.race-table td{text-align:left;vertical-align:top;padding:.5rem .75rem;border-bottom:1px solid var(--line);overflow-wrap:normal}
 .race-table thead th{font-size:.8rem;text-transform:uppercase;letter-spacing:.02em;color:var(--muted);border-bottom:2px solid var(--line)}
 .race-table tbody th{font-weight:600;min-width:9rem}
 .race-table .empty{color:var(--muted)}

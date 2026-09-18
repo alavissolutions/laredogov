@@ -200,9 +200,11 @@ function raceTable(ctx: RenderContext, race: Race): string {
       const source = named ? row.candidate : row.unnamed;
       const filings = filingsOf(ctx, source.filings);
       const name = named ? row.candidate.ballotName || row.candidate.name : t(lang, 'race.nameNotPosted');
+      // Two unnamed rows would otherwise give their links the same accessible name.
+      const linkName = named ? name : `${name}, ${t(lang, 'race.rowPosition', { n: String(source.order + 1) })}`;
       return `<tr${named ? '' : ' class="unnamed"'}><th scope="row">${esc(name)}</th>${treasurerCell(ctx, source.treasurer, filings)}${applicationCell(
         ctx,
-        name,
+        linkName,
         filings,
       )}</tr>`;
     })
@@ -247,7 +249,7 @@ ${isQuestion ? questionSection(ctx, race) : raceTable(ctx, race)}
     title: race.title,
     path: PATHS.race(election.slug, race.slug),
     body,
-    description: t(lang, 'race.description', { race: race.title }),
+    description: isQuestion ? t(lang, 'race.question.description') : t(lang, 'race.description', { race: race.title }),
   });
 }
 

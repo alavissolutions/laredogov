@@ -98,7 +98,12 @@ describe('Elections 02: Race pages with the comparison table', () => {
     }
 
     const style = await site.file('/style.css');
-    expect(style).toContain('.table-scroll{overflow-x:auto');
+    // Positioned so the visually hidden caption inside it is clipped with the table rather than
+    // pushing the whole page sideways on a phone.
+    expect(style).toContain('.table-scroll{position:relative;overflow-x:auto');
+    // The table keeps a floor wider than a phone, so it overflows into the scrolling container
+    // instead of squeezing the city's names into one letter per line.
+    expect(style).toContain('.race-table{border-collapse:collapse;min-width:34rem');
 
     // The same people, links, and numbers in both languages.
     const hrefs = ($: CheerioAPI) => $('table.race-table a').map((_, a) => $(a).attr('href')).get();
@@ -149,8 +154,12 @@ describe('Elections 02: Race pages with the comparison table', () => {
       const link = $('main .link-list a');
       expect(link.attr('href')).toBe('https://www.cityoflaredo.com/home/showdocument?id=24357&t=639237901400846155');
       expect(link.text()).toContain('Election Ordinance');
-      // A question has no candidates, so there is no comparison table to show.
+      // A question has no candidates, so there is no comparison table to show, and the page does
+      // not describe itself as being about candidates.
       expect($('table.race-table').length).toBe(0);
+      const description = $('meta[name="description"]').attr('content')!;
+      expect(description).not.toMatch(lang === 'es' ? /candidato/ : /candidate/);
+      expect(description).toMatch(lang === 'es' ? /^Una pregunta/ : /^A question/);
     }
   });
 
@@ -252,5 +261,48 @@ describe('Elections 02: Race pages with the comparison table', () => {
     expect(data.filings.some((f) => f.documentId === '23928')).toBe(false);
     expect(data.filings).toHaveLength(31);
     expect(otherLog.some((l) => /1 link\(s\) in the candidate tables are not titled as the column/.test(l))).toBe(true);
+  });
+
+  it('keeps one Filing when the city links one document from two rows, and tells the owner', async () => {
+    // The city's own data entry: District 1's second application link pointed at the mayoral
+    // candidate's document. Identity is the document id, so that is one Filing, not two.
+    const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
+    const twice = candidates.replace('/home/showpublisheddocument/24067/639214606441070000', '/home/showpublisheddocument/23928/639203245618530000');
+    expect(twice).not.toBe(candidates);
+
+    const site = await Site.create();
+    const log: string[] = [];
+    const { data } = await site.build({ fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: twice }, now: FIXTURE_NOW, sources: [cityElections], log });
+
+    expect(new Set(data.filings.map((f) => f.id)).size).toBe(data.filings.length);
+    expect(data.filings).toHaveLength(31);
+    expect(data.filings.filter((f) => f.documentId === '23928')).toHaveLength(1);
+    expect(log.some((l) => /document 23928 is linked twice in District 1/.test(l))).toBe(true);
+  });
+
+  it('names a Candidate the city named in only one of its two name cells, and says which is blank', async () => {
+    const candidates = await readFile(`${fixtureRoot}/city-elections/general-2026-candidates.html`, 'utf8');
+    const ballotOnly = candidates.replace('<td>Jorge Alberto Garza<br>', '<td>&nbsp;<br>');
+    expect(ballotOnly).not.toBe(candidates);
+
+    const site = await Site.create();
+    const log: string[] = [];
+    const { data } = await site.build({
+      fixtures: { ...electionFixtures, [GENERAL_CANDIDATES_URL]: ballotOnly },
+      now: FIXTURE_NOW,
+      sources: [cityElections],
+      log,
+    });
+
+    // The city named this person, so the site names them too, under the name the city printed.
+    expect(data.candidates).toHaveLength(16);
+    const garza = data.candidates.find((c) => c.slug === 'jorge-a-garza')!;
+    expect(garza.name).toBe('Jorge A. Garza');
+    expect(garza.ballotName).toBe('Jorge A. Garza');
+    expect(data.races.find((r) => r.slug === 'mayor')!.unnamedRows).toHaveLength(0);
+    expect(log.some((l) => /"Jorge A. Garza" in Mayor has no legal name/.test(l))).toBe(true);
+
+    const $ = await site.page('/en/elections/2026-general/mayor/');
+    expect($('table.race-table tbody tr').eq(2).find('th').text()).toBe('Jorge A. Garza');
   });
 });
