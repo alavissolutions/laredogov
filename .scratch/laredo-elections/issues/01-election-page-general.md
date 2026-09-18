@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Fixture recorded for the general election page through the headless fetcher
 - [x] Election page renders at the spec's URL in both languages with calendar, notices, voting sites, and outside links

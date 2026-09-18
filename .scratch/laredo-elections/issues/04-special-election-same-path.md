@@ -4,7 +4,7 @@
 
 **Blocked by:** 02
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Fixtures recorded for the special election page and its candidates sub-page
 - [x] Two Elections in the data file; the special has 1 Race, 3 named Candidates, and 1 unnamed row

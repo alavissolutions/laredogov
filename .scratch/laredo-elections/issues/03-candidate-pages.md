@@ -4,7 +4,7 @@
 
 **Blocked by:** 02
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] One page per Candidate at the spec's URL; slugs derive from name on ballot, ASCII, hyphenated, numeric suffix on collision
 - [x] Filing labels and the neutrality sentence live in the strings file in both languages; names and city titles are never translated

@@ -4,7 +4,7 @@
 
 **Blocked by:** 01
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Fixture recorded for the general candidates sub-page
 - [x] First build yields 6 office Races with 16 named Candidates and 1 question Race

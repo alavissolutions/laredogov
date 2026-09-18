@@ -4,7 +4,7 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Fixture recorded for the campaign finance page
 - [x] "Gilbert Gonzalez" with no Alias stays unmatched; with an Alias it attaches to Gilberto Gonzalez, and the same person can attach in two Elections

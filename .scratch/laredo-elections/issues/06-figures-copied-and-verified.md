@@ -4,7 +4,7 @@
 
 **Blocked by:** 05
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Two PDF fixtures: one readable July 2026 officeholder report, one unreadable stub
   - Four, after review, and none a capture, on the coordinator's assumption below: no readable report exists in the city's filings, and a real scan is a megabyte this project does not keep (ADR-0001). All are written by `npm run make:pdf-fixtures`, filed by people who do not exist, and documented as written in `test/fixtures/README.md`. A plain readable cover sheet (document 23838); the same form written the awkward way a real writer does, with kerned `TJ` arrays, hexadecimal strings and an indirect `/Length` (23812); an amendment behind an original with a blank totals box, which must come back unreadable (22178); and the image-only scan every real report is, which every other document URL answers with.
