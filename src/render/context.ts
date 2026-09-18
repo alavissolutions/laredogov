@@ -55,6 +55,7 @@ export const PATHS = {
   feed: '/feed.xml',
   meetings: '/meetings/',
   election: (slug: string) => `/elections/${slug}/`,
+  race: (electionSlug: string, raceSlug: string) => `/elections/${electionSlug}/${raceSlug}/`,
   body: (bodyId: string) => `/meetings/body/${bodyId}/`,
   meeting: (id: string) => `/meetings/${id}/`,
   directory: '/directory/',

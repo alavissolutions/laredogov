@@ -25,17 +25,39 @@ export async function saveData(file: string, data: DataFile): Promise<void> {
     meetings: [...data.meetings].sort(byId),
     bodies: [...data.bodies].sort(byId),
     elections: [...data.elections].sort(byId),
+    races: [...data.races].sort(byId),
+    candidates: [...data.candidates].sort(byId),
+    filings: [...data.filings].sort(byId),
     sources: Object.fromEntries(Object.entries(data.sources).sort(([a], [b]) => a.localeCompare(b))),
   };
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, `${JSON.stringify(sorted, null, 2)}\n`);
 }
 
-/** The build refuses an Item with a missing or unknown Topic (ADR-0004), or an Election missing its key fields. */
+/**
+ * The build refuses an Item with a missing or unknown Topic (ADR-0004), or an Election, Race,
+ * Candidate, or Filing missing what its page is built from.
+ */
 export function validateData(data: DataFile): void {
   for (const election of data.elections) {
     if (!election.slug || !election.title || !election.date || !election.url) {
       throw new Error(`Election ${election.id} is missing slug, title, date, or url`);
+    }
+  }
+  for (const race of data.races) {
+    if (!race.slug || !race.title || !race.electionId) {
+      throw new Error(`Race ${race.id} is missing slug, title, or electionId`);
+    }
+  }
+  for (const candidate of data.candidates) {
+    // A row the Publisher has not named is not a Candidate (CONTEXT.md); it stays on its Race.
+    if (!candidate.slug || !candidate.name || !candidate.raceId) {
+      throw new Error(`Candidate ${candidate.id} is missing slug, name, or raceId`);
+    }
+  }
+  for (const filing of data.filings) {
+    if (!filing.documentId || !filing.url || !filing.label) {
+      throw new Error(`Filing ${filing.id} is missing documentId, url, or label`);
     }
   }
   for (const item of data.items) {

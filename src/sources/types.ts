@@ -1,4 +1,4 @@
-import type { Body, DataFile, DirectoryEntry, Election, Item, Meeting, PublisherId, Topic } from '../domain.js';
+import type { Body, Candidate, DataFile, DirectoryEntry, Election, Filing, Item, Meeting, PublisherId, Race, Topic } from '../domain.js';
 import type { Fetcher } from '../fetcher/types.js';
 
 /** What an adapter returns for a new or re-seen Item; the build fills in first-seen and last-seen-live. */
@@ -9,6 +9,11 @@ export type NewMeeting = Omit<Meeting, 'firstSeen' | 'lastSeenLive' | 'source' |
 
 /** What an adapter returns for an Election; the build fills in first-seen and last-seen-live. */
 export type NewElection = Omit<Election, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+
+/** What an adapter returns for a Race, a Candidate, and a Filing; the build stamps them the same way. */
+export type NewRace = Omit<Race, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+export type NewCandidate = Omit<Candidate, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
+export type NewFiling = Omit<Filing, 'firstSeen' | 'lastSeenLive' | 'source' | 'publisher'>;
 
 export interface SourceRunContext {
   fetcher: Fetcher;
@@ -23,6 +28,9 @@ export interface SourceResult {
   meetings?: NewMeeting[];
   bodies?: Omit<Body, 'source' | 'publisher'>[];
   elections?: NewElection[];
+  races?: NewRace[];
+  candidates?: NewCandidate[];
+  filings?: NewFiling[];
 }
 
 /**

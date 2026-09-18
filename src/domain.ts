@@ -113,8 +113,8 @@ export interface ElectionForum {
 }
 
 /**
- * One election day run by a Publisher (CONTEXT.md). Its Races arrive with issue 02; this record
- * carries what the Publisher puts on the Election's own page.
+ * One election day run by a Publisher (CONTEXT.md). Its Races are separate records keyed by
+ * `electionId`; this record carries what the Publisher puts on the Election's own page.
  */
 export interface Election {
   /** `${source}:${slug}`; stable across builds. */
@@ -132,6 +132,101 @@ export interface Election {
   calendar: ElectionCalendarEntry[];
   links: ElectionLink[];
   forums: ElectionForum[];
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** What a Race is: an office with Candidates, or a question the Publisher put on the ballot. */
+export type RaceKind = 'office' | 'question';
+
+/**
+ * A row the Publisher printed under a Race with no candidate name: a treasurer appointment and
+ * nothing else. It is not a Candidate (CONTEXT.md) and nobody is named for it; it renders in ballot
+ * order as "candidate name not yet posted" so a reader sees the row the Publisher published.
+ */
+export interface UnnamedRow {
+  /** The Publisher's ballot order within the Race, counted over every row it printed. */
+  order: number;
+  /** The treasurer the Publisher named, if it named one. */
+  treasurer?: string;
+  /** Filing ids the Publisher linked in that row. */
+  filings: string[];
+}
+
+/**
+ * One office or question on an Election's ballot (CONTEXT.md). Candidates and Filings are their own
+ * records keyed by `raceId`; a question Race carries the Publisher's link to what called it.
+ */
+export interface Race {
+  /** `${electionId}:${slug}`; stable across builds. */
+  id: string;
+  electionId: string;
+  /** Last path segment of the Race's page, e.g. `mayor`. Fixed by the Source, never derived from a filename. */
+  slug: string;
+  /** The Publisher's own heading for the Race; never translated. */
+  title: string;
+  kind: RaceKind;
+  /** The Publisher's own order of Races on its page. */
+  order: number;
+  publisher: PublisherId;
+  source: string;
+  /** Present on a question Race: the Publisher's own link to the document that called the question. */
+  question?: { label: string; url: string };
+  unnamedRows: UnnamedRow[];
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/**
+ * A person the Publisher lists by name under a Race (CONTEXT.md). Both names are printed as the
+ * Publisher printed them; the site never derives a name from a filename or adds a label.
+ */
+export interface Candidate {
+  /** `${raceId}:${slug of the legal name}`: identity is the Election, the Race, and the legal name. */
+  id: string;
+  raceId: string;
+  electionId: string;
+  /** Last path segment of the Candidate's page, from the name on ballot. */
+  slug: string;
+  /** Legal name, as printed in the Publisher's table. */
+  name: string;
+  /** Name on ballot, as printed. */
+  ballotName: string;
+  /** The campaign treasurer the Publisher named. */
+  treasurer?: string;
+  /** The Publisher's ballot order within the Race. */
+  order: number;
+  /** Filing ids, in the order the Publisher listed them. */
+  filings: string[];
+  publisher: PublisherId;
+  source: string;
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** What a Filing is, by where the Publisher placed it and how it labelled the link (CONTEXT.md). */
+export type FilingKind = 'treasurer-appointment' | 'ballot-application' | 'finance-report';
+
+/**
+ * Something the Publisher posted under a Candidate's name (CONTEXT.md). Identity is the Publisher's
+ * own document id, so one document is one Filing wherever the Publisher links it.
+ */
+export interface Filing {
+  /** `${source}:filing:${documentId}`. */
+  id: string;
+  /** The Publisher's numeric document id, with the cache-busting ticks dropped. */
+  documentId: string;
+  kind: FilingKind;
+  /** The Publisher's own label for the link (its anchor title); never translated. */
+  label: string;
+  /** The office the Publisher filed it under, in the Publisher's words. */
+  office?: string;
+  candidateId?: string;
+  raceId?: string;
+  electionId?: string;
+  url: string;
+  publisher: PublisherId;
+  source: string;
   firstSeen: string;
   lastSeenLive: string;
 }
@@ -181,11 +276,14 @@ export interface DataFile {
   meetings: Meeting[];
   bodies: Body[];
   elections: Election[];
+  races: Race[];
+  candidates: Candidate[];
+  filings: Filing[];
   sources: Record<string, SourceHealth>;
 }
 
 export function emptyData(): DataFile {
-  return { version: 1, items: [], meetings: [], bodies: [], elections: [], sources: {} };
+  return { version: 1, items: [], meetings: [], bodies: [], elections: [], races: [], candidates: [], filings: [], sources: {} };
 }
 
 /** Directory entries describe every Source and Lookup, ingested or not. */

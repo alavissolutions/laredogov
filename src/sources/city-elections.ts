@@ -4,8 +4,9 @@
  * The City of Laredo puts one page per Election: a dated calendar, a table of election notices, and
  * rows of image buttons for voting sites, its own sub-pages, the ordinances, and the outside sites a
  * voter needs. This adapter reads that page and the Election's candidates sub-page, and yields one
- * Election plus an Item for every notice and voting-site list the city dates. Race and Candidate
- * tables on the candidates sub-page arrive with issue 02.
+ * Election plus an Item for every notice and voting-site list the city dates. The candidates
+ * sub-page carries one table per Race, which this adapter reads into Races, Candidates, and the
+ * treasurer-appointment and ballot-application Filings the city links in them (issue 02).
  *
  * Nothing here is guessed from a title or a filename: which button is a voting-site list, and which
  * host belongs to which Publisher, are declared below (ADR-0004) from the pages as they stood on
@@ -13,10 +14,10 @@
  */
 import { load, type CheerioAPI } from 'cheerio';
 import { dayOf, fromCentral, parseMonthNameDate, to24h } from '../dates.js';
-import type { ElectionCalendarEntry, ElectionForum, ElectionLink, PublisherId } from '../domain.js';
+import type { ElectionCalendarEntry, ElectionForum, ElectionLink, FilingKind, PublisherId, UnnamedRow } from '../domain.js';
 import { ensureOk } from '../fetcher/types.js';
 import { CITY_SITE, cityDocumentId, cityDocumentPostedAt, cityHref, collapse } from './city.js';
-import type { NewElection, NewItem, SourceAdapter } from './types.js';
+import type { NewCandidate, NewElection, NewFiling, NewItem, NewRace, SourceAdapter } from './types.js';
 
 /** A cheerio selection, as the other city adapters spell it. */
 type Selection = ReturnType<CheerioAPI>;
@@ -34,6 +35,21 @@ export interface ElectionPage {
   date: string;
   url: string;
   candidatesUrl: string;
+  /** The questions on this Election's ballot, which the city posts as ordinance links, not tables. */
+  questions: readonly ElectionQuestion[];
+}
+
+/**
+ * A question Race the city put on the ballot. The city publishes no table for a question: it links
+ * the ordinance or resolution that called it from a button on the Election page, so the question is
+ * declared here by the city's own sub-label on that button and takes its title from it. Nothing is
+ * guessed from a filename or a heading (ADR-0004).
+ */
+export interface ElectionQuestion {
+  /** Last path segment of the Race's page on this site. */
+  slug: string;
+  /** The city's own sub-label on the Election page button that links the question's document. */
+  linkNote: string;
 }
 
 /**
@@ -42,7 +58,15 @@ export interface ElectionPage {
  * special election joins this table with issue 04.
  */
 export const ELECTION_PAGES: readonly ElectionPage[] = [
-  { slug: '2026-general', date: '2026-11-03', url: GENERAL_ELECTION_URL, candidatesUrl: GENERAL_CANDIDATES_URL },
+  {
+    slug: '2026-general',
+    date: '2026-11-03',
+    url: GENERAL_ELECTION_URL,
+    candidatesUrl: GENERAL_CANDIDATES_URL,
+    // The city's non-binding question on pediatric hospital services, resolution 2026R221 (doc
+    // 24357), linked from the "Election Ordinance" button labelled below (verified 2026-09-17).
+    questions: [{ slug: 'pediatric-hospital-services', linkNote: 'Non-Binding Election-Pediatric Hospital Services' }],
+  },
 ];
 
 /** The city's own heading over its table of notices, and over the forum buttons on the sub-page. */
@@ -207,6 +231,186 @@ function parseAccordionLink(anchor: Selection): ElectionLink | undefined {
 }
 
 /**
+ * The Races on the candidates sub-page, by the city's own accordion heading, and the slug each one
+ * gets on this site. Slugs are fixed here rather than derived so a Race keeps its URL when the city
+ * re-words a heading (spec: Race slugs are fixed per adapter). A heading the city adds that is not
+ * in this table is still recorded, under a slug derived from the heading and a line in the run log.
+ */
+export const RACE_SLUGS: Record<string, string> = {
+  Mayor: 'mayor',
+  'District 1': 'district-1',
+  'District 2': 'district-2',
+  'District 3': 'district-3',
+  'District 6': 'district-6',
+  'District 8': 'district-8',
+  'Municipal Court Judge - Position 1': 'municipal-court-judge-position-1',
+};
+
+/** What each column of a Race table is, by the city's own header cell (verified 2026-09-17). */
+const COLUMN_ROLES: Record<string, ColumnRole> = {
+  Name: 'name',
+  'Name on Ballot': 'ballotName',
+  'Campaign Treasurer': 'treasurer',
+  Application: 'application',
+};
+type ColumnRole = 'name' | 'ballotName' | 'treasurer' | 'application';
+
+/** The city repeats the header row to open its write-in block, which it leaves empty. */
+const WRITE_IN_HEADER = 'Write In Candidate';
+
+/**
+ * What kind of Filing a link in a Race table is: the column the city put it in, confirmed by the
+ * title the city gives the anchor. Filenames are never read (spec: Names), and a link whose title
+ * does not match its column is left out and counted in the run log rather than filed as a guess.
+ * The title patterns allow for the city's own spellings ("for Place", "for a Place", "Special
+ * Election Ballot", and the "Balllot" typo in the judge race).
+ */
+const FILING_COLUMNS: readonly { column: ColumnRole; kind: FilingKind; title: RegExp }[] = [
+  { column: 'treasurer', kind: 'treasurer-appointment', title: /campaign treasurer/i },
+  { column: 'application', kind: 'ballot-application', title: /place on the (?:\w+ )*ball+ot/i },
+];
+
+/** A document the city linked in a Race table, with the kind its column and anchor title give it. */
+export interface ParsedFilingLink {
+  kind: FilingKind;
+  documentId: string;
+  url: string;
+  /** The city's own title on the anchor. */
+  label: string;
+}
+
+/** One row of a Race table. `name` is empty when the city has not named the candidate. */
+export interface ParsedRaceRow {
+  name: string;
+  ballotName: string;
+  treasurer?: string;
+  filings: ParsedFilingLink[];
+}
+
+export interface ParsedRace {
+  /** The city's own accordion heading. */
+  title: string;
+  slug: string;
+  /** Whether the slug came from the declared table above. */
+  declared: boolean;
+  rows: ParsedRaceRow[];
+}
+
+export interface ParsedRaces {
+  races: ParsedRace[];
+  /** Accordion headings that hold a table this adapter could not read, for the run log. */
+  unreadable: string[];
+  /** Links whose anchor title did not match the column the city put them in, for the run log. */
+  mismatchedLinks: number;
+  /** Write-in rows the city filled in, which this site does not yet show, for the run log. */
+  writeInRows: number;
+}
+
+/**
+ * The Race tables on the candidates sub-page: one accordion per Race, one table each, in the city's
+ * ballot order. Everything printed is taken as printed; nothing is inferred from a filename.
+ */
+export function parseRaces(html: string): ParsedRaces {
+  const $ = load(html);
+  const out: ParsedRaces = { races: [], unreadable: [], mismatchedLinks: 0, writeInRows: 0 };
+  for (const item of $('#ColumnUserControl1 .accordion_widget .accordion-item').toArray()) {
+    const $item = $(item);
+    const title = collapse($item.find('.accordion-heading').first().text());
+    const table = $item.find('table').first();
+    // Accordions with no table hold something else the city keeps here, such as sample ballots.
+    if (!title || table.length === 0) continue;
+    const header = raceColumns($, table);
+    if (!header) {
+      out.unreadable.push(title);
+      continue;
+    }
+    const race: ParsedRace = {
+      title,
+      slug: RACE_SLUGS[title] ?? nameSlug(title),
+      declared: RACE_SLUGS[title] !== undefined,
+      rows: [],
+    };
+    let writeIn = false;
+    // Rows above the header row are the city's own title row for the table, not candidates.
+    for (const row of table.find('tr').toArray().slice(header.index + 1)) {
+      const cells = $(row).find('td,th');
+      // The city repeats a header row to open its write-in block; rows after it have different
+      // columns ("Contact Info." instead of a name on ballot), so they are counted, not read.
+      if (collapse(cells.first().text()) === WRITE_IN_HEADER) {
+        writeIn = true;
+        continue;
+      }
+      const parsed = parseRaceRow($, cells, header.columns, out);
+      if (!parsed) continue;
+      if (writeIn) out.writeInRows += 1;
+      else race.rows.push(parsed);
+    }
+    out.races.push(race);
+  }
+  return out;
+}
+
+/** Which column holds what, from the city's own header row. Without that row the table is not read. */
+function raceColumns($: CheerioAPI, table: Selection): { columns: Map<ColumnRole, number>; index: number } | undefined {
+  const rows = table.find('tr').toArray();
+  for (const [index, row] of rows.entries()) {
+    const cells = $(row).find('td,th').toArray();
+    const columns = new Map<ColumnRole, number>();
+    cells.forEach((cell, column) => {
+      const role = COLUMN_ROLES[collapse($(cell).text())];
+      if (role !== undefined && !columns.has(role)) columns.set(role, column);
+    });
+    if (columns.get('name') === 0 && columns.has('ballotName') && columns.has('treasurer')) return { columns, index };
+  }
+  return undefined;
+}
+
+function parseRaceRow($: CheerioAPI, cells: Selection, columns: Map<ColumnRole, number>, out: ParsedRaces): ParsedRaceRow | undefined {
+  const cell = (role: ColumnRole): Selection | undefined => {
+    const index = columns.get(role);
+    return index === undefined ? undefined : cells.eq(index);
+  };
+  const text = (role: ColumnRole) => collapse(cell(role)?.text() ?? '');
+  const filings: ParsedFilingLink[] = [];
+  for (const { column, kind, title } of FILING_COLUMNS) {
+    for (const anchor of cell(column)?.find('a').toArray() ?? []) {
+      const filing = parseFilingLink($(anchor), kind, title);
+      if (filing) filings.push(filing);
+      else out.mismatchedLinks += 1;
+    }
+  }
+  const name = text('name');
+  const treasurer = text('treasurer');
+  // A row with nothing in it is the spacing the city puts between its blocks.
+  if (!name && !treasurer && filings.length === 0) return undefined;
+  return { name, ballotName: text('ballotName'), ...(treasurer ? { treasurer } : {}), filings };
+}
+
+/** A link in a Race table, kept only when the city's own anchor title matches its column. */
+function parseFilingLink(anchor: Selection, kind: FilingKind, title: RegExp): ParsedFilingLink | undefined {
+  const label = collapse(anchor.attr('title') ?? '');
+  const url = cityHref(anchor.attr('href') ?? '');
+  if (!label || !url || !title.test(label)) return undefined;
+  const documentId = cityDocumentId(url);
+  if (!documentId) return undefined;
+  return { kind, documentId, url, label };
+}
+
+/**
+ * A slug from a name the city printed: lowercase, ASCII (Treviño becomes trevino), hyphenated.
+ * Names themselves are always printed as the city prints them; this is only for the URL.
+ */
+export function nameSlug(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
+}
+
+/**
  * The candidate forums the city lists under its own FORUMS heading on the candidates sub-page.
  * The buttons carry the date and time in their text and, as of 2026-09-17, no href at all: the city
  * adds one when it posts the video, so until then a forum shows its date and nothing to open.
@@ -257,10 +461,14 @@ export const cityElections: SourceAdapter = {
   async run({ fetcher, log }) {
     const elections: NewElection[] = [];
     const items: NewItem[] = [];
+    const races: NewRace[] = [];
+    const candidates: NewCandidate[] = [];
+    const filings: NewFiling[] = [];
     const seen = new Set<string>();
     let notices = 0;
     let votingSites = 0;
     let forumCount = 0;
+    let unnamed = 0;
 
     let skippedLinks = 0;
     for (const page of ELECTION_PAGES) {
@@ -271,14 +479,16 @@ export const cityElections: SourceAdapter = {
       if (!parsed.title) throw new Error(`no election heading on ${page.url}; the city changed the page`);
       skippedLinks += parsed.skippedLinks;
 
-      // Forums live on the candidates sub-page and are ancillary: if that page is unreachable the
-      // Election still gets its calendar, notices, and links.
-      let forums: ElectionForum[] = [];
+      // The candidates sub-page carries the Race tables and the forum schedule. It is a second page
+      // and can fail on its own: if it is unreachable the Election still gets its calendar, notices,
+      // and links, and the Races already recorded stay as they are.
+      let candidatesHtml: string | undefined;
       try {
-        forums = parseForums(ensureOk(await fetcher.fetch(page.candidatesUrl, 'browser')).body);
+        candidatesHtml = ensureOk(await fetcher.fetch(page.candidatesUrl, 'browser')).body;
       } catch (err) {
-        log(`city-elections: ${page.candidatesUrl} unreadable, no forum schedule (${err instanceof Error ? err.message : String(err)})`);
+        log(`city-elections: ${page.candidatesUrl} unreadable, no Races or forum schedule (${err instanceof Error ? err.message : String(err)})`);
       }
+      const forums: ElectionForum[] = candidatesHtml ? parseForums(candidatesHtml) : [];
       const id = `city-elections:${page.slug}`;
       elections.push({
         id,
@@ -291,6 +501,79 @@ export const cityElections: SourceAdapter = {
         forums,
       });
       forumCount += forums.length;
+
+      // The Races: the city's own tables, in its own order, then the questions it put on the ballot.
+      let order = 0;
+      if (candidatesHtml) {
+        const parsedRaces = parseRaces(candidatesHtml);
+        for (const parsed of parsedRaces.races) {
+          if (!parsed.declared) log(`city-elections: "${parsed.title}" is not in the declared Race table; its page is /${parsed.slug}/`);
+          const raceId = `${id}:${parsed.slug}`;
+          const unnamedRows: UnnamedRow[] = [];
+          const takenIds = new Set<string>();
+          const takenSlugs = new Set<string>();
+          parsed.rows.forEach((row, rowOrder) => {
+            const filed = row.filings.map((f) => ({ ...f, id: filingId(f.documentId) }));
+            // A row the city has not named is not a Candidate (CONTEXT.md): it is shown on the Race
+            // page as not yet posted, with the treasurer appointment the city did post.
+            const candidateId = row.name ? unique(`${raceId}:${nameSlug(row.name)}`, takenIds) : undefined;
+            for (const f of filed) {
+              filings.push({
+                id: f.id,
+                documentId: f.documentId,
+                kind: f.kind,
+                label: f.label,
+                office: parsed.title,
+                ...(candidateId ? { candidateId } : {}),
+                raceId,
+                electionId: id,
+                url: f.url,
+              });
+            }
+            if (!candidateId) {
+              unnamed += 1;
+              unnamedRows.push({ order: rowOrder, ...(row.treasurer ? { treasurer: row.treasurer } : {}), filings: filed.map((f) => f.id) });
+              return;
+            }
+            candidates.push({
+              id: candidateId,
+              raceId,
+              electionId: id,
+              slug: unique(nameSlug(row.ballotName || row.name), takenSlugs),
+              name: row.name,
+              ballotName: row.ballotName,
+              ...(row.treasurer ? { treasurer: row.treasurer } : {}),
+              order: rowOrder,
+              filings: filed.map((f) => f.id),
+            });
+          });
+          races.push({ id: raceId, electionId: id, slug: parsed.slug, title: parsed.title, kind: 'office', order: order++, unnamedRows });
+        }
+        if (parsedRaces.unreadable.length) log(`city-elections: no readable candidate table under ${parsedRaces.unreadable.join(', ')}`);
+        if (parsedRaces.mismatchedLinks) log(`city-elections: ${parsedRaces.mismatchedLinks} link(s) in the candidate tables are not titled as the column the city put them in; left out`);
+        if (parsedRaces.writeInRows) log(`city-elections: ${parsedRaces.writeInRows} write-in row(s) the city filled in are not shown yet`);
+      }
+
+      for (const question of page.questions) {
+        // The city links a question's own ordinance from a button on the Election page; without that
+        // link there is nothing to show, so the question waits rather than being invented.
+        const link = parsed.links.find((l) => l.note === question.linkNote);
+        if (!link) {
+          log(`city-elections: no link sub-labelled "${question.linkNote}" on ${page.url}; the question Race is not shown`);
+          continue;
+        }
+        races.push({
+          id: `${id}:${question.slug}`,
+          electionId: id,
+          slug: question.slug,
+          // The question's title is the city's own sub-label on that button, as printed.
+          title: link.note ?? link.label,
+          kind: 'question',
+          order: order++,
+          question: { label: link.label, url: link.url },
+          unnamedRows: [],
+        });
+      }
 
       for (const notice of parsed.notices) {
         const documentId = cityDocumentId(notice.url);
@@ -337,6 +620,25 @@ export const cityElections: SourceAdapter = {
         `${notices} notices, ${votingSites} voting-site lists, ${forumCount} forum entries, ${links} links ` +
         `(${skippedLinks} skipped: ${SKIPPED_ACCORDIONS.join(', ')})`,
     );
-    return { items, elections };
+    const questions = races.filter((r) => r.kind === 'question').length;
+    const offices = races.length - questions;
+    log(
+      `city-elections: ${races.length} Races (${offices} office${offices === 1 ? '' : 's'}, ${questions} question${questions === 1 ? '' : 's'}), ` +
+        `${candidates.length} Candidates, ${unnamed} row${unnamed === 1 ? '' : 's'} the city has not named, ${filings.length} Filings`,
+    );
+    return { items, elections, races, candidates, filings };
   },
 };
+
+/** A Filing's id: the city's own document id, so one document is one Filing wherever it is linked. */
+function filingId(documentId: string): string {
+  return `city-elections:filing:${documentId}`;
+}
+
+/** Keeps ids and slugs unique when the city prints two rows that would spell the same, e.g. `-2`. */
+function unique(value: string, taken: Set<string>): string {
+  let candidate = value;
+  for (let n = 2; taken.has(candidate); n += 1) candidate = `${value}-${n}`;
+  taken.add(candidate);
+  return candidate;
+}
