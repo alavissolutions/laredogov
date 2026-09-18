@@ -17,8 +17,10 @@
  *       - 23842
  *
  * The key under `aliases` is the Candidate id from the data file, which the run log prints beside
- * every report it could not attach. A name is declared exactly as the Publisher spells it; nothing
- * here is normalised, trimmed of titles, or matched loosely (ADR-0005).
+ * every report it could not attach; an id that is nobody is named in the log too. A name is
+ * declared exactly as the Publisher spells it and runs to the end of its line: nothing here is
+ * normalised, trimmed of titles, or matched loosely (ADR-0005), and a `#` after a name is part of
+ * the name, so a note about a declaration goes on its own line above it.
  */
 import { readFile } from 'node:fs/promises';
 

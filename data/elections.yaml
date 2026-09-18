@@ -7,7 +7,8 @@
 # a candidate only when the name matches one of these exactly, character for character after
 # trimming. Nothing is guessed. Every report the build could not attach is named in the run log
 # with the city's spelling, the office, and the filing deadline; add that spelling under the
-# candidate it belongs to, which is the candidate's id in data/laredo.json:
+# candidate it belongs to, which is the candidate's id in data/laredo.json. A name runs to the end
+# of its line, so a note goes on its own line above it, never after the name:
 #
 #   aliases:
 #     city-elections:2026-general:mayor:victor-daniel-trevino:

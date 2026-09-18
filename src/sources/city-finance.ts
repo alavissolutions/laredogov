@@ -10,8 +10,10 @@
  * the owner declared (ADR-0005), and everything else is recorded, shown, and logged as unmatched.
  *
  * The page's older sections are hand-built tables and nested lists rather than the plain list the
- * recent deadlines use, so the office is read from what the city printed above or beside the link
- * and never from the document's filename (spec: Names). Shapes verified 2026-09-17.
+ * recent deadlines use, so the office is read from what the city printed above or beside the link,
+ * and in the January 15, 2023 and January 15, 2015 lists from inside the link itself, where the
+ * city wrote its usual "Office - Name" inside the anchor rather than before it. Never from the
+ * document's filename (spec: Names). Shapes verified 2026-09-17.
  */
 import { load, type CheerioAPI } from 'cheerio';
 import { parseMonthNameDate } from '../dates.js';
@@ -90,9 +92,15 @@ export function parseFinancePage(html: string): ParsedFinancePage {
     const period: FinancePeriod = { label, date, reports: [], broken: [] };
     for (const anchor of $item.find('.accordion-content a').toArray()) {
       const $anchor = $(anchor);
-      const filerName = collapse($anchor.text());
-      if (!filerName) continue;
-      const office = officeOf($, $anchor);
+      const linked = collapse($anchor.text());
+      if (!linked) continue;
+      const printed = officeOf($, $anchor);
+      // Where the city printed no office beside the link it sometimes wrote its usual
+      // "Office - Name" inside the link instead (January 15, 2023 and January 15, 2015). The name
+      // has to come out of it, or the report is filed under a name nobody answers to (ADR-0005).
+      const inside = printed === undefined ? /^(.+?) - (.+)$/.exec(linked) : null;
+      const office = printed ?? inside?.[1];
+      const filerName = inside?.[2] ?? linked;
       const url = cityHref($anchor.attr('href') ?? '');
       const documentId = url ? cityDocumentId(url) : undefined;
       // The city's CMS has left at least one of these links as a bare `http://` (the spec's note
@@ -121,8 +129,10 @@ export function parseFinancePage(html: string): ParsedFinancePage {
  * heading row above it in the hand-built tables the older deadlines use. The city writes its own
  * headings in bold or underlined there, which is how a heading row is told from a filer row.
  *
- * Whatever comes back is the city's wording, printed as printed: the city puts a first filer on
- * some office rows and calls a block "Write In Candidate", and neither is tidied up here.
+ * Whatever comes back is the city's wording, printed as printed: under July 15, 2020 the city put
+ * the first filer on the office row itself ("District VII - Benigno G. Cepeda"), and under October
+ * 2024 it heads a block "Write In Candidate". Neither is tidied up here, because this site never
+ * rewrites what the Publisher wrote; both are from before this site's election coverage opens.
  */
 function officeOf($: CheerioAPI, anchor: Selection): string | undefined {
   const li = anchor.closest('li');
@@ -143,15 +153,19 @@ function officeOf($: CheerioAPI, anchor: Selection): string | undefined {
   return undefined;
 }
 
-/** The text a list item holds itself, ignoring anything nested inside it, minus a trailing dash. */
+/**
+ * The text a list item holds itself, ignoring anything nested inside it, minus a trailing dash.
+ * A run with nothing readable in it is the city's own punctuation rather than an office: under
+ * October 11, 2022 it marks one filer with a bare "*".
+ */
 function ownText($: CheerioAPI, el: Selection): string {
   const text = collapse(
     el
       .contents()
       .filter((_, node) => node.type === 'text')
       .text(),
-  );
-  return text.replace(/\s*[-–—:]\s*$/, '').trim();
+  ).replace(/\s*[-–—:]\s*$/, '');
+  return /[\p{L}\p{N}]/u.test(text) ? text.trim() : '';
 }
 
 /** A Filing's id: the city's own document id, so one document is one Filing wherever it is linked. */
@@ -239,8 +253,10 @@ export const cityFinance: SourceAdapter = {
         if (inCoverage) {
           items.push({
             id: `city-finance:doc:${report.documentId}`,
-            // The city's own words for the link and its own spelling of the filer's name.
-            title: `${report.label}: ${report.filerName}`,
+            // The city's own words for these links and its own spelling of the filer's name. The
+            // label is the constant rather than this link's own title, which the CMS varies ("CFR"
+            // on document 13810): a feed's titles must not wobble with one anchor's attribute.
+            title: `${FINANCE_LABEL}: ${report.filerName}`,
             // The city's filing-deadline heading is the date it published the report under.
             date: period.date,
             url: report.url,
@@ -259,6 +275,12 @@ export const cityFinance: SourceAdapter = {
 
     if (parsed.undated.length) log(`city-finance: no date in the heading "${parsed.undated.join('", "')}"; nothing filed under it`);
     if (duplicates) log(`city-finance: ${duplicates} report(s) the city lists under more than one heading; kept as one Filing each`);
+    // An Alias under a Candidate id that is nobody attaches nothing, and a fifty-character id is
+    // the easiest thing in that file to mistype, so the owner is told rather than left guessing.
+    const known = new Set(previous.candidates.map((c) => c.id));
+    for (const [id, names] of handKept.aliases) {
+      if (names.length && !known.has(id)) log(`city-finance: "${id}" in ${handKeptFile} is no Candidate, so its Alias attaches nothing`);
+    }
     const aliased = [...handKept.aliases.values()].filter((names) => names.length).length;
     log(
       `city-finance: ${aliased} Candidate${aliased === 1 ? '' : 's'} with a declared Alias, ` +
@@ -267,7 +289,7 @@ export const cityFinance: SourceAdapter = {
     const attached = [...filings.values()].filter((f) => f.attachedTo?.length).length;
     log(
       `city-finance: ${filings.size} finance reports over ${parsed.periods.length} filing periods, ${attached} attached to a Candidate, ` +
-        `${unmatched.length} in this election's periods with no Candidate`,
+        `${unmatched.length} in the periods this site covers with no Candidate`,
     );
     if (!coverage) log('city-finance: no Election with a calendar yet, so no report is dated into the Elections feed');
     return { items, filings: [...filings.values()] };

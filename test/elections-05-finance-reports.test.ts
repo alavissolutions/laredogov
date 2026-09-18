@@ -1,4 +1,6 @@
+import { access } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
+import { loadHandKept } from '../src/elections/hand-kept.js';
 import { cityElections } from '../src/sources/city-elections.js';
 import { CAMPAIGN_FINANCE_URL, cityFinance } from '../src/sources/city-finance.js';
 import { electionFixtures, financeFixtures, FIXTURE_NOW } from './fixtures/fetcher.js';
@@ -11,6 +13,9 @@ describe('Elections 05: campaign finance reports attached by Alias', () => {
   it('records every report the city posted, with the period and the office the city filed it under', async () => {
     const site = await Site.create();
     const { data } = await site.build({ fixtures, now: FIXTURE_NOW, sources: [cityElections, cityFinance] });
+
+    // No hand-kept file here: a missing one means no Aliases, and the build leaves none behind.
+    await expect(access(site.handKeptFile)).rejects.toThrow();
 
     const reports = data.filings.filter((f) => f.kind === 'finance-report');
     // One Filing per document the city links on its finance page, back to 2015.
@@ -128,12 +133,18 @@ verified:
       // One column per filing period the city has a heading for since this election opened.
       const periods = $('table.race-table thead th.finance');
       expect(periods.map((_, th) => $(th).find('time').attr('datetime')).get()).toEqual(['2026-01-15', '2026-07-15']);
+      // The heading says what the column is as well as which deadline, and reads as two words.
+      expect(periods.eq(1).text()).toBe(
+        `${lang === 'es' ? 'Informe de finanzas de campaña 15 jul 2026' : 'Campaign finance report Jul 15, 2026'}`,
+      );
 
       const rows = $('table.race-table tbody tr');
       expect(rows.eq(0).find('th').text()).toBe('Lupe De Leon Jr');
-      // The city has posted no report under this candidate's name, so the cell says so.
+      // The city has posted no report under a name this candidate is listed by, and the cell says
+      // exactly that: a report the city posted under a spelling nobody has declared is not "not
+      // posted", it is under the table with the city's own spelling (ADR-0005).
       expect(rows.eq(0).find('td.finance').map((_, td) => $(td).find('a').length).get()).toEqual([0, 0]);
-      expect(rows.eq(0).find('td.finance').eq(1).text()).toContain(lang === 'es' ? 'No publicado' : 'Not posted');
+      expect(rows.eq(0).find('td.finance').eq(1).text()).toContain(lang === 'es' ? 'Ningún informe bajo este nombre' : 'No report under this name');
 
       // The sitting District 1 member's own reports, each under the deadline the city filed it under.
       const gonzalez = rows.eq(1);
@@ -197,20 +208,25 @@ verified:
       const $ = await site.page(`/${lang}/elections/2026-general/district-1/gilbert-gonzalez/`);
       const reports = $('.filings li.finance-report');
       // Every report the city has posted under a name this candidate answers to, newest first.
-      expect(reports.length).toBe(13);
+      expect(reports.length).toBe(14);
       expect(reports.eq(0).find('a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/23838/639197320934130000');
       expect(reports.eq(0).find('time.period').attr('datetime')).toBe('2026-07-15');
       // Filed as an officeholder: the office the city filed it under, in the city's words.
       expect(reports.eq(0).find('.note').text()).toContain('District 1');
       expect(reports.eq(0).text()).toContain(lang === 'es' ? 'Informe de finanzas de campaña' : 'Campaign finance report');
-      expect(reports.eq(12).find('time.period').attr('datetime')).toBe('2021-07-15');
+      expect(reports.eq(13).find('time.period').attr('datetime')).toBe('2021-07-15');
+      // Under January 15, 2023 the city wrote the office inside the link ("District 1 - Gilbert
+      // Gonzalez"), so the name comes out of it and the office is still the city's own word.
+      const jan2023 = reports.filter((_, li) => $(li).find('time.period').attr('datetime') === '2023-01-15');
+      expect(jan2023.find('a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/3200/638156115172300000');
+      expect(jan2023.find('.note').text()).toBe('District 1');
       // A report filed as an officeholder carries the office, and no label of this site's own: the
       // only mention of "incumbent" on the page is the sentence promising not to use one.
       expect(reports.text().toLowerCase()).not.toContain(lang === 'es' ? 'titular' : 'incumbent');
       expect($('.neutrality').text().toLowerCase()).toContain(lang === 'es' ? 'titular' : 'incumbent');
       // The treasurer appointment and the ballot application the city put in its table are still
       // first: this list is everything the city posted under the name, in one place.
-      expect($('.filings li').length).toBe(15);
+      expect($('.filings li').length).toBe(16);
     }
 
     // A candidate the city has posted no finance report for says so rather than showing a gap.
@@ -308,5 +324,21 @@ verified:
     const $ = await site.page('/en/elections/2026-general/district-1/');
     expect($('table.race-table tbody tr').length).toBe(2);
     expect($('table.race-table thead th.finance').length).toBe(0);
+  });
+
+  it('reads the committed hand-kept file and tells the owner about an Alias declared under nobody', async () => {
+    // The file that ships with the repo has to parse, or the live build fails every run.
+    const shipped = await loadHandKept('data/elections.yaml');
+    expect(shipped.aliases.size).toBe(0);
+    expect(shipped.verified.size).toBe(0);
+
+    const site = await Site.create();
+    await site.writeHandKept('aliases:\n  city-elections:2026-general:mayor:nobody-at-all:\n    - Dr. Victor D. Treviño\n');
+    const log: string[] = [];
+    const { data } = await site.build({ fixtures, now: FIXTURE_NOW, sources: [cityElections, cityFinance], log });
+
+    expect(log.join('\n')).toContain('"city-elections:2026-general:mayor:nobody-at-all"');
+    expect(log.join('\n')).toContain('is no Candidate, so its Alias attaches nothing');
+    expect(data.filings.find((f) => f.documentId === '23842')!.attachedTo).toBeUndefined();
   });
 });
