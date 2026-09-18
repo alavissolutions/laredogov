@@ -1,20 +1,32 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import type { CheerioAPI } from 'cheerio';
 import { describe, expect, it } from 'vitest';
-import { cityElections, GENERAL_CANDIDATES_URL, GENERAL_ELECTION_URL } from '../src/sources/city-elections.js';
+import {
+  cityElections,
+  GENERAL_CANDIDATES_URL,
+  GENERAL_ELECTION_URL,
+  SPECIAL_CANDIDATES_URL,
+  SPECIAL_ELECTION_URL,
+} from '../src/sources/city-elections.js';
 import { electionFixtures, FIXTURE_NOW } from './fixtures/fetcher.js';
 import { fixtureRoot } from './fixtures/paths.js';
 import { daysAfter, newPanelTitles, Site } from './helpers.js';
 
 const GENERAL = '/elections/2026-general/';
+const ELECTION = 'city-elections:2026-general';
+
+/**
+ * This file is about the general Election. The Source reads every Election the city keeps in one run
+ * (issue 04), so what would otherwise be a count of the whole data file is taken of the general
+ * Election's own records here; the two-Election totals belong to elections-04.
+ */
 
 describe('Elections 01: the Election page from the city general election page', () => {
   it('records the 2026 General Election with the city calendar, notices, voting sites, and forums', async () => {
     const site = await Site.create();
     const { data } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections] });
 
-    expect(data.elections).toHaveLength(1);
-    const election = data.elections[0]!;
+    const election = data.elections.find((e) => e.slug === '2026-general')!;
     expect(election.id).toBe('city-elections:2026-general');
     expect(election.slug).toBe('2026-general');
     expect(election.date).toBe('2026-11-03');
@@ -45,8 +57,8 @@ describe('Elections 01: the Election page from the city general election page', 
   it('files the city notices and voting-site lists as Elections Items dated by the city', async () => {
     const site = await Site.create();
     const { data } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections] });
-    const items = data.items.filter((i) => i.source === 'city-elections');
-    expect(items.every((i) => i.topic === 'elections')).toBe(true);
+    const items = data.items.filter((i) => i.election?.id === ELECTION);
+    expect(items.every((i) => i.topic === 'elections' && i.source === 'city-elections')).toBe(true);
 
     const drawing = items.find((i) => i.title === 'Notice of Drawing for Place on Ballot Order')!;
     expect(drawing.id).toBe('city-elections:doc:24125');
@@ -74,7 +86,7 @@ describe('Elections 01: the Election page from the city general election page', 
 
     const again = await site.build({ fixtures: electionFixtures, now: daysAfter(FIXTURE_NOW, 1), sources: [cityElections] });
     expect(again.report.newItems).toBe(0);
-    expect(again.data.elections).toHaveLength(1);
+    expect(again.data.elections).toHaveLength(2);
   });
 
   it('renders the Election page in both languages with calendar, notices, voting sites, forums, and outside links by Publisher', async () => {
@@ -202,18 +214,20 @@ describe('Elections 01: the Election page from the city general election page', 
     const site = await Site.create();
     await writeFile(site.dataFile, JSON.stringify({ version: 1, items: [], meetings: [], bodies: [], sources: {} }));
     const { data } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections] });
-    expect(data.elections).toHaveLength(1);
-    expect(JSON.parse(await readFile(site.dataFile, 'utf8')).elections).toHaveLength(1);
+    expect(data.elections.filter((e) => e.id === ELECTION)).toHaveLength(1);
+    expect(JSON.parse(await readFile(site.dataFile, 'utf8')).elections).toHaveLength(2);
   });
 
   it('reads each city page once and logs what it found', async () => {
     const site = await Site.create();
     const log: string[] = [];
     const { requests } = await site.build({ fixtures: electionFixtures, now: FIXTURE_NOW, sources: [cityElections], log });
-    expect(requests.map((r) => r.url)).toEqual([GENERAL_ELECTION_URL, GENERAL_CANDIDATES_URL]);
-    expect(log.some((l) => /^city-elections: 1 Election, 14 calendar entries, 3 notices, 2 voting-site lists, 6 forum entries/.test(l))).toBe(true);
+    // Each Election's page and its candidates sub-page, once each, in the order they are declared.
+    expect(requests.map((r) => r.url)).toEqual([GENERAL_ELECTION_URL, GENERAL_CANDIDATES_URL, SPECIAL_ELECTION_URL, SPECIAL_CANDIDATES_URL]);
+    // The summary is of the run, so it counts both Elections; elections-04 asserts the special half.
+    expect(log.some((l) => /^city-elections: 2 Elections, 22 calendar entries, 6 notices, 4 voting-site lists, 6 forum entries/.test(l))).toBe(true);
     // The links the declared accordion exclusions leave out are counted, not silently dropped.
-    expect(log.some((l) => /14 skipped: Candidate Forms/.test(l))).toBe(true);
-    expect(log).toContain('city-elections: ok, 5 new Items');
+    expect(log.some((l) => /25 skipped: Candidate Forms/.test(l))).toBe(true);
+    expect(log).toContain('city-elections: ok, 10 new Items');
   });
 });
