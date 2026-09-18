@@ -250,11 +250,13 @@ export interface Filing {
    */
   documentFilename?: string;
   /**
-   * Set on a document the extractor read nothing out of: every report the Publisher has posted for
-   * this cycle is a scan from a copier with no text layer. It is what a reader sees nothing extra
-   * for, and it is what stops the build spending half a minute on the same document every run.
+   * The version of the cover-sheet reader that opened this document and found nothing in it: every
+   * report the Publisher has posted for this cycle is a scan from a copier with no text layer. It
+   * is what stops the build spending half a minute on the same document every run, and it is a
+   * version rather than a flag so that a reader which later learns to read something opens every
+   * document the one before it gave up on (issue 06).
    */
-  unreadable?: boolean;
+  unreadableBy?: number;
   publisher: PublisherId;
   source: string;
   firstSeen: string;

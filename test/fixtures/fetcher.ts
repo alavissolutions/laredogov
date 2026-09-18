@@ -86,18 +86,33 @@ export const electionFixtures: Record<string, FixtureBody> = {
 };
 
 /**
- * The campaign finance reports the build opens (issue 06). Both are written rather than captured,
- * because the city has posted no readable report to capture and this project does not keep a copy
- * of a real one (ADR-0001); see `scripts/make-pdf-fixtures.ts` and the README beside them.
+ * The campaign finance reports the build opens (issue 06). None is a capture: the city has posted
+ * no readable report to capture and this project keeps no copy of a real one (ADR-0001). They are
+ * written by `scripts/make-pdf-fixtures.ts`, filed by people who do not exist, with totals that are
+ * nobody's; see the README beside them.
  *
- * Document 23838 is Gilbert Gonzalez's July 15, 2026 report, the one the readable cover sheet
- * stands in for. Every other document the city links answers with the scan, which is what every
- * real report for this cycle is.
+ * Three real document ids stand in for the three shapes the reader has to tell apart, and every
+ * other document the city links answers with the scan, which is what every real report is today:
+ *
+ * - 23838, Gilbert Gonzalez's July 15, 2026 report: a plain text layer this reads.
+ * - 23812, Alyssa Cigarroa's July 15, 2026 report: the same form written the awkward way a real
+ *   writer does, with kerned `TJ` arrays, hexadecimal strings and an indirect `/Length`.
+ * - 22178, Gilbert Gonzalez's January 15, 2026 report: an amendment filed behind an original whose
+ *   total contributions box was left blank, which has to come back unreadable rather than read half
+ *   from one sheet and half from the other.
  */
 export const financeDocumentFixtures: Record<string, FixtureBody> = {
   'https://www.cityoflaredo.com/home/showpublisheddocument/23838/639197320934130000': document(
     'city-finance/synthetic-cover-sheet.pdf',
     'CFR D1 Gilbert Gonzalez 010126063026.pdf',
+  ),
+  'https://www.cityoflaredo.com/home/showpublisheddocument/23812/639197300666370000': document(
+    'city-finance/synthetic-cover-sheet-kerned.pdf',
+    'CFR D8 Alyssa Cigarroa 010126063026.pdf',
+  ),
+  'https://www.cityoflaredo.com/home/showpublisheddocument/22178/639040911917700000': document(
+    'city-finance/synthetic-amended.pdf',
+    'CFR D1 Gilbert Gonzalez AMENDED 010125123125.pdf',
   ),
   'https://www.cityoflaredo.com/home/showpublisheddocument/*': document('city-finance/synthetic-scanned.pdf', 'CFR scanned.pdf'),
 };

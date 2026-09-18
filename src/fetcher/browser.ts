@@ -12,6 +12,8 @@ import { desktopUserAgent, type DownloadResponse, type FetchResponse } from './t
 export class BrowserSession {
   private browser: Browser | undefined;
   private context: BrowserContext | undefined;
+  /** Hosts this context has already navigated, so a document store is asked for cookies once. */
+  private readonly warmed = new Set<string>();
 
   private async ctx(): Promise<BrowserContext> {
     if (this.context) return this.context;
@@ -46,25 +48,41 @@ export class BrowserSession {
    * will hand over. So the navigation is made and the document's own response is taken off the
    * route it travels on, with a blank page fulfilled in its place so Chromium never opens the
    * viewer at all. Verified against the city's store 2026-09-17 (spec: Fetching).
+   *
+   * `route.fetch()` is the Node side asking, with this context's cookies, which is why the page
+   * that links the documents is opened first when the context is fresh: the cookies Akamai sets on
+   * that navigation are what the store answers to. Ordering is not left to luck, so a caller
+   * reaching for a document in a context that has fetched nothing else gets the referring page
+   * navigated for it first.
    */
-  async download(url: string, timeoutMs = 45_000): Promise<DownloadResponse> {
-    const page = await (await this.ctx()).newPage();
+  async download(url: string, referer?: string, timeoutMs = 45_000): Promise<DownloadResponse> {
+    const context = await this.ctx();
+    if (referer && !this.warmed.has(origin(referer))) {
+      this.warmed.add(origin(referer));
+      await this.fetch(referer, timeoutMs).catch(() => undefined);
+    }
+    const page = await context.newPage();
     let caught: DownloadResponse | undefined;
     try {
-      await page.route(url, async (route) => {
-        try {
-          const res = await route.fetch();
-          caught = {
-            url: res.url(),
-            status: res.status(),
-            bytes: await res.body(),
-            ...filenameOf(res.headers()['content-disposition']),
-          };
-        } finally {
-          // The viewer is never wanted, and a page left hanging on an unfulfilled route times out.
-          await route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }).catch(() => undefined);
-        }
-      });
+      // A predicate, not a glob: a document URL may carry `?` and `*`, which a route pattern reads
+      // as wildcards, and this must intercept the one document it asked for and nothing else.
+      await page.route(
+        (candidate) => candidate.href === url,
+        async (route) => {
+          try {
+            const res = await route.fetch();
+            caught = {
+              url: res.url(),
+              status: res.status(),
+              bytes: await res.body(),
+              ...filenameOf(res.headers()['content-disposition']),
+            };
+          } finally {
+            // The viewer is never wanted, and a page left hanging on an unfulfilled route times out.
+            await route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }).catch(() => undefined);
+          }
+        },
+      );
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
       // A route that never fired means the store redirected the navigation somewhere else.
       return caught ?? { url, status: 0, bytes: new Uint8Array() };
@@ -78,16 +96,37 @@ export class BrowserSession {
     await this.browser?.close().catch(() => undefined);
     this.context = undefined;
     this.browser = undefined;
+    this.warmed.clear();
+  }
+}
+
+function origin(url: string): string {
+  try {
+    return new URL(url).origin;
+  } catch {
+    return url;
   }
 }
 
 /**
  * The filename the city's store sends. It writes the header without the `attachment;` every other
  * store leads with (`filename="CFR D1 Gilbert Gonzalez 010126063026.pdf"`), so both shapes are
- * read. It is kept for the owner and never parsed for a name or an office (spec: Fetching).
+ * read, and the percent-encoded `filename*=UTF-8''` form is decoded. It is kept for the owner and
+ * never parsed for a name or an office (spec: Fetching).
  */
 function filenameOf(header: string | undefined): { filename?: string } {
-  const match = header ? /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(header) : null;
-  const filename = match?.[1]?.trim();
-  return filename ? { filename } : {};
+  if (!header) return {};
+  const encoded = /filename\*=\s*(?:UTF-8|ISO-8859-1)?''([^;]+)/i.exec(header);
+  const plain = /filename=\s*"?([^";]+)"?/i.exec(header);
+  const raw = (encoded?.[1] ?? plain?.[1] ?? '').trim();
+  if (!raw) return {};
+  let filename = raw;
+  if (encoded) {
+    try {
+      filename = decodeURIComponent(raw);
+    } catch {
+      filename = raw;
+    }
+  }
+  return { filename };
 }

@@ -27,7 +27,7 @@
 import { load, type CheerioAPI } from 'cheerio';
 import { parseMonthNameDate } from '../dates.js';
 import { earliestCoverageStart } from '../elections/coverage.js';
-import { figureId, readCoverSheet } from '../elections/figures.js';
+import { figureId, READER_VERSION, readCoverSheet } from '../elections/figures.js';
 import { loadHandKept, type HandKeptElections } from '../elections/hand-kept.js';
 import type { Candidate, DataFile } from '../domain.js';
 import { ensureOk, type Fetcher } from '../fetcher/types.js';
@@ -224,6 +224,9 @@ export const cityFinance: SourceAdapter = {
     const previousFigures = new Map(previous.figures.map((f) => [f.documentId, f]));
     const items: NewItem[] = [];
     const unmatched: string[] = [];
+    // How many of the Publisher's reports are older than this site's coverage of any Election, so
+    // the owner can see the line the download gate draws rather than infer it (issue 06).
+    let beforeCoverage = 0;
     // Where this site's election coverage begins. The city's finance page carries every report
     // filed since 2015; the ones from before the earliest Election this site covers opened are
     // recorded so a Candidate's history is whole, but they are not news (spec: Item rules).
@@ -258,14 +261,17 @@ export const cityFinance: SourceAdapter = {
           // What a run before this one found in the document itself. The page is re-read whole
           // every run, so anything the document said has to be carried across by hand.
           ...(before?.documentFilename ? { documentFilename: before.documentFilename } : {}),
-          ...(before?.unreadable ? { unreadable: true } : {}),
+          ...(before?.unreadableBy !== undefined ? { unreadableBy: before.unreadableBy } : {}),
         };
         filings.set(id, filing);
         const inCoverage = coverage !== undefined && period.date >= coverage;
         // The document is opened once, the first run that sees it, and only for the deadlines this
-        // site covers. A document a run before this one already read, or already found nothing in,
-        // is never opened again; one whose download failed is tried once more next run.
-        if (inCoverage && !previousFigures.has(report.documentId) && !filing.unreadable) toDownload.push(filing);
+        // site covers. A document a run before this one already read is never opened again; one a
+        // weaker reader found nothing in is opened again only when the reader has improved; one
+        // whose download failed is tried once more next run.
+        const readAlready = previousFigures.has(report.documentId) || (filing.unreadableBy ?? 0) >= READER_VERSION;
+        if (inCoverage && !readAlready) toDownload.push(filing);
+        if (coverage !== undefined && !inCoverage) beforeCoverage += 1;
         // Only the deadlines this site's Elections cover are the owner's job: a decade of reports
         // filed before the earliest Election opened would bury the lines that need an Alias.
         if (inCoverage && attachedTo.length === 0) {
@@ -299,6 +305,12 @@ export const cityFinance: SourceAdapter = {
     }
 
     const figures = await copyFigures({ fetcher, toDownload, previousFigures, handKept, log });
+    // A document id the owner has verified that no Figure answers to attaches to nothing and says
+    // nothing, and a scan they have checked by eye is the likeliest way into that (user story 19).
+    const copied = new Set(figures.map((f) => f.documentId));
+    for (const documentId of handKept.verified) {
+      if (!copied.has(documentId)) log(`city-finance: "${documentId}" is verified in ${handKeptFile}, but no totals were read from that document, so nothing shows`);
+    }
 
     if (parsed.undated.length) log(`city-finance: no date in the heading "${parsed.undated.join('", "')}"; nothing filed under it`);
     if (duplicates) log(`city-finance: ${duplicates} report(s) the city lists under more than one heading; kept as one Filing each`);
@@ -322,7 +334,8 @@ export const cityFinance: SourceAdapter = {
     // What the owner does next: check a PDF against its Figure and add its id to the file, and
     // decide what to do about the reports nothing can be read from (user story 18).
     const awaiting = figures.filter((f) => !f.verified).length;
-    const unreadable = [...filings.values()].filter((f) => f.unreadable).length;
+    const unreadable = [...filings.values()].filter((f) => f.unreadableBy !== undefined).length;
+    if (beforeCoverage) log(`city-finance: ${beforeCoverage} report(s) filed before this site's earliest Election opened; recorded, and not opened`);
     log(
       `city-finance: ${awaiting} Figure${awaiting === 1 ? '' : 's'} awaiting review, ` +
         `${unreadable} report${unreadable === 1 ? '' : 's'} the extractor could not read`,
@@ -349,6 +362,11 @@ interface CopyFiguresOptions {
  * else, in roughly twenty-five seconds, and this site asks it for no more at once than a person
  * reading the page would (ADR-0001, spec: Fetching).
  */
+/** A PDF says so in its first bytes; some writers put a byte or two of rubbish in front of them. */
+function isPdf(bytes: Uint8Array): boolean {
+  return Buffer.from(bytes.subarray(0, 1024)).toString('latin1').includes('%PDF-');
+}
+
 async function copyFigures({ fetcher, toDownload, previousFigures, handKept, log }: CopyFiguresOptions): Promise<NewFigure[]> {
   const figures: NewFigure[] = [];
   for (const [documentId, figure] of previousFigures) {
@@ -359,7 +377,10 @@ async function copyFigures({ fetcher, toDownload, previousFigures, handKept, log
   for (const filing of toDownload) {
     let document;
     try {
-      document = ensureOk(await fetcher.download(filing.url));
+      document = ensureOk(await fetcher.download(filing.url, CAMPAIGN_FINANCE_URL));
+      // A CMS error page or a bot challenge served as a cheerful 200 is not a report, and marking
+      // it unreadable would close the document for good on the strength of a bad afternoon.
+      if (!isPdf(document.bytes)) throw new Error('the response is not a PDF');
     } catch (err) {
       // One document the store would not hand over is not a reason to fail the Source and lose
       // every other report on the page; the next run asks for it again.
@@ -371,7 +392,7 @@ async function copyFigures({ fetcher, toDownload, previousFigures, handKept, log
     if (document.filename) filing.documentFilename = document.filename;
     const totals = readCoverSheet(document.bytes);
     if (!totals) {
-      filing.unreadable = true;
+      filing.unreadableBy = READER_VERSION;
       log(
         `city-finance: nothing could be read from document ${filing.documentId} ("${filing.filerName}"` +
           `, ${filing.period?.label ?? 'no filing period'}); the site links it with no totals`,

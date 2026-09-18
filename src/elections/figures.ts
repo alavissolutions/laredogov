@@ -11,23 +11,44 @@
  *
  * Two things this deliberately does not do:
  *
- * - **It does not guess.** All four totals must be found, each one behind the label the form
- *   prints for it, or nothing is returned and the report renders as a link with no Figure. Boxes
- *   17 and 19 are the unitemized subtotals, and their labels contain the labels of boxes 18 and 20
- *   word for word, so the labels are matched against each other and the amount taken from between
- *   one label and the next rather than from anywhere after it.
+ * - **It does not guess.** All four totals must be found on one cover sheet, each one behind the
+ *   label the form prints for it and written as money with cents, or nothing is returned at all and
+ *   the report renders as a link with no Figure. Reading three totals and a number that happened to
+ *   be nearby would put a wrong figure under a real person's name, which is the whole reason the
+ *   owner verifies these before they show (note on ADR-0001). Three shapes the form itself sets are
+ *   guarded by tests: boxes 17 and 19 are the unitemized subtotals whose labels contain most of the
+ *   labels of boxes 18 and 20, a box left blank leaves the numbering of the box below it sitting
+ *   where its amount should be, and an amended report filed behind the original repeats the whole
+ *   sheet with different numbers on it.
  * - **It does not read images.** Every report the City of Laredo has posted for the 2026 cycle is
  *   a scan from a copier: no `/Font` object, one image per page, no text layer at all (probed
  *   2026-09-17). There is nothing in those bytes for any text extractor to find, and turning a
  *   picture of a form into numbers is a decision for the owner, not this file. They come back
  *   unreadable, which is the case the build is built around.
  *
- * There is no PDF dependency behind this. What it needs of the format is small and stable since
- * PDF 1.0: a document is a list of objects, an object may carry a stream, a stream carrying page
- * content holds text-showing operators, and the only compression these forms use is Flate.
+ * There is no PDF dependency behind this. What it needs of the format is small and old: a document
+ * is a list of objects, an object may carry a stream, a stream carrying page content holds
+ * text-showing operators, and Flate is the only compression these forms use. What it does not do is
+ * fonts. A document whose fonts are subset with their own encodings — which is what the Ethics
+ * Commission's own form-filling software produces — shows its text as glyph codes, no label
+ * matches, and the report comes back unreadable rather than wrong. That is a limitation, not a
+ * finished job, which is why `READER_VERSION` exists: a document this version found nothing in is
+ * opened again once the version rises, so a reader that learns encodings re-reads every report the
+ * one before it gave up on.
  */
 import { inflateRawSync, inflateSync } from 'node:zlib';
 import type { FigureTotals } from '../domain.js';
+
+/**
+ * What this version of the reader can do. A Filing records the version that found nothing in its
+ * document, and the build opens that document again when this number is higher than the one
+ * recorded, so every report a weaker reader gave up on is re-read once rather than being written
+ * off for good. Raise it whenever this file learns to read something it could not before.
+ */
+export const READER_VERSION = 1;
+
+/** A stream that inflates to more than this is not a form; it is a way to take the whole run down. */
+const MAX_INFLATED = 64 << 20;
 
 /** The Figure copied from one Filing; its id is the Publisher's document id, as the owner verifies by. */
 export function figureId(source: string, documentId: string): string {
@@ -42,11 +63,14 @@ export function figureId(source: string, documentId: string): string {
 export function readCoverSheet(bytes: Uint8Array): FigureTotals | undefined {
   const text = normalise(pdfText(bytes));
   if (!text) return undefined;
-  const marks = labelMarks(text);
-  const contributions = amountFor(text, marks, 'contributions');
-  const expenditures = amountFor(text, marks, 'expenditures');
-  const contributionsMaintained = amountFor(text, marks, 'contributionsMaintained');
-  const outstandingLoans = amountFor(text, marks, 'outstandingLoans');
+  // One cover sheet, the first the document prints. A report filed with its amendment behind it
+  // carries the sheet twice with different numbers on it, and four totals read half from one and
+  // half from the other would be a set of figures that was never filed by anyone.
+  const sheet = firstCoverSheet(labelMarks(text), text.length);
+  const contributions = amountFor(text, sheet, 'contributions');
+  const expenditures = amountFor(text, sheet, 'expenditures');
+  const contributionsMaintained = amountFor(text, sheet, 'contributionsMaintained');
+  const outstandingLoans = amountFor(text, sheet, 'outstandingLoans');
   if (contributions === undefined || expenditures === undefined) return undefined;
   if (contributionsMaintained === undefined || outstandingLoans === undefined) return undefined;
   return { contributions, expenditures, contributionsMaintained, outstandingLoans };
@@ -70,43 +94,69 @@ interface Mark {
   from: number;
   /** Where the label starts, which is where the label before it has to stop looking. */
   at: number;
+  /** Where this label's amount has to be found by: the next label, or the end of the sheet. */
+  until: number;
 }
 
-/** Every one of the six labels wherever it appears, in the order the document prints them. */
+/**
+ * Every one of the six labels wherever it appears, in the order the document prints them, each one
+ * bounded by the next: a box's amount is printed between its own label and the label under it, and
+ * a box left blank has to come up empty rather than reach down into the box below.
+ */
 function labelMarks(text: string): Mark[] {
-  const marks: Mark[] = [];
+  const found: Omit<Mark, 'until'>[] = [];
   for (const { key, pattern } of LABELS) {
     pattern.lastIndex = 0;
-    for (let m = pattern.exec(text); m; m = pattern.exec(text)) marks.push({ key, at: m.index, from: m.index + m[0].length });
+    for (let m = pattern.exec(text); m; m = pattern.exec(text)) found.push({ key, at: m.index, from: m.index + m[0].length });
   }
-  return marks.sort((a, b) => a.at - b.at);
+  found.sort((a, b) => a.at - b.at);
+  // The last box on a sheet has the affidavit under it rather than a label, so it is given the
+  // width of a form row to print its amount in and no more.
+  return found.map((mark, index) => ({ ...mark, until: found[index + 1]?.at ?? Math.min(text.length, mark.from + 200) }));
 }
 
 /**
- * The amount the form prints for one box: the first money the document carries between that box's
- * label and the next label of any of the six. A form that repeats its cover sheet (an amended
- * report filed behind the original) gives the label twice, so each occurrence is tried in turn.
+ * The first cover sheet in the document: its labels run in the form's own order, and a label that
+ * comes round a second time is the next sheet starting. An amended report filed behind the original
+ * is two sheets; so is a report whose schedules repeat the summary.
  */
-function amountFor(text: string, marks: readonly Mark[], key: LabelKey): number | undefined {
-  for (const [index, mark] of marks.entries()) {
-    if (mark.key !== key) continue;
-    const until = marks[index + 1]?.at ?? Math.min(text.length, mark.from + 200);
-    const amount = money(text.slice(mark.from, until));
-    if (amount !== undefined) return amount;
+function firstCoverSheet(marks: readonly Mark[], end: number): Mark[] {
+  const sheet: Mark[] = [];
+  for (const mark of marks) {
+    if (sheet.some((m) => m.key === mark.key)) break;
+    sheet.push(mark);
+  }
+  // The last box of the sheet must not read into the sheet that follows it either.
+  const last = sheet[sheet.length - 1];
+  if (last) last.until = Math.min(last.until, marks[sheet.length]?.at ?? end);
+  return sheet;
+}
+
+/** The amount the form prints for one box, or nothing, which makes the whole report unreadable. */
+function amountFor(text: string, sheet: readonly Mark[], key: LabelKey): number | undefined {
+  const mark = sheet.find((m) => m.key === key);
+  return mark ? money(text.slice(mark.from, mark.until)) : undefined;
+}
+
+/**
+ * Money as this form prints it: dollars and cents, optionally behind a dollar sign, grouped in
+ * threes or not at all. Cents are required, because the thing most likely to be sitting where a
+ * blank box's amount should be is the printed number of the box below it ("18."), and a number
+ * that runs on from the digits before it is refused, because a number broken across the page by
+ * the writer is not a number this can add up. Anything the form could have meant as negative — a
+ * minus sign, an accountant's parentheses — is refused rather than read as positive.
+ */
+const AMOUNT = /(?:\$\s*)?(\d{1,3}(?:,\d{3})*\.\d{2}|\d+\.\d{2})(?![\d,])/g;
+
+function money(segment: string): number | undefined {
+  AMOUNT.lastIndex = 0;
+  for (let match = AMOUNT.exec(segment); match; match = AMOUNT.exec(segment)) {
+    const before = segment.slice(0, match.index).replace(/\s+$/, '');
+    if (/[\d,.\-\u2013\u2014(]$/.test(before)) continue;
+    const value = Number(match[1]!.replace(/,/g, ''));
+    if (Number.isFinite(value)) return value;
   }
   return undefined;
-}
-
-/**
- * Money as the form prints it. A dollar sign makes it money whatever follows; without one it has
- * to carry cents, so the "18." numbering the Ethics Commission prints beside the next box is never
- * read as the amount of the box before it.
- */
-function money(segment: string): number | undefined {
-  const match = /\$\s*(\d[\d,]*(?:\.\d{2})?)/.exec(segment) ?? /(?<![\d.,])(\d[\d,]*\.\d{2})(?![\d])/.exec(segment);
-  if (!match) return undefined;
-  const value = Number(match[1]!.replace(/,/g, ''));
-  return Number.isFinite(value) ? value : undefined;
 }
 
 /** Matching is done on one line of upper-case text: a PDF breaks a form's row wherever it likes. */
@@ -182,11 +232,13 @@ function decode(dict: string, data: Buffer): Buffer | undefined {
   const filter = /\/Filter\s*(\/[A-Za-z0-9]+|\[[^\]]*\])/.exec(dict)?.[1];
   if (filter === undefined) return data;
   if (!/FlateDecode/.test(filter) || /DCTDecode|JPXDecode|CCITTFaxDecode|LZWDecode|RunLengthDecode/.test(filter)) return undefined;
+  // Bounded: a stream that inflates to more than a form ever could is dropped rather than allowed
+  // to take the whole scheduled run, every Source in it, down with one document.
   try {
-    return inflateSync(data);
+    return inflateSync(data, { maxOutputLength: MAX_INFLATED });
   } catch {
     try {
-      return inflateRawSync(data);
+      return inflateRawSync(data, { maxOutputLength: MAX_INFLATED });
     } catch {
       return undefined;
     }
@@ -205,6 +257,9 @@ function contentText(content: string): string {
   const lines: string[] = [];
   let row = '';
   let kern: number | undefined;
+  // A kern wide enough to be a space, between two runs that are both digits, is the writer
+  // splitting one number across two strings; a space there would make 24,310.75 into 24 and 310.75.
+  const spaced = (text: string) => kern !== undefined && kern <= -100 && !(/[\d,]$/.test(row) && /^[\d,]/.test(text));
   const endRow = () => {
     if (row.trim()) lines.push(row.trim());
     row = '';
@@ -214,12 +269,12 @@ function contentText(content: string): string {
     const c = content[i]!;
     if (c === '(') {
       const [text, next] = literalString(content, i);
-      row += (kern !== undefined && kern <= -100 ? ' ' : '') + text;
+      row += (spaced(text) ? ' ' : '') + text;
       kern = undefined;
       i = next;
     } else if (c === '<' && content[i + 1] !== '<') {
       const [text, next] = hexString(content, i);
-      row += (kern !== undefined && kern <= -100 ? ' ' : '') + text;
+      row += (spaced(text) ? ' ' : '') + text;
       kern = undefined;
       i = next;
     } else if (c === '%') {

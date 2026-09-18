@@ -11,8 +11,8 @@ export function productionFetcher(): Fetcher {
     },
     // The city's document store answers real browser navigations and nothing else, so a download
     // is always a browser download (spec: Fetching).
-    download(url: string): Promise<DownloadResponse> {
-      return browser.download(url);
+    download(url: string, referer?: string): Promise<DownloadResponse> {
+      return browser.download(url, referer);
     },
     close: () => browser.close(),
   };

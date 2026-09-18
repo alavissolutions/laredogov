@@ -29,9 +29,11 @@ export interface Fetcher {
   fetch(url: string, mode: FetchMode): Promise<FetchResponse>;
   /**
    * One document out of a Publisher's document store. It is its own method rather than a fetch
-   * mode because what comes back is bytes and a filename, not a page (spec: Fetching).
+   * mode because what comes back is bytes and a filename, not a page (spec: Fetching). `referer`
+   * is the Publisher's own page that links the document: a store behind bot management answers
+   * only a browser that has been there, so the implementation may open it first.
    */
-  download(url: string): Promise<DownloadResponse>;
+  download(url: string, referer?: string): Promise<DownloadResponse>;
   /** Release any held resources (browser instances). Safe to call more than once. */
   close(): Promise<void>;
 }

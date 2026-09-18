@@ -32,7 +32,7 @@ export function fixtureFetcher(map: Record<string, FixtureBody>): Fetcher & { re
       return { url, status: entry.status, body: entry.body ?? '' };
     },
     // A recorded document is read as bytes rather than as text: the documents this serves are PDFs.
-    async download(url): Promise<DownloadResponse> {
+    async download(url, _referer): Promise<DownloadResponse> {
       requests.push({ url, mode: 'download' });
       const entry = lookup(url);
       if (typeof entry === 'string') return { url, status: 200, bytes: Buffer.from(entry) };
