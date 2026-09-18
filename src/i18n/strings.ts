@@ -93,6 +93,19 @@ const en = {
   'race.question.description': 'A question the City of Laredo put on the ballot, with the city’s own document linked.',
   'race.rowPosition': 'row {n}',
 
+  'candidate.legalName': 'Legal name',
+  'candidate.race': 'Race',
+  'candidate.filings': 'What the city has posted',
+  'candidate.filings.intro': 'Every document the city posted under this name, in the order it lists them.',
+  'candidate.filings.empty': 'The city has not posted a document under this name yet.',
+  'candidate.lastSeenLive': 'Last seen on the city’s page on {date}',
+  'candidate.description': 'Every document the City of Laredo has posted under the name {name}, a candidate for {race}.',
+  'candidate.neutrality': 'Everything on this page is copied from City of Laredo filings and links back to them. The site adds no opinion, no incumbent or party label, and nothing from anywhere else.',
+
+  'filing.treasurer-appointment': 'Campaign treasurer appointment',
+  'filing.ballot-application': 'Application for a place on the ballot',
+  'filing.finance-report': 'Campaign finance report',
+
   'meetings.title': 'Meetings',
   'meetings.intro': 'Public meetings of the City of Laredo and its boards and commissions, from the city’s Legistar calendar. Meetings are convened under the Texas Open Meetings Act.',
   'meetings.filterByBody': 'Filter by Body',
@@ -393,6 +406,19 @@ const es: Record<keyof typeof en, string> = {
   'race.description': 'Quién ha publicado la Ciudad de Laredo como candidato para {race}, con su tesorero de campaña y su solicitud de lugar en la boleta.',
   'race.question.description': 'Una pregunta que la Ciudad de Laredo puso en la boleta, con el documento propio de la ciudad enlazado.',
   'race.rowPosition': 'fila {n}',
+
+  'candidate.legalName': 'Nombre legal',
+  'candidate.race': 'Contienda',
+  'candidate.filings': 'Lo que ha publicado la ciudad',
+  'candidate.filings.intro': 'Cada documento que la ciudad publicó bajo este nombre, en el orden en que los enlista.',
+  'candidate.filings.empty': 'La ciudad aún no ha publicado ningún documento bajo este nombre.',
+  'candidate.lastSeenLive': 'Visto por última vez en la página de la ciudad el {date}',
+  'candidate.description': 'Cada documento que la Ciudad de Laredo ha publicado bajo el nombre {name}, candidato para {race}.',
+  'candidate.neutrality': 'Todo en esta página está copiado de documentos presentados ante la Ciudad de Laredo y enlaza de vuelta a ellos. El sitio no agrega opiniones, ni etiquetas de titular o de partido, ni nada de ninguna otra fuente.',
+
+  'filing.treasurer-appointment': 'Nombramiento de tesorero de campaña',
+  'filing.ballot-application': 'Solicitud de lugar en la boleta',
+  'filing.finance-report': 'Informe de finanzas de campaña',
 
   'meetings.title': 'Reuniones',
   'meetings.intro': 'Reuniones públicas de la Ciudad de Laredo y sus juntas y comisiones, tomadas del calendario Legistar de la ciudad. Las Reuniones se convocan conforme a la Ley de Reuniones Abiertas de Texas.',

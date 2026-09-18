@@ -9,6 +9,11 @@
  * A Race page is the city's own table, in the city's ballot order: who the city named, the treasurer
  * it named, and the ballot application it linked. A row the city has not named is shown as such and
  * is nobody (CONTEXT.md). Finance report columns join the table with issue 05.
+ *
+ * A Candidate page (user stories 6, 8, 9) is one name from that table: both names as the city
+ * printed them, the Race, the treasurer, and every Filing the city posted under the name, each
+ * under a plain label with the city's own words for it, its link, and the date the site last saw it
+ * on the city's page. It ends with the sentence saying what the page is and is not.
  */
 import { formatDate, formatTime, sortValue } from '../dates.js';
 import { PUBLISHER_ORDER } from '../directory/entries.js';
@@ -133,6 +138,14 @@ export function candidatesInOrder(ctx: RenderContext, race: Race): Candidate[] {
   return ctx.data.candidates.filter((c) => c.raceId === race.id).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 }
 
+/**
+ * The name a reader sees first: the name on the ballot, which is the name the city prints in the
+ * ballot-order column. The city leaves that cell blank now and then, and the legal name stands in.
+ */
+export function candidateName(candidate: Candidate): string {
+  return candidate.ballotName || candidate.name;
+}
+
 /** The Races a reader can open from the Election page. */
 function racesSection(ctx: RenderContext, election: Election): string {
   const { lang } = ctx;
@@ -164,14 +177,20 @@ function filingsOf(ctx: RenderContext, ids: readonly string[]): Filing[] {
   return ids.map((id) => ctx.data.filings.find((f) => f.id === id)).filter((f): f is Filing => f !== undefined);
 }
 
-/** The treasurer cell: the Publisher's own link text is the treasurer it named. */
+/**
+ * The treasurer cell: the Publisher's own link text is the treasurer it named. A candidate who
+ * appointed themselves is named twice in one row, once as the way into their page and once as the
+ * treasurer, so the link says which document it opens for a reader who meets it out of context.
+ */
 function treasurerCell(ctx: RenderContext, treasurer: string | undefined, filings: readonly Filing[]): string {
   const { lang } = ctx;
   const appointment = filings.find((f) => f.kind === 'treasurer-appointment');
   if (!treasurer && !appointment) return `<td class="treasurer"><span class="empty">${esc(t(lang, 'race.notPosted'))}</span></td>`;
   if (!appointment) return `<td class="treasurer">${esc(treasurer ?? '')}</td>`;
   const label = treasurer || appointment.label;
-  return `<td class="treasurer"><a href="${esc(appointment.url)}" rel="noopener">${esc(label)}</a></td>`;
+  return `<td class="treasurer"><a href="${esc(appointment.url)}" rel="noopener">${esc(label)}<span class="visually-hidden"> ${esc(
+    t(lang, 'filing.treasurer-appointment'),
+  )}</span></a></td>`;
 }
 
 /**
@@ -188,7 +207,7 @@ function applicationCell(ctx: RenderContext, name: string, filings: readonly Fil
 }
 
 /** The comparison table: one row per Candidate, in the Publisher's ballot order. */
-function raceTable(ctx: RenderContext, race: Race): string {
+function raceTable(ctx: RenderContext, election: Election, race: Race): string {
   const { lang } = ctx;
   const rows = raceRows(ctx, race);
   if (rows.length === 0) return `<p class="empty">${esc(t(lang, 'race.candidates.empty'))}</p>`;
@@ -199,10 +218,14 @@ function raceTable(ctx: RenderContext, race: Race): string {
       const named = 'candidate' in row;
       const source = named ? row.candidate : row.unnamed;
       const filings = filingsOf(ctx, source.filings);
-      const name = named ? row.candidate.ballotName || row.candidate.name : t(lang, 'race.nameNotPosted');
+      const name = named ? candidateName(row.candidate) : t(lang, 'race.nameNotPosted');
       // Two unnamed rows would otherwise give their links the same accessible name.
       const linkName = named ? name : `${name}, ${t(lang, 'race.rowPosition', { n: String(source.order + 1) })}`;
-      return `<tr${named ? '' : ' class="unnamed"'}><th scope="row">${esc(name)}</th>${treasurerCell(ctx, source.treasurer, filings)}${applicationCell(
+      // The name is the way into the Candidate's own page; a row the city has not named leads nowhere.
+      const heading = named
+        ? `<a href="${href(ctx, PATHS.candidate(election.slug, race.slug, row.candidate.slug))}">${esc(name)}</a>`
+        : esc(name);
+      return `<tr${named ? '' : ' class="unnamed"'}><th scope="row">${heading}</th>${treasurerCell(ctx, source.treasurer, filings)}${applicationCell(
         ctx,
         linkName,
         filings,
@@ -243,7 +266,7 @@ export function racePage(ctx: RenderContext, election: Election, race: Race): st
 <section aria-labelledby="race-candidates">
 <h2 id="race-candidates">${esc(t(lang, isQuestion ? 'elections.races' : 'race.candidates'))}</h2>
 <p class="intro">${esc(t(lang, isQuestion ? 'race.question.intro' : 'race.candidates.intro'))}</p>
-${isQuestion ? questionSection(ctx, race) : raceTable(ctx, race)}
+${isQuestion ? questionSection(ctx, race) : raceTable(ctx, election, race)}
 </section>`;
   return layout(ctx, {
     title: race.title,
@@ -289,5 +312,58 @@ ${topicNav(ctx)}`;
     path: PATHS.election(election.slug),
     body,
     description: t(lang, 'elections.description', { date: formatDate(lang, election.date, 'long') }),
+  });
+}
+
+/** One Filing: the site's plain label, the city's own words for it, and when it was last seen live. */
+function filingLine(ctx: RenderContext, filing: Filing): string {
+  const { lang } = ctx;
+  // The city's own title for the link is kept beside the plain label so a reader can find the same
+  // row on the city's page; it is the Publisher's wording and is never translated.
+  const note = filing.label ? `<span class="note">${esc(filing.label)}</span>` : '';
+  const seen = esc(t(lang, 'candidate.lastSeenLive', { date: formatDate(lang, filing.lastSeenLive, 'short') }));
+  return `<li><a href="${esc(filing.url)}" rel="noopener">${esc(t(lang, `filing.${filing.kind}`))}</a>${note}<span class="meta"><time datetime="${esc(
+    filing.lastSeenLive,
+  )}">${seen}</time></span></li>`;
+}
+
+function filingsSection(ctx: RenderContext, candidate: Candidate): string {
+  const { lang } = ctx;
+  const filings = filingsOf(ctx, candidate.filings);
+  const list =
+    filings.length === 0
+      ? `<p class="empty">${esc(t(lang, 'candidate.filings.empty'))}</p>`
+      : `<ul class="filings">\n${filings.map((f) => filingLine(ctx, f)).join('\n')}\n</ul>`;
+  return `<section aria-labelledby="candidate-filings">
+<h2 id="candidate-filings">${esc(t(lang, 'candidate.filings'))}</h2>
+<p class="intro">${esc(t(lang, 'candidate.filings.intro'))}</p>
+${list}
+</section>`;
+}
+
+export function candidatePage(ctx: RenderContext, election: Election, race: Race, candidate: Candidate): string {
+  const { lang } = ctx;
+  const name = candidateName(candidate);
+  // Both names as the city printed them, then where the city put this person, then who they named
+  // as treasurer. Nothing here is the site's own words except the headings.
+  const treasurer = candidate.treasurer
+    ? esc(candidate.treasurer)
+    : `<span class="empty">${esc(t(lang, 'race.notPosted'))}</span>`;
+  const body = `<h1>${esc(name)}</h1>
+<dl>
+<dt>${esc(t(lang, 'candidate.legalName'))}</dt><dd>${esc(candidate.name)}</dd>
+<dt>${esc(t(lang, 'race.nameOnBallot'))}</dt><dd>${esc(candidate.ballotName || t(lang, 'race.notPosted'))}</dd>
+<dt>${esc(t(lang, 'candidate.race'))}</dt><dd><a href="${href(ctx, PATHS.race(election.slug, race.slug))}">${esc(race.title)}</a></dd>
+<dt>${esc(t(lang, 'race.election'))}</dt><dd><a href="${href(ctx, PATHS.election(election.slug))}">${esc(election.title)}</a></dd>
+<dt>${esc(t(lang, 'elections.electionDay'))}</dt><dd><time datetime="${esc(election.date)}">${esc(formatDate(lang, election.date, 'long'))}</time></dd>
+<dt>${esc(t(lang, 'race.treasurer'))}</dt><dd>${treasurer}</dd>
+</dl>
+<p class="neutrality">${esc(t(lang, 'candidate.neutrality'))}</p>
+${filingsSection(ctx, candidate)}`;
+  return layout(ctx, {
+    title: name,
+    path: PATHS.candidate(election.slug, race.slug, candidate.slug),
+    body,
+    description: t(lang, 'candidate.description', { name, race: race.title }),
   });
 }

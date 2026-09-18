@@ -82,7 +82,9 @@ describe('Elections 02: Race pages with the comparison table', () => {
       // The treasurer cell is the city's own link text: the treasurer it named.
       const gonzalez = rows.eq(1);
       const treasurer = gonzalez.find('td.treasurer a');
-      expect(treasurer.text()).toBe('Sonia Villarreal');
+      // The visible text is the treasurer's name; the link says which document it opens as well,
+      // because a candidate who appointed themselves is named twice in the same row (issue 03).
+      expect(treasurer.contents().first().text()).toBe('Sonia Villarreal');
       expect(treasurer.attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/23926/639203242118170000');
       expect(gonzalez.find('td.application a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/23928/639203245618530000');
       // Every link has its own accessible name, so "View" never stands alone out of context.
@@ -105,9 +107,24 @@ describe('Elections 02: Race pages with the comparison table', () => {
     // instead of squeezing the city's names into one letter per line.
     expect(style).toContain('.race-table{border-collapse:collapse;min-width:34rem');
 
-    // The same people, links, and numbers in both languages.
-    const hrefs = ($: CheerioAPI) => $('table.race-table a').map((_, a) => $(a).attr('href')).get();
-    expect(hrefs(await site.page('/es/elections/2026-general/mayor/'))).toEqual(hrefs(await site.page('/en/elections/2026-general/mayor/')));
+    // The same people, the same city documents, and the same numbers in both languages. The links
+    // into this site's own Candidate pages differ only by the reader's language tree (issue 03).
+    const cityLinks = ($: CheerioAPI) =>
+      $('table.race-table a')
+        .map((_, a) => $(a).attr('href')!)
+        .get()
+        .filter((url) => url.startsWith('http'));
+    const es = await site.page('/es/elections/2026-general/mayor/');
+    const en = await site.page('/en/elections/2026-general/mayor/');
+    expect(cityLinks(es)).toEqual(cityLinks(en));
+    expect(cityLinks(en)).toHaveLength(10);
+    const own = ($: CheerioAPI, lang: string) =>
+      $('table.race-table tbody th a')
+        .map((_, a) => $(a).attr('href')!)
+        .get()
+        .every((url) => url.startsWith(`/${lang}/elections/`));
+    expect(own(es, 'es')).toBe(true);
+    expect(own(en, 'en')).toBe(true);
   });
 
   it('opens every Race from the Election page, in the city ballot order', async () => {
@@ -227,7 +244,7 @@ describe('Elections 02: Race pages with the comparison table', () => {
     // Still in the city's ballot order, fourth as the city printed it.
     expect(rows.eq(3).hasClass('unnamed')).toBe(true);
     expect(rows.eq(3).find('th').text()).toBe('Candidate name not yet posted');
-    expect(rows.eq(3).find('td.treasurer a').text()).toBe('Alfonso I. "Poncho" Casso');
+    expect(rows.eq(3).find('td.treasurer a').contents().first().text()).toBe('Alfonso I. "Poncho" Casso');
     expect(rows.eq(3).find('td.application a').attr('href')).toBe('https://www.cityoflaredo.com/home/showpublisheddocument/24065/639214600658800000');
     expect($('main').text()).not.toContain('Poncho Casso,');
     const es = await site.page('/es/elections/2026-general/mayor/');

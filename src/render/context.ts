@@ -56,6 +56,7 @@ export const PATHS = {
   meetings: '/meetings/',
   election: (slug: string) => `/elections/${slug}/`,
   race: (electionSlug: string, raceSlug: string) => `/elections/${electionSlug}/${raceSlug}/`,
+  candidate: (electionSlug: string, raceSlug: string, candidateSlug: string) => `/elections/${electionSlug}/${raceSlug}/${candidateSlug}/`,
   body: (bodyId: string) => `/meetings/body/${bodyId}/`,
   meeting: (id: string) => `/meetings/${id}/`,
   directory: '/directory/',

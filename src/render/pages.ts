@@ -194,6 +194,8 @@ export function searchPage(ctx: RenderContext): string {
     index: rootHref(ctx, '/search-index.json'),
     topicHref: href(ctx, PATHS.topic('TOPIC' as Topic)),
     meetingHref: href(ctx, PATHS.meeting('ID')),
+    // Pages of this site are indexed by their language-independent path; this is the reader's tree.
+    pageHref: href(ctx, ''),
     officialDocument: t(lang, 'item.officialDocument'),
     stream: Object.fromEntries(DOCUMENT_KINDS.map((kind) => [kind, t(lang, `stream.${kind}`, { body: '{body}', date: '{date}' })])),
   };
@@ -218,13 +220,14 @@ function fold(s){return s.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u03
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function fmt(d){try{var dt=/^\\d{4}-\\d{2}-\\d{2}$/.test(d)?new Date(d+'T12:00:00Z'):new Date(d);return new Intl.DateTimeFormat(L.locale,{timeZone:'America/Chicago',month:'short',day:'numeric',year:'numeric'}).format(dt);}catch(e){return d;}}
 function title(it){return it.k?L.stream[it.k].replace('{body}',it.b).replace('{date}',fmt(it.md)):it.t;}
+function hay(it){return fold(title(it)+' '+(it.a||''));}
 function load(){if(!loading){loading=fetch(L.index).then(function(r){return r.json();}).then(function(j){index=j;return j;});}return loading;}
 function render(q){var words=fold(q).split(/\\s+/).filter(Boolean);if(!words.length){out.innerHTML='';return;}
-var hits=index.filter(function(it){var h=fold(title(it));return words.every(function(w){return h.indexOf(w)>=0;});});
+var hits=index.filter(function(it){var h=hay(it);return words.every(function(w){return h.indexOf(w)>=0;});});
 hits.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0;});
 var head='<p>'+(hits.length===1?L.one:L.results.replace('{count}',hits.length))+'</p>';
 if(!hits.length){out.innerHTML='<p>'+esc(L.none)+'</p>';return;}
-out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.m?L.meetingHref.replace('ID',it.m):it.u;var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(title(it))+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
+out.innerHTML=head+'<ul class="items">'+hits.slice(0,200).map(function(it){var href=it.s?L.pageHref+it.s:(it.m?L.meetingHref.replace('ID',it.m):it.u);var doc=it.m?'<span class="sep" aria-hidden="true">·</span><a href="'+esc(it.u)+'" rel="noopener">'+esc(L.officialDocument)+'</a>':'';return '<li><a class="title" href="'+esc(href)+'" rel="noopener">'+esc(title(it))+'</a><span class="meta">'+esc(L.publishers[it.p]||it.p)+'<span class="sep" aria-hidden="true">·</span><time datetime="'+esc(it.d)+'">'+esc(fmt(it.d))+'</time><span class="sep" aria-hidden="true">·</span><a href="'+esc(L.topicHref.replace('TOPIC',it.o))+'">'+esc(L.topics[it.o]||it.o)+'</a>'+doc+'</span></li>';}).join('')+'</ul>';}
 function run(){var q=input.value;if(!q.trim()){out.innerHTML='';return;}out.innerHTML='<p>'+esc(L.loading)+'</p>';load().then(function(){render(q);});}
 form.addEventListener('submit',function(e){e.preventDefault();run();try{history.replaceState(null,'','?q='+encodeURIComponent(input.value));}catch(err){}});
 input.addEventListener('input',function(){if(index){render(input.value);}});
