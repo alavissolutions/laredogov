@@ -1,14 +1,16 @@
 import { dayOf, formatDate } from './dates.js';
-import type { Body, DataFile, DocumentKind, Item, Meeting, MeetingDocument, SourceHealth } from './domain.js';
+import type { Body, DataFile, DocumentKind, Election, Item, Meeting, MeetingDocument, PublisherId, SourceHealth } from './domain.js';
 import { DOCUMENT_KINDS } from './domain.js';
 import type { Fetcher } from './fetcher/types.js';
 import { t } from './i18n/strings.js';
-import type { NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
+import type { NewElection, NewItem, NewMeeting, SourceAdapter } from './sources/types.js';
 
 export interface IngestOptions {
   fetcher: Fetcher;
   sources: readonly SourceAdapter[];
   now: Date;
+  /** The owner's hand-kept elections file (ADR-0005); the Sources that need it read it themselves. */
+  handKeptFile: string;
   log: (message: string) => void;
 }
 
@@ -22,7 +24,7 @@ export interface IngestReport {
  * slot and the rest of the build proceeds (user story 36). Adapters run in registry order and each sees
  * the data as updated by the adapters before it.
  */
-export async function ingest(data: DataFile, { fetcher, sources, now, log }: IngestOptions): Promise<IngestReport> {
+export async function ingest(data: DataFile, { fetcher, sources, now, handKeptFile, log }: IngestOptions): Promise<IngestReport> {
   const stamp = now.toISOString();
   const report: IngestReport = { newItems: 0, failed: [] };
 
@@ -32,9 +34,14 @@ export async function ingest(data: DataFile, { fetcher, sources, now, log }: Ing
     health.firstChecked ??= stamp;
     health.lastChecked = stamp;
     try {
-      const result = await source.run({ fetcher, previous: data, now, log });
+      const result = await source.run({ fetcher, previous: data, now, handKeptFile, log });
       const added = mergeItems(data, source, result.items, stamp);
       if (result.bodies) mergeBodies(data, source, result.bodies);
+      if (result.elections) mergeElections(data, source, result.elections, stamp);
+      if (result.races) mergeRecords(data.races, source, result.races, stamp);
+      if (result.candidates) mergeRecords(data.candidates, source, result.candidates, stamp);
+      if (result.filings) mergeRecords(data.filings, source, result.filings, stamp);
+      if (result.figures) mergeRecords(data.figures, source, result.figures, stamp);
       if (result.meetings) {
         const streamLines = mergeMeetings(data, source, result.meetings, stamp);
         report.newItems += streamLines;
@@ -78,6 +85,68 @@ function mergeBodies(data: DataFile, source: SourceAdapter, bodies: ReadonlyArra
     const existing = byId.get(incoming.id);
     if (existing) Object.assign(existing, incoming);
     else data.bodies.push({ ...incoming, source: source.id, publisher: source.publisher });
+  }
+}
+
+/**
+ * Elections are re-read whole on every run: the Publisher's page is the record, so the incoming
+ * version replaces the stored one and only first-seen survives. The one exception is a list that
+ * comes back empty. An Election page that briefly loses its calendar, its links, or its forum
+ * schedule, or that the Publisher strips after election day, must not empty the record (spec: the
+ * pages stay up, frozen), so an empty list never overwrites one that has entries.
+ */
+function mergeElections(data: DataFile, source: SourceAdapter, elections: readonly NewElection[], stamp: string): void {
+  const byId = new Map(data.elections.map((e) => [e.id, e]));
+  for (const incoming of elections) {
+    const existing = byId.get(incoming.id);
+    if (existing) {
+      const kept = { calendar: existing.calendar, links: existing.links, forums: existing.forums };
+      Object.assign(existing, incoming, { lastSeenLive: stamp });
+      if (incoming.calendar.length === 0) existing.calendar = kept.calendar;
+      if (incoming.links.length === 0) existing.links = kept.links;
+      if (incoming.forums.length === 0) existing.forums = kept.forums;
+    } else {
+      const election: Election = { ...incoming, source: source.id, publisher: source.publisher, firstSeen: stamp, lastSeenLive: stamp };
+      data.elections.push(election);
+      byId.set(election.id, election);
+    }
+  }
+}
+
+/**
+ * Races, Candidates, Filings, and Figures are re-read whole on every run like Elections: the Publisher's
+ * table is the record, so an incoming version replaces the stored one and only first-seen survives.
+ * Replacing rather than assigning matters because a field the Publisher clears (a treasurer cell it
+ * empties, a Filing that stops belonging to a Candidate) must clear here too. Nothing is ever
+ * removed (spec: the pages stay up, frozen), so a Candidate the Publisher drops from its table keeps
+ * their page and their last-seen-live date simply stops moving.
+ */
+function mergeRecords<T extends { id: string; source: string; publisher: PublisherId; firstSeen: string; lastSeenLive: string }>(
+  records: T[],
+  source: SourceAdapter,
+  incoming: readonly Omit<T, 'source' | 'publisher' | 'firstSeen' | 'lastSeenLive'>[],
+  stamp: string,
+): void {
+  // Where each record sits, not what it is: the city's finance page hands back some six hundred
+  // Filings a run and the file only grows, so a run has to cost what it brought in rather than
+  // re-scanning everything stored for each one of them (branch review finding 8).
+  const indexById = new Map(records.map((r, index) => [r.id, index]));
+  for (const record of incoming) {
+    const at = indexById.get(record.id);
+    const existing = at === undefined ? undefined : records[at];
+    const merged = {
+      ...record,
+      source: source.id,
+      publisher: source.publisher,
+      firstSeen: existing?.firstSeen ?? stamp,
+      lastSeenLive: stamp,
+    } as T;
+    if (at === undefined) {
+      indexById.set(merged.id, records.length);
+      records.push(merged);
+    } else {
+      records[at] = merged;
+    }
   }
 }
 
