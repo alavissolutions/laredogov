@@ -13,6 +13,7 @@
     "build:fixtures": "tsx src/cli.ts build --fixtures",
     "check:akamai": "tsx src/cli.ts check-akamai",
     "capture": "tsx scripts/capture-fixtures.ts",
+    "make:pdf-fixtures": "tsx scripts/make-pdf-fixtures.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"

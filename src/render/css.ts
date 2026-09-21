@@ -50,5 +50,43 @@ form.search input{flex:1 1 14rem;font:inherit;padding:.5rem;border:1px solid var
 form.search button{font:inherit;padding:.5rem 1rem;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:.25rem}
 .site-footer{border-top:1px solid var(--line);background:var(--soft);font-size:.875rem;color:var(--muted);padding:1rem 0}
 .site-footer p{margin:.25rem 0}
+.elections-list>li{padding:.75rem 0;border-bottom:1px solid var(--line)}
+.elections-list .title{font-size:1.05rem}
+.election-calendar,.election-forums,.voting-sites,.link-list{list-style:none;margin:.5rem 0;padding:0}
+.election-calendar>li,.election-forums>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.election-calendar .when,.election-forums time{display:block;font-size:.875rem;color:var(--muted)}
+.voting-sites li,.link-list li{padding:.3rem 0}
+.link-list .note,.voting-sites .note{display:block;font-size:.8rem;color:var(--muted)}
+.link-list a,.voting-sites a{display:inline-block}
+.election-links>section>h3{margin-top:1rem}
+.races-list{list-style:none;margin:.5rem 0;padding:0}
+.races-list>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.races-list .title{font-size:1.05rem}
+.filings{list-style:none;margin:.5rem 0;padding:0}
+.filings>li{padding:.5rem 0;border-bottom:1px solid var(--line)}
+.filings .note{display:block;font-size:.875rem;color:var(--muted)}
+.neutrality{font-size:.9rem;color:var(--muted);background:var(--soft);border-left:4px solid var(--line);padding:.5rem .75rem;margin:.75rem 0}
+.table-scroll{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.5rem 0;max-width:100%}
+.race-table{border-collapse:collapse;min-width:34rem;width:100%;font-size:.95rem}
+.race-table th,.race-table td{text-align:left;vertical-align:top;padding:.5rem .75rem;border-bottom:1px solid var(--line);overflow-wrap:normal}
+.race-table thead th{font-size:.8rem;text-transform:uppercase;letter-spacing:.02em;color:var(--muted);border-bottom:2px solid var(--line)}
+.race-table tbody th{font-weight:600;min-width:9rem}
+.race-table .empty{color:var(--muted)}
+.race-table tr.unnamed th{font-weight:400;color:var(--muted);font-style:italic}
+.race-table th.finance{white-space:nowrap}
+.race-table th.finance .what{display:block;text-transform:none;letter-spacing:0;font-weight:400}
+.race-table td.finance a{display:inline-block}
+.filings time.period{display:inline-block;min-width:7rem;font-size:.875rem;color:var(--muted)}
+.figure{display:grid;grid-template-columns:auto auto;gap:.1rem .75rem;margin:.35rem 0 0;font-size:.85rem}
+.figure dt{font-weight:400;font-size:.85rem;color:var(--muted)}
+.figure dd{margin:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figure-note,.figure-awaiting{display:block;font-size:.8rem;color:var(--muted);margin:.25rem 0 0}
+.race-table td.finance .figure{max-width:16rem}
+.filings .figure{max-width:24rem}
+.unmatched-reports{list-style:none;margin:.5rem 0;padding:0}
+.unmatched-reports>li{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.unmatched-reports .note{display:block;font-size:.8rem;color:var(--muted)}
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (min-width:40rem){.election-calendar .when,.election-forums time{display:inline-block;min-width:16rem;vertical-align:top}}
 @media (min-width:40rem){h1{font-size:2rem}body{font-size:17px}}
 `;

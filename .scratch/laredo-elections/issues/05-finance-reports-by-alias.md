@@ -4,11 +4,13 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Fixture recorded for the campaign finance page
-- [ ] "Gilbert Gonzalez" with no Alias stays unmatched; with an Alias it attaches to Gilberto Gonzalez, and the same person can attach in two Elections
-- [ ] Officeholder reports attach and show the office the city filed them under; no incumbent label anywhere
-- [ ] Unmatched reports render under the Race table and in the log
-- [ ] Finance report Items in the RSS with heading dates; pre-window reports produce no Items
-- [ ] Directory entry for the finance Source in both languages
+- [x] Fixture recorded for the campaign finance page
+- [x] "Gilbert Gonzalez" with no Alias stays unmatched; with an Alias it attaches to Gilberto Gonzalez, and the same person can attach in two Elections
+  - In the recorded fixture "Gilbert Gonzalez" is the District 1 candidate's name on ballot, so it attaches with no Alias, as ADR-0005 requires. The pair that needs an Alias is "Dr. Victor D. Treviño" against "Victor Daniel Trevino"; both paths and the two-Elections case are tested. See the review record.
+- [x] Officeholder reports attach and show the office the city filed them under; no incumbent label anywhere
+- [x] Unmatched reports render under the Race table and in the log
+- [x] Finance report Items in the RSS with heading dates; pre-window reports produce no Items
+  - "Pre-window" is read as before the first day on the earliest Election's own calendar (2025-11-03), not its first ballot-filing day (2026-07-18), which falls after the only 2026 reports the city has posted. Documented in `src/elections/coverage.ts`.
+- [x] Directory entry for the finance Source in both languages

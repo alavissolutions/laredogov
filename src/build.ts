@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { loadData, saveData } from './data-file.js';
 import type { DataFile } from './domain.js';
 import type { Fetcher } from './fetcher/types.js';
@@ -11,6 +12,8 @@ export interface BuildOptions {
   outDir: string;
   /** The committed data file; created on the first build. */
   dataFile: string;
+  /** The owner's hand-kept elections file; defaults to `elections.yaml` beside the data file. */
+  handKeptFile?: string;
   now?: Date;
   sources?: readonly SourceAdapter[];
   siteUrl?: string | undefined;
@@ -34,7 +37,8 @@ export async function build(opts: BuildOptions): Promise<BuildResult> {
   const now = opts.now ?? new Date();
   const log = opts.log ?? ((m: string) => console.log(m));
   const data = await loadData(opts.dataFile);
-  const report = await ingest(data, { fetcher: opts.fetcher, sources: opts.sources ?? SOURCES, now, log });
+  const handKeptFile = opts.handKeptFile ?? path.join(path.dirname(opts.dataFile), 'elections.yaml');
+  const report = await ingest(data, { fetcher: opts.fetcher, sources: opts.sources ?? SOURCES, now, handKeptFile, log });
   await saveData(opts.dataFile, data);
   await render(data, {
     outDir: opts.outDir,
