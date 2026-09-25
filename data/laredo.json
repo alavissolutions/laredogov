@@ -14,7 +14,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3304",
@@ -43,7 +43,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3312",
@@ -58,7 +58,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3318",
@@ -73,7 +73,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3338",
@@ -87,7 +87,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3352",
@@ -132,7 +132,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3362",
@@ -161,7 +161,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3366",
@@ -176,7 +176,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3368",
@@ -191,7 +191,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3370",
@@ -221,7 +221,7 @@
       "source": "city-calendar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-17T20:06:23.674Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-calendar:3390",
@@ -299,6 +299,36 @@
       "lastSeenLive": "2026-09-24T20:06:33.032Z"
     },
     {
+      "id": "city-calendar:3412",
+      "title": "Trail of Hope 5K Challenge: Remembering 17; Supporting the Many",
+      "date": "2026-09-26T12:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3412/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-26T12:00:00.000Z",
+        "end": "2026-09-26T18:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-25T12:16:59.750Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
+    },
+    {
+      "id": "city-calendar:3414",
+      "title": "Brush & Bulky Item Collection - District 2",
+      "date": "2026-09-28T11:00:00.000Z",
+      "url": "https://www.cityoflaredo.com/Home/Components/Calendar/Event/3414/17",
+      "topic": "events",
+      "event": {
+        "start": "2026-09-28T11:00:00.000Z",
+        "end": "2026-09-28T20:00:00.000Z"
+      },
+      "source": "city-calendar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-25T12:16:59.750Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
+    },
+    {
       "id": "city-newsroom:530",
       "title": "City of Laredo Issues Animal Health Advisory Following Regional New World Screwworm Case",
       "date": "2026-06-27",
@@ -321,7 +351,7 @@
       "source": "city-newsroom",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-newsroom:542",
@@ -332,7 +362,7 @@
       "source": "city-newsroom",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "city-newsroom:548",
@@ -387,7 +417,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1331"
@@ -402,7 +432,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1331"
@@ -417,7 +447,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1331"
@@ -432,7 +462,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1331"
@@ -447,7 +477,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1332"
@@ -462,7 +492,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1332"
@@ -477,7 +507,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1332"
@@ -492,7 +522,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1332"
@@ -507,7 +537,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1333"
@@ -522,7 +552,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1333"
@@ -537,7 +567,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1333"
@@ -552,7 +582,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1334"
@@ -567,7 +597,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-22T20:05:56.306Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1334"
@@ -582,7 +612,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1548"
@@ -597,7 +627,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1548"
@@ -612,7 +642,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1548"
@@ -627,7 +657,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1548"
@@ -642,7 +672,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1549"
@@ -657,7 +687,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1549"
@@ -672,7 +702,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1556"
@@ -687,7 +717,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1557"
@@ -702,7 +732,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1557"
@@ -717,7 +747,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1558"
@@ -732,7 +762,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1559"
@@ -747,7 +777,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1560"
@@ -762,7 +792,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1562"
@@ -777,7 +807,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1563"
@@ -792,7 +822,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1564"
@@ -807,7 +837,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1566"
@@ -822,7 +852,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1568"
@@ -837,7 +867,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1569"
@@ -852,7 +882,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1569"
@@ -867,7 +897,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1570"
@@ -882,7 +912,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1574"
@@ -897,7 +927,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1576"
@@ -912,7 +942,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1576"
@@ -927,7 +957,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1577"
@@ -942,7 +972,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1578"
@@ -957,7 +987,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1579"
@@ -972,7 +1002,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1581"
@@ -987,7 +1017,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1581"
@@ -1002,7 +1032,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1583"
@@ -1017,7 +1047,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1584"
@@ -1032,7 +1062,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1585"
@@ -1047,7 +1077,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1587"
@@ -1062,7 +1092,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1588"
@@ -1077,7 +1107,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1589"
@@ -1092,7 +1122,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1590"
@@ -1107,7 +1137,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1590"
@@ -1122,7 +1152,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1590"
@@ -1137,7 +1167,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1591"
@@ -1152,7 +1182,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1591"
@@ -1167,7 +1197,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1592"
@@ -1182,7 +1212,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1594"
@@ -1197,7 +1227,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1595"
@@ -1212,7 +1242,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1596"
@@ -1227,7 +1257,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1596"
@@ -1242,7 +1272,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1597"
@@ -1257,7 +1287,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1598"
@@ -1272,7 +1302,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1599"
@@ -1287,7 +1317,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1599"
@@ -1302,7 +1332,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1600"
@@ -1317,7 +1347,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1602"
@@ -1332,7 +1362,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1604"
@@ -1347,7 +1377,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1605"
@@ -1362,7 +1392,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1611"
@@ -1377,7 +1407,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1611"
@@ -1392,7 +1422,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1611"
@@ -1407,7 +1437,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1612"
@@ -1422,7 +1452,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-17T20:06:23.674Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "minutes",
         "meetingId": "1612"
@@ -1437,7 +1467,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1612"
@@ -1452,7 +1482,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "video",
         "meetingId": "1612"
@@ -1467,7 +1497,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1614"
@@ -1482,7 +1512,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1614"
@@ -1497,7 +1527,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1623"
@@ -1512,7 +1542,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1623"
@@ -1527,7 +1557,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-23T12:16:53.988Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1625"
@@ -1542,7 +1572,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-23T12:16:53.988Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "packet",
         "meetingId": "1625"
@@ -1557,7 +1587,7 @@
       "publisher": "city-of-laredo",
       "source": "legistar",
       "firstSeen": "2026-09-17T20:06:23.674Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z",
       "stream": {
         "kind": "agenda",
         "meetingId": "1630"
@@ -1596,7 +1626,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1332",
@@ -1629,7 +1659,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1333",
@@ -1658,7 +1688,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1334",
@@ -1683,7 +1713,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1335",
@@ -1699,7 +1729,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1336",
@@ -1715,7 +1745,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1337",
@@ -1731,7 +1761,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1338",
@@ -1747,7 +1777,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1339",
@@ -1763,7 +1793,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1426",
@@ -1777,7 +1807,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1548",
@@ -1810,7 +1840,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1549",
@@ -1835,7 +1865,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1556",
@@ -1856,7 +1886,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1557",
@@ -1881,7 +1911,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1558",
@@ -1902,7 +1932,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1559",
@@ -1923,7 +1953,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1560",
@@ -1944,7 +1974,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1562",
@@ -1964,7 +1994,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1563",
@@ -1985,7 +2015,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1564",
@@ -2006,7 +2036,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1566",
@@ -2027,7 +2057,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1568",
@@ -2047,7 +2077,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1569",
@@ -2072,7 +2102,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1570",
@@ -2093,7 +2123,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1571",
@@ -2109,7 +2139,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1574",
@@ -2130,7 +2160,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1576",
@@ -2155,7 +2185,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1577",
@@ -2176,7 +2206,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1578",
@@ -2197,7 +2227,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1579",
@@ -2218,7 +2248,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1581",
@@ -2243,7 +2273,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1583",
@@ -2264,7 +2294,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1584",
@@ -2285,7 +2315,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1585",
@@ -2306,7 +2336,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1587",
@@ -2327,7 +2357,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1588",
@@ -2348,7 +2378,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1589",
@@ -2369,7 +2399,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1590",
@@ -2398,7 +2428,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1591",
@@ -2423,7 +2453,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1592",
@@ -2444,7 +2474,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1594",
@@ -2465,7 +2495,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1595",
@@ -2486,7 +2516,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1596",
@@ -2511,7 +2541,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1597",
@@ -2531,7 +2561,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1598",
@@ -2552,7 +2582,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1599",
@@ -2577,7 +2607,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1600",
@@ -2598,7 +2628,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1602",
@@ -2619,7 +2649,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1604",
@@ -2640,7 +2670,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1605",
@@ -2661,7 +2691,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1611",
@@ -2690,7 +2720,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1612",
@@ -2723,7 +2753,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1614",
@@ -2748,7 +2778,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1622",
@@ -2764,7 +2794,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1623",
@@ -2789,7 +2819,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1625",
@@ -2814,7 +2844,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-16T06:20:44.546Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1630",
@@ -2835,7 +2865,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-17T20:06:23.674Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1632",
@@ -2851,7 +2881,7 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-22T20:05:56.306Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     },
     {
       "id": "1633",
@@ -2867,7 +2897,23 @@
       "source": "legistar",
       "publisher": "city-of-laredo",
       "firstSeen": "2026-09-21T20:06:12.742Z",
-      "lastSeenLive": "2026-09-24T20:06:33.032Z"
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
+    },
+    {
+      "id": "1640",
+      "bodyId": "268",
+      "bodyName": "Historic District / Landmark Board",
+      "date": "2026-10-08",
+      "time": "12:00 PM",
+      "location": "City of Laredo City Hall \r\nCity Council Chambers\r\n1110 Houston Street\r\nLaredo, Texas 78040",
+      "cancelled": false,
+      "url": "https://cityoflaredo.legistar.com/MeetingDetail.aspx?LEGID=1640&GID=929&G=B965C976-B177-41E4-B9AA-4EB73F5544CA",
+      "documents": {},
+      "lastModified": "2026-09-24T19:31:58.447Z",
+      "source": "legistar",
+      "publisher": "city-of-laredo",
+      "firstSeen": "2026-09-25T12:16:59.750Z",
+      "lastSeenLive": "2026-09-25T12:16:59.750Z"
     }
   ],
   "bodies": [
@@ -3273,32 +3319,36 @@
   "sources": {
     "city-bids": {
       "firstChecked": "2026-09-16T06:20:44.546Z",
-      "lastChecked": "2026-09-24T20:06:33.032Z",
-      "lastSuccess": "2026-09-24T20:06:33.032Z"
+      "lastChecked": "2026-09-25T12:16:59.750Z",
+      "lastSuccess": "2026-09-25T12:16:59.750Z"
     },
     "city-calendar": {
       "firstChecked": "2026-09-16T06:20:44.546Z",
-      "lastChecked": "2026-09-24T20:06:33.032Z",
-      "lastNewItem": "2026-09-23T20:06:25.090Z",
-      "lastSuccess": "2026-09-24T20:06:33.032Z"
+      "lastChecked": "2026-09-25T12:16:59.750Z",
+      "lastNewItem": "2026-09-25T12:16:59.750Z",
+      "lastSuccess": "2026-09-25T12:16:59.750Z"
     },
     "city-newsroom": {
       "firstChecked": "2026-09-16T06:20:44.546Z",
-      "lastChecked": "2026-09-24T20:06:33.032Z",
+      "lastChecked": "2026-09-25T12:16:59.750Z",
       "lastNewItem": "2026-09-16T06:20:44.546Z",
-      "lastSuccess": "2026-09-24T20:06:33.032Z"
+      "lastSuccess": "2026-09-25T12:16:59.750Z"
     },
     "laredo-utilities": {
       "firstChecked": "2026-09-16T06:20:44.546Z",
-      "lastChecked": "2026-09-24T20:06:33.032Z",
+      "lastChecked": "2026-09-25T12:16:59.750Z",
       "lastNewItem": "2026-09-16T06:20:44.546Z",
-      "lastSuccess": "2026-09-24T20:06:33.032Z"
+      "lastSuccess": "2026-09-24T20:06:33.032Z",
+      "lastError": {
+        "at": "2026-09-25T12:16:59.750Z",
+        "message": "fetch failed"
+      }
     },
     "legistar": {
       "firstChecked": "2026-09-16T06:20:44.546Z",
-      "lastChecked": "2026-09-24T20:06:33.032Z",
+      "lastChecked": "2026-09-25T12:16:59.750Z",
       "lastNewItem": "2026-09-23T12:16:53.988Z",
-      "lastSuccess": "2026-09-24T20:06:33.032Z"
+      "lastSuccess": "2026-09-25T12:16:59.750Z"
     }
   }
 }
