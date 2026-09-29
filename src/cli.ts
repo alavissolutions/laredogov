@@ -19,6 +19,9 @@ async function main(): Promise<void> {
         now,
         outDir: process.env.OUT_DIR ?? path.resolve('site'),
         dataFile: process.env.DATA_FILE ?? path.resolve(useFixtures ? 'site-data/fixtures.json' : 'data/laredo.json'),
+        // The owner's hand-kept file is the same one whichever data file is being written, so a
+        // development build shows the same Aliases the live site does (ADR-0005).
+        handKeptFile: process.env.ELECTIONS_FILE ?? path.resolve('data/elections.yaml'),
         siteUrl: process.env.SITE_URL,
         basePath: process.env.BASE_PATH ?? '',
         domain: process.env.SITE_DOMAIN,

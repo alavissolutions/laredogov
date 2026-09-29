@@ -18,6 +18,7 @@ export const PUBLISHER_ORDER: readonly PublisherId[] = [
   'laredo-college',
   'laredo-housing-authority',
   'txdot-laredo',
+  'texas-sos',
 ];
 
 const VERIFIED = '2026-09-16';

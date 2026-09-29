@@ -4,11 +4,18 @@
 
 **Blocked by:** 05
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Two PDF fixtures: one readable July 2026 officeholder report, one unreadable stub
-- [ ] Extracted totals match the readable fixture's cover sheet
-- [ ] Awaiting review until verified, then all four totals with period, Filing link, and last-seen-live date, in both languages
-- [ ] Unreadable report degrades to a link; build succeeds
-- [ ] Second build downloads nothing
-- [ ] Log counts present
+- [x] Two PDF fixtures: one readable July 2026 officeholder report, one unreadable stub
+  - Four, after review, and none a capture, on the coordinator's assumption below: no readable report exists in the city's filings, and a real scan is a megabyte this project does not keep (ADR-0001). All are written by `npm run make:pdf-fixtures`, filed by people who do not exist, and documented as written in `test/fixtures/README.md`. A plain readable cover sheet (document 23838); the same form written the awkward way a real writer does, with kerned `TJ` arrays, hexadecimal strings and an indirect `/Length` (23812); an amendment behind an original with a blank totals box, which must come back unreadable (22178); and the image-only scan every real report is, which every other document URL answers with.
+- [x] Extracted totals match the readable fixture's cover sheet
+  - And nothing is returned at all rather than a number that happened to be nearby. Three shapes the form itself sets are guarded: boxes 17 and 19 are the unitemized subtotals whose labels carry most of the labels of 18 and 20; a box left blank leaves the printed numbering of the box below it where its amount should be, so cents are required and a number running on from the digits before it is refused; and an amended report repeats the whole sheet, so all four totals come off the first sheet or none do. Sanity-checked by hand against two of the real scans: both report unreadable in milliseconds rather than crashing, and Flate output is bounded so one crafted stream cannot take the scheduled run down.
+- [x] Awaiting review until verified, then all four totals with period, Filing link, and last-seen-live date, in both languages
+- [x] Unreadable report degrades to a link; build succeeds
+- [x] Second build downloads nothing
+  - A document is opened once, the first run that sees its id, and only for the filing deadlines this site's Elections cover: the page carries 504 reports back to 2015 and the city's store takes roughly 25 seconds per navigation, so downloading all of them would be hours (spec: Cost). That line and its consequences are recorded on ADR-0001 and counted in the run log, since the spec's Fetching section says only "absent from the previous data file". A report the extractor found nothing in records the reader version that gave up on it, so it is not opened again until the reader improves; a download that failed outright, or answered with something that is not a PDF, is tried once more next run.
+- [x] Log counts present
+
+## Comments
+
+**2026-09-17, coordinator:** Probed all six 2026 candidates' July 15, 2026 officeholder reports (docs 23842, 23838, 23844, 23884, 23862, 23812). Every one is a scanned image PDF from a Toshiba copier (producer `SECnvtToPDF V1.0`, zero fonts, one image per page, 1.3 MB to 20 MB). None has a text layer, so the "readable July 2026 officeholder report" fixture this ticket asks for does not exist in the city's filings. Assumption taken so the ticket can proceed: build the extractor for text-layer PDFs as specified, treat every scanned report as the spec's "extractor cannot read" case (Filing, link, no Figure, logged), and test the readable path against a small synthetic text-layer PDF laid out like the TEC cover sheet (documented as synthetic in the fixtures README). Adding OCR is a decision for the owner; until then no current report will produce Figures.

@@ -11,8 +11,29 @@ export interface FetchResponse {
   body: string;
 }
 
+/**
+ * A document the Publisher stores rather than a page: bytes, and the filename its own store gives
+ * them. Bytes because the documents this reaches for are PDFs, and a PDF read as text is nonsense
+ * (issue 06).
+ */
+export interface DownloadResponse {
+  /** Final URL after any redirects. */
+  url: string;
+  status: number;
+  bytes: Uint8Array;
+  /** The filename out of `Content-Disposition`, as the Publisher wrote it, when it sends one. */
+  filename?: string;
+}
+
 export interface Fetcher {
   fetch(url: string, mode: FetchMode): Promise<FetchResponse>;
+  /**
+   * One document out of a Publisher's document store. It is its own method rather than a fetch
+   * mode because what comes back is bytes and a filename, not a page (spec: Fetching). `referer`
+   * is the Publisher's own page that links the document: a store behind bot management answers
+   * only a browser that has been there, so the implementation may open it first.
+   */
+  download(url: string, referer?: string): Promise<DownloadResponse>;
   /** Release any held resources (browser instances). Safe to call more than once. */
   close(): Promise<void>;
 }
@@ -40,7 +61,7 @@ export class FetchError extends Error {
 }
 
 /** Throws unless the response is a 2xx. Adapters call this so a block or outage becomes a recorded Source error. */
-export function ensureOk(res: FetchResponse): FetchResponse {
+export function ensureOk<T extends { url: string; status: number }>(res: T): T {
   if (res.status < 200 || res.status >= 300) {
     throw new FetchError(`HTTP ${res.status} fetching ${res.url}`, res.url, res.status);
   }

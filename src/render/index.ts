@@ -4,6 +4,7 @@ import { LANGS, TOPICS, type DataFile } from '../domain.js';
 import { assertStringsComplete } from '../i18n/strings.js';
 import { makeContext, PATHS, type RenderConfig } from './context.js';
 import { CSS } from './css.js';
+import { candidatePage, candidatesInOrder, electionPage, racePage, racesInOrder } from './elections.js';
 import { aboutPage, directoryPage, homePage, meetingPage, meetingsPage, searchPage, topicPage } from './pages.js';
 import { rssFeed } from './rss.js';
 import { searchIndex } from './search-index.js';
@@ -36,6 +37,15 @@ export async function render(data: DataFile, opts: RenderOptions): Promise<void>
     for (const topic of TOPICS) {
       await write(`/${lang}${PATHS.topic(topic)}`, topicPage(ctx, topic));
       await write(`/${lang}${PATHS.topicFeed(topic)}`, rssFeed(ctx, topic));
+    }
+    for (const election of data.elections) {
+      await write(`/${lang}${PATHS.election(election.slug)}`, electionPage(ctx, election));
+      for (const race of racesInOrder(ctx, election)) {
+        await write(`/${lang}${PATHS.race(election.slug, race.slug)}`, racePage(ctx, election, race));
+        for (const candidate of candidatesInOrder(ctx, race)) {
+          await write(`/${lang}${PATHS.candidate(election.slug, race.slug, candidate.slug)}`, candidatePage(ctx, election, race, candidate));
+        }
+      }
     }
     await write(`/${lang}${PATHS.meetings}`, meetingsPage(ctx));
     for (const body of data.bodies) await write(`/${lang}${PATHS.body(body.id)}`, meetingsPage(ctx, body.id));
