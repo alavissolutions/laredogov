@@ -35,6 +35,7 @@ export const PUBLISHERS = [
   'laredo-college',
   'laredo-housing-authority',
   'txdot-laredo',
+  'texas-sos',
 ] as const;
 export type PublisherId = (typeof PUBLISHERS)[number];
 
@@ -73,6 +74,225 @@ export interface Item {
   event?: { start: IsoDateOrTime; end?: IsoDateOrTime; place?: string };
   /** Present on stream lines: an Item that announces a document attaching to a Meeting (see CONTEXT.md). */
   stream?: { kind: DocumentKind; meetingId: string };
+  /** Present on Items the Publisher posted with an Election, so the Election page can show them. */
+  election?: { id: string; kind: ElectionItemKind };
+}
+
+/** What an Election Item is: a notice the Publisher dated, or a list of voting sites. */
+export type ElectionItemKind = 'notice' | 'voting-site';
+
+/** One dated line of the Publisher's own election calendar, in the Publisher's wording. */
+export interface ElectionCalendarEntry {
+  /** Central-time calendar date. */
+  date: string;
+  /**
+   * The last day of an entry the Publisher printed as spanning more than one, such as a two-day
+   * holiday. Absent for the single day every other entry is.
+   */
+  endDate?: string;
+  /** The date exactly as the Publisher printed it, kept for the data file's readers. */
+  label: string;
+  /** What the Publisher says happens that day; never translated. */
+  description: string;
+}
+
+/** A link the Publisher posts beside an Election, and which Publisher it sends the reader to. */
+export interface ElectionLink {
+  /** `voting-site` links are the early-voting and election-day site lists; the rest are context. */
+  kind: 'voting-site' | 'link';
+  /** The Publisher's own label and sub-label; never translated. */
+  label: string;
+  note?: string;
+  url: string;
+  /** The Publisher the link leads to, when its host is one this site has declared. */
+  publisher?: PublisherId;
+}
+
+/** A candidate forum the Publisher scheduled. `url` appears only once the Publisher posts one. */
+export interface ElectionForum {
+  /** The Race or group the Publisher named, as printed. */
+  label: string;
+  /** Central-time start, as an ISO timestamp. */
+  start: IsoDateOrTime;
+  url?: string;
+}
+
+/**
+ * One election day run by a Publisher (CONTEXT.md). Its Races are separate records keyed by
+ * `electionId`; this record carries what the Publisher puts on the Election's own page.
+ */
+export interface Election {
+  /** `${source}:${slug}`; stable across builds. */
+  id: string;
+  /** Last path segment of the Election's pages, e.g. `2026-general`. */
+  slug: string;
+  /** The Publisher's own heading for the Election; never translated. */
+  title: string;
+  /** Election day, Central-time calendar date. */
+  date: string;
+  publisher: PublisherId;
+  source: string;
+  /** The Publisher's own page for this Election. */
+  url: string;
+  calendar: ElectionCalendarEntry[];
+  links: ElectionLink[];
+  forums: ElectionForum[];
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** What a Race is: an office with Candidates, or a question the Publisher put on the ballot. */
+export type RaceKind = 'office' | 'question';
+
+/**
+ * A row the Publisher printed under a Race with no candidate name: a treasurer appointment and
+ * nothing else. It is not a Candidate (CONTEXT.md) and nobody is named for it; it renders in ballot
+ * order as "candidate name not yet posted" so a reader sees the row the Publisher published.
+ */
+export interface UnnamedRow {
+  /** The Publisher's ballot order within the Race, counted over every row it printed. */
+  order: number;
+  /** The treasurer the Publisher named, if it named one. */
+  treasurer?: string;
+  /** Filing ids the Publisher linked in that row. */
+  filings: string[];
+}
+
+/**
+ * One office or question on an Election's ballot (CONTEXT.md). Candidates and Filings are their own
+ * records keyed by `raceId`; a question Race carries the Publisher's link to what called it.
+ */
+export interface Race {
+  /** `${electionId}:${slug}`; stable across builds. */
+  id: string;
+  electionId: string;
+  /** Last path segment of the Race's page, e.g. `mayor`. Fixed by the Source, never derived from a filename. */
+  slug: string;
+  /** The Publisher's own heading for the Race; never translated. */
+  title: string;
+  kind: RaceKind;
+  /** The Publisher's own order of Races on its page. */
+  order: number;
+  publisher: PublisherId;
+  source: string;
+  /** Present on a question Race: the Publisher's own link to the document that called the question. */
+  question?: { label: string; url: string };
+  unnamedRows: UnnamedRow[];
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/**
+ * A person the Publisher lists by name under a Race (CONTEXT.md). Both names are printed as the
+ * Publisher printed them; the site never derives a name from a filename or adds a label.
+ */
+export interface Candidate {
+  /** `${raceId}:${slug of the legal name}`: identity is the Election, the Race, and the legal name. */
+  id: string;
+  raceId: string;
+  electionId: string;
+  /** Last path segment of the Candidate's page, from the name on ballot. */
+  slug: string;
+  /** Legal name, as printed in the Publisher's table. */
+  name: string;
+  /** Name on ballot, as printed. */
+  ballotName: string;
+  /** The campaign treasurer the Publisher named. */
+  treasurer?: string;
+  /** The Publisher's ballot order within the Race. */
+  order: number;
+  /** Filing ids, in the order the Publisher listed them. */
+  filings: string[];
+  publisher: PublisherId;
+  source: string;
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** What a Filing is, by where the Publisher placed it and how it labelled the link (CONTEXT.md). */
+export type FilingKind = 'treasurer-appointment' | 'ballot-application' | 'finance-report';
+
+/**
+ * Something the Publisher posted under a Candidate's name (CONTEXT.md). Identity is the Publisher's
+ * own document id, so one document is one Filing wherever the Publisher links it.
+ */
+export interface Filing {
+  /** `${source}:filing:${documentId}`. */
+  id: string;
+  /** The Publisher's numeric document id, with the cache-busting ticks dropped. */
+  documentId: string;
+  kind: FilingKind;
+  /** The Publisher's own label for the link (its anchor title); never translated. */
+  label: string;
+  /** The office the Publisher filed it under, in the Publisher's words. */
+  office?: string;
+  /**
+   * The Publisher's own spelling of the name it posted the Filing under, on a page that lists
+   * filers rather than Candidates (its campaign finance page). It is what a reader sees for a
+   * report no Candidate answers to, and it is what an Alias is declared against (ADR-0005).
+   */
+  filerName?: string;
+  /** The filing period the Publisher posted it under: its own heading, and that heading's date. */
+  period?: { label: string; date: string };
+  /**
+   * The Candidates this Filing attaches to by exact name or declared Alias (ADR-0005), for a
+   * Filing the Publisher posted outside a Race table. One report can belong to two Candidates: the
+   * same person filing while they run in two Elections is two Candidates (CONTEXT.md).
+   */
+  attachedTo?: string[];
+  candidateId?: string;
+  raceId?: string;
+  electionId?: string;
+  url: string;
+  /**
+   * The filename the Publisher's document store sent with the document, kept for the owner so they
+   * recognise the file they open. It is never parsed for a name or an office (spec: Fetching).
+   */
+  documentFilename?: string;
+  /**
+   * The version of the cover-sheet reader that opened this document and found nothing in it: every
+   * report the Publisher has posted for this cycle is a scan from a copier with no text layer. It
+   * is what stops the build spending half a minute on the same document every run, and it is a
+   * version rather than a flag so that a reader which later learns to read something opens every
+   * document the one before it gave up on (issue 06).
+   */
+  unreadableBy?: number;
+  publisher: PublisherId;
+  source: string;
+  firstSeen: string;
+  lastSeenLive: string;
+}
+
+/** The four totals a campaign finance report prints on its cover sheet, in whole dollars and cents. */
+export interface FigureTotals {
+  /** Total political contributions, not the unitemized subtotal printed above it on the form. */
+  contributions: number;
+  expenditures: number;
+  /** Total political contributions maintained as of the last day of the reporting period. */
+  contributionsMaintained: number;
+  /** Total principal amount of all outstanding loans as of the last day of the reporting period. */
+  outstandingLoans: number;
+}
+
+/**
+ * A number copied from a Filing (CONTEXT.md), with the Filing it came from and whether the owner
+ * has checked it against that Filing. A wrong number under a Candidate's name is a fairness
+ * problem, so a Figure is stored as soon as it is read and rendered only once the owner has listed
+ * its document id in the hand-kept file (note on ADR-0001). The Publisher's document is not kept.
+ */
+export interface Figure {
+  /** `${source}:figure:${documentId}`: one Figure per Filing, so a re-read replaces it. */
+  id: string;
+  filingId: string;
+  /** The Publisher's document id, which is what the owner lists to verify it (user story 19). */
+  documentId: string;
+  totals: FigureTotals;
+  /** True once the owner has listed `documentId` under `verified` in the hand-kept file. */
+  verified: boolean;
+  publisher: PublisherId;
+  source: string;
+  firstSeen: string;
+  lastSeenLive: string;
 }
 
 export interface Meeting {
@@ -119,11 +339,16 @@ export interface DataFile {
   items: Item[];
   meetings: Meeting[];
   bodies: Body[];
+  elections: Election[];
+  races: Race[];
+  candidates: Candidate[];
+  filings: Filing[];
+  figures: Figure[];
   sources: Record<string, SourceHealth>;
 }
 
 export function emptyData(): DataFile {
-  return { version: 1, items: [], meetings: [], bodies: [], sources: {} };
+  return { version: 1, items: [], meetings: [], bodies: [], elections: [], races: [], candidates: [], filings: [], figures: [], sources: {} };
 }
 
 /** Directory entries describe every Source and Lookup, ingested or not. */
