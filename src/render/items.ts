@@ -41,7 +41,13 @@ export function postedDate(item: Item): string {
   return item.event ? item.firstSeen : item.date;
 }
 
-export function itemLine(ctx: RenderContext, item: Item): string {
+/** How an Item is drawn where its surroundings already say something the line would repeat. */
+export interface ItemLineOptions {
+  /** Leave off the Election chip on a page that is already about that one Election. */
+  omitElection?: boolean;
+}
+
+export function itemLine(ctx: RenderContext, item: Item, options: ItemLineOptions = {}): string {
   const { lang } = ctx;
   const title = itemTitle(ctx, item);
   const titleLink = item.stream
@@ -52,6 +58,11 @@ export function itemLine(ctx: RenderContext, item: Item): string {
     `<time datetime="${esc(item.date)}">${esc(itemDateLabel(ctx, item.date))}</time>`,
     `<a class="topic" href="${href(ctx, PATHS.topic(item.topic))}">${esc(t(lang, `topic.${item.topic}`))}</a>`,
   ];
+  // An Item a Publisher posted with an Election says which Election, in the Publisher's own words.
+  // Two Elections post lists under the very same title ("Early Voting Sites") for different weeks,
+  // and a voter meeting one in the feed or the New panel has to be able to tell them apart (issue 04).
+  const election = item.election && !options.omitElection ? ctx.data.elections.find((e) => e.id === item.election?.id) : undefined;
+  if (election) parts.push(`<a class="election" href="${href(ctx, PATHS.election(election.slug))}">${esc(election.title)}</a>`);
   if (item.event?.place) parts.push(`<span class="place">${esc(item.event.place)}</span>`);
   if (item.stream) parts.push(`<a href="${esc(item.url)}" rel="noopener">${esc(t(lang, 'item.officialDocument'))}</a>`);
   let extra = '';
@@ -64,9 +75,9 @@ export function itemLine(ctx: RenderContext, item: Item): string {
   return `<li>${titleLink}<span class="meta">${parts.join('<span class="sep" aria-hidden="true">·</span>')}</span>${extra}</li>`;
 }
 
-export function itemList(ctx: RenderContext, items: Item[], emptyText: string): string {
+export function itemList(ctx: RenderContext, items: Item[], emptyText: string, options: ItemLineOptions = {}): string {
   if (items.length === 0) return `<p class="empty">${esc(emptyText)}</p>`;
-  return `<ul class="items">\n${items.map((i) => itemLine(ctx, i)).join('\n')}\n</ul>`;
+  return `<ul class="items">\n${items.map((i) => itemLine(ctx, i, options)).join('\n')}\n</ul>`;
 }
 
 /** Items posted in the 90-day window, newest posting first (see postedDate). */

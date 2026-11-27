@@ -72,6 +72,54 @@ export function parseUsDateTime(text: string): { iso: string; ymd: string; time?
   return { iso: fromCentral(ymd, hm).toISOString(), ymd, time: `${m[4]}:${m[5]} ${m[6]!.toUpperCase()}` };
 }
 
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+/**
+ * Parses a Publisher's written-out date, with or without a weekday: "Monday, November 03, 2025",
+ * "August 21, 2026". Returns the Central-time calendar date, or undefined when the text has none.
+ */
+export function parseMonthNameDate(text: string): string | undefined {
+  const m = /([A-Za-z]{3,9})\s+(\d{1,2}),?\s+(\d{4})/.exec(text);
+  if (!m) return undefined;
+  const month = MONTHS.findIndex((name) => name.startsWith(m[1]!.toLowerCase()));
+  if (month < 0) return undefined;
+  const [day, year] = [Number(m[2]), Number(m[3])];
+  // Date.UTC rolls a day that does not exist into the next month, so a round trip rejects it.
+  const roundTrip = new Date(Date.UTC(year, month, day));
+  if (roundTrip.getUTCMonth() !== month || roundTrip.getUTCDate() !== day) return undefined;
+  return roundTrip.toISOString().slice(0, 10);
+}
+
+/**
+ * Every written-out date in one piece of text, in the order the Publisher printed them. A Publisher
+ * that means a span of days writes both of them into the one cell it has.
+ */
+export function parseMonthNameDates(text: string): string[] {
+  const out: string[] = [];
+  for (const m of text.matchAll(/[A-Za-z]{3,9}\s+\d{1,2},?\s+\d{4}/g)) {
+    const date = parseMonthNameDate(m[0]);
+    if (date) out.push(date);
+  }
+  return out;
+}
+
+/**
+ * Parses a Publisher's numeric short date, on its own in the text it was given: `10-07-26`,
+ * `10-7-2026`, `10/07/26`. A two-digit year is this century, which is as far as any Publisher this
+ * site reads writes them. The whole text has to be the date, so a cell holding anything else is
+ * left alone rather than mined for digits.
+ */
+export function parseNumericDate(text: string): string | undefined {
+  const m = /^(\d{1,2})[-/](\d{1,2})[-/](\d{2}|\d{4})$/.exec(text.trim());
+  if (!m) return undefined;
+  const [month, day] = [Number(m[1]) - 1, Number(m[2])];
+  const year = m[3]!.length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+  // Date.UTC rolls a month or a day that does not exist into the next one, so a round trip rejects it.
+  const roundTrip = new Date(Date.UTC(year, month, day));
+  if (roundTrip.getUTCMonth() !== month || roundTrip.getUTCDate() !== day) return undefined;
+  return roundTrip.toISOString().slice(0, 10);
+}
+
 /** "5:30 PM" -> "17:30" */
 export function to24h(hour12: number, minute: number, ampm: string): string {
   let h = hour12 % 12;

@@ -30,9 +30,13 @@ ${items.map((i) => rssItem(ctx, i)).join('\n')}
 
 function rssItem(ctx: RenderContext, item: Item): string {
   const { lang } = ctx;
+  // Two Elections post lists under the very same title ("Early Voting Sites") for different weeks,
+  // so an Item the Publisher posted with an Election names it, in the Publisher's own words (issue 04).
+  const election = item.election ? ctx.data.elections.find((e) => e.id === item.election?.id) : undefined;
   const description = [
     t(lang, `publisher.${item.publisher}`),
     t(lang, `topic.${item.topic}`),
+    election?.title,
     item.event ? formatDate(lang, item.event.start, 'long') : undefined,
     item.event?.place,
   ]
